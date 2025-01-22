@@ -1,0 +1,44 @@
+.header {
+    height: 80px;
+    background-color: black;
+}
+.main-layout {
+    display: flex;
+    height: 300px;
+}
+.main-content {
+    background-color: #0dcaf0;
+    flex: 3.2;
+    padding: 5px;
+}
+.sidebar {
+    background-color: green;
+    flex: 0.8;
+    padding: 10px;
+}
+
+
+.main-layout2 {
+    display: flex;
+    height: 300px;
+}
+.main-content2 {
+    background-color: white ;
+    flex: 3.2;
+    padding: 5px;
+}
+.sidebar2 {
+    background-color: pink;
+    flex: 0.8;
+    padding: 10px;
+}
+
+.full-width-footer {
+    width: 100%;
+    background-color: black;
+}
+
+.navbar-nav .nav-link:hover {
+    color: black;
+    background-color: #C1CDCD;
+}

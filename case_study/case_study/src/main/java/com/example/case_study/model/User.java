@@ -16,7 +16,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "INT")
-    private int id;
+    private Integer id;
 
     @NotBlank(message = "Username must not be empty")
     @Size(min = 5, max = 50, message = "Username must be between 5 and 50 characters")
@@ -44,4 +44,7 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
+
+    @Column(name = "is_delete", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean isDelete = false;
 }

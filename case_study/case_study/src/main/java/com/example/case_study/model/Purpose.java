@@ -17,7 +17,7 @@ public class Purpose {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "INT")
-    private int id;
+    private Integer id;
 
     @NotNull(message = "Purpose must not be null")
     @Column(name = "purpose", columnDefinition = "ENUM('SALE', 'RENT')", nullable = false)

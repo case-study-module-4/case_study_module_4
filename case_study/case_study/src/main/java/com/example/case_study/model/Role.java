@@ -15,8 +15,11 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "INT")
-    private int id;
+    private Integer id;
 
     @Column(name = "name", columnDefinition = "VARCHAR(50)", unique = true, nullable = false)
     private String name;
+
+    @Column(name = "is_delete", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean isDelete = false;
 }

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -35,7 +37,7 @@ public class User {
     @DecimalMin(value = "0.0", inclusive = true, message = "Balance must be zero or positive")
     @Digits(integer = 13, fraction = 2, message = "Balance must have at most 13 integer digits and 2 decimal places")
     @Column(name = "balance", columnDefinition = "DECIMAL(15,2)", nullable = false)
-    private double balance;
+    private BigDecimal balance;
 
     @Lob
     @Column(name = "image", columnDefinition = "TEXT")

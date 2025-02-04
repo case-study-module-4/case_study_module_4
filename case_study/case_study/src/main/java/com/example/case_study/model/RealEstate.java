@@ -39,10 +39,9 @@ public class RealEstate {
 
     @Column(name = "image", columnDefinition = "TEXT")
     private String image;
-
-    @NotNull(message = "ID Real Estate Type must not be null")
-    @Column(name = "real_estate_type_id", columnDefinition = "INT")
-    private int realEstateTypeId;
+    @ManyToOne
+    @JoinColumn(name = "real_estate_type_id", columnDefinition = "INT")
+    private RealEstateType realEstateType;
 
     @Column(name = "is_delete", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isDelete = false;

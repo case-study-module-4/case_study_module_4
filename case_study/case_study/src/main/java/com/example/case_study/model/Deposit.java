@@ -29,7 +29,7 @@ public class Deposit {
     @NotNull(message = "Amount must not be null")
     @DecimalMin(value = "0.0", inclusive = false, message = "Amount must be greater than zero")
     @Digits(integer = 13, fraction = 2, message = "Amount must have at most 13 integer digits and 2 decimal places")
-    @Column(name = "amount", columnDefinition = "DECIMAL(15,2)", nullable = false)
+    @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
     @NotNull(message = "Payment date must not be null")

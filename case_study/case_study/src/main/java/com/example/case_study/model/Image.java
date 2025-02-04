@@ -17,7 +17,9 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "INT")
-    private int id;
+
+    private Integer id;
+
 
     @NotNull(message = "Real Estate ID must not be null")
     @ManyToOne

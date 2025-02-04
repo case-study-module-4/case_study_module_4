@@ -18,7 +18,9 @@ public class Deposit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "INT")
-    private int id;
+
+    private Integer id;
+
 
     @NotNull(message = "User ID must not be null")
     @ManyToOne

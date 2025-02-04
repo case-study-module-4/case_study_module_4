@@ -17,7 +17,9 @@ public class PostType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "INT")
-    private int id;
+
+    private Integer id;
+
 
     @NotNull(message = "Type name must not be null")
     @Column(name = "type_name", columnDefinition = "ENUM('STANDARD', 'VIP_SILVER', 'VIP_GOLD', 'VIP_DIAMOND')", nullable = false)

@@ -19,7 +19,9 @@ public class RealEstate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "INT")
-    private int id;
+
+    private Integer id;
+
 
     @NotBlank(message = "Status must not be empty")
     @Column(name = "status", columnDefinition = "ENUM('Available', 'Sold', 'Rented')", nullable = false)
@@ -43,4 +45,8 @@ public class RealEstate {
     @NotNull(message = "ID Real Estate Type must not be null")
     @Column(name = "real_estate_type_id", columnDefinition = "INT")
     private int realEstateTypeId;
+
+    @Column(name = "is_delete", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean isDelete = false;
+
 }

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
@@ -29,7 +30,7 @@ public class Deposit {
     @DecimalMin(value = "0.0", inclusive = false, message = "Amount must be greater than zero")
     @Digits(integer = 13, fraction = 2, message = "Amount must have at most 13 integer digits and 2 decimal places")
     @Column(name = "amount", columnDefinition = "DECIMAL(15,2)", nullable = false)
-    private double amount;
+    private BigDecimal amount;
 
     @NotNull(message = "Payment date must not be null")
     @PastOrPresent(message = "Payment date cannot be in the future")

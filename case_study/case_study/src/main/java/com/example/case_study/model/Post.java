@@ -19,7 +19,9 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "INT")
+
     private Integer id;
+
 
     @NotBlank(message = "Status must not be empty")
     @Column(name = "status", columnDefinition = "ENUM('Pending', 'Approved', 'Rejected')", nullable = false)

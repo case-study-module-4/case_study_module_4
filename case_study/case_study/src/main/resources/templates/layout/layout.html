@@ -14,7 +14,8 @@
 </th:block>
 
 <th:block th:fragment="header">
-    <header class="header">
+    <header class="header" style=" height: 80px;
+    background-color: black;">
         <nav class="navbar navbar-expand-lg " style="height: 80px ; background-color: #E6E6FA">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
@@ -36,28 +37,48 @@
                         <li class="nav-item">
                             <a class="nav-link me-3 active" href="#">Nhà đất cho thuê</a>
                         </li>
-<!--                        <li class="nav-item me-3 dropdown">-->
-<!--                            <a class="nav-link active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"-->
-<!--                               aria-expanded="false">-->
-<!--                                Dropdown-->
-<!--                            </a>-->
-<!--                            <ul class="dropdown-menu">-->
-<!--                                <li><a class="dropdown-item" href="#">Action</a></li>-->
-<!--                                <li><a class="dropdown-item" href="#">Another action</a></li>-->
-<!--                                <li>-->
-<!--                                    <hr class="dropdown-divider">-->
-<!--                                </li>-->
-<!--                                <li><a class="dropdown-item" href="#">Something else here</a></li>-->
-<!--                            </ul>-->
-<!--                        </li>-->
-<!--                        <li class="nav-item me-3">-->
-<!--                            <a class="nav-link active disabled" aria-disabled="true">Disabled</a>-->
-<!--                        </li>-->
+                        <!--                        <li class="nav-item me-3 dropdown">-->
+                        <!--                            <a class="nav-link active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"-->
+                        <!--                               aria-expanded="false">-->
+                        <!--                                Dropdown-->
+                        <!--                            </a>-->
+                        <!--                            <ul class="dropdown-menu">-->
+                        <!--                                <li><a class="dropdown-item" href="#">Action</a></li>-->
+                        <!--                                <li><a class="dropdown-item" href="#">Another action</a></li>-->
+                        <!--                                <li>-->
+                        <!--                                    <hr class="dropdown-divider">-->
+                        <!--                                </li>-->
+                        <!--                                <li><a class="dropdown-item" href="#">Something else here</a></li>-->
+                        <!--                            </ul>-->
+                        <!--                        </li>-->
+                        <!--                        <li class="nav-item me-3">-->
+                        <!--                            <a class="nav-link active disabled" aria-disabled="true">Disabled</a>-->
+                        <!--                        </li>-->
                     </ul>
                     <ul class="navbar-nav mb-2 mb-lg-0">
-                        <li class="nav-item me-3">
-                            <a class="nav-link active" href="#">Đăng nhập</a>
+<!--                                                <li class="nav-item me-3">-->
+<!--                                                    <a class="nav-link active" href="#" >Đăng nhập</a>-->
+<!--                                                </li>-->
+                        <li class="nav-item me-3" sec:authorize="!isAuthenticated()">
+                            <a class="nav-link active" href="/login">Đăng nhập</a>
                         </li>
+
+                        <li class="nav-item dropdown me-3" sec:authorize="isAuthenticated()">
+                            <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" aria-expanded="false">
+                                <b th:text="${#authentication.name}"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/profile">Hồ sơ của tôi</a></li>
+                                <li>
+                                    <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changePasswordUserModal">
+                                        Thay Đổi Mật Khẩu
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                            </ul>
+                        </li>
+
                         <li class="nav-item">
                             <a class="btn btn-primary text-white" href="#">Đăng tin</a>
                         </li>
@@ -67,6 +88,7 @@
         </nav>
     </header>
 </th:block>
+
 
 <th:block th:fragment="footer">
     <footer class="full-width-footer py-sm-3 py-md-4 py-xl-6" style="width: 100%;

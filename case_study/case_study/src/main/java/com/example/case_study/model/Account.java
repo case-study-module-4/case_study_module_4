@@ -17,7 +17,9 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "INT")
-    private Integer id;
+
+      private Integer id;
+
 
     @NotBlank(message = "Username must not be empty")
     @Size(min = 5, max = 50, message = "Username must be between 5 and 50 characters")
@@ -28,6 +30,10 @@ public class Account {
     @Size(min = 8, message = "Password must be at least 8 characters long")
     @Column(name = "password", columnDefinition = "VARCHAR(100)")
     private String password;
+
+    @NotBlank(message = "Role must not be empty")
+    @Column(name = "name_role", columnDefinition = "ENUM('Admin', 'User')", nullable = false)
+    private String nameRole;
 
     @ManyToOne
     @JoinColumn(name = "id_role", referencedColumnName = "id", nullable = false)

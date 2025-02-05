@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng tin mới</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../style/posting-form.css">
+
+</head>
+<body>
+<div class="container my-5">
+    <h2 class="mb-4">Đăng tin mới</h2>
+    <p class="text-muted">Thông tin có dấu (*) là bắt buộc, không đăng lại tin đã đăng trên Batdongsan.vn</p>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4" id="tabOptions" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-ban" data-bs-toggle="tab" data-bs-target="#ban" type="button" role="tab">
+                Bán
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-chothue" data-bs-toggle="tab" data-bs-target="#chothue" type="button" role="tab">
+                Cho thuê
+            </button>
+        </li>
+    </ul>
+
+    <!-- Form -->
+    <form>
+        <!-- Loại bất động sản -->
+        <div class="mb-3">
+            <label for="loai_bds" class="form-label">Loại bất động sản *</label>
+            <select id="loai_bds" name="loai_bds" class="form-select">
+                <option value="">VD: Nhà riêng</option>
+                <option value="nha_rieng">Nhà riêng</option>
+                <option value="chung_cu">Chung cư</option>
+                <option value="dat">Đất</option>
+            </select>
+        </div>
+
+        <!-- Địa chỉ -->
+        <h3 class="mt-4">Địa chỉ</h3>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="tinh_thanh" class="form-label">Tỉnh, thành phố *</label>
+                <select id="tinh_thanh" name="tinh_thanh" class="form-select">
+                    <option value="">Chọn</option>
+                    <option value="hanoi">Hà Nội</option>
+                    <option value="hcm">TP. Hồ Chí Minh</option>
+                    <option value="danang">Đà Nẵng</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label for="quan_huyen" class="form-label">Quận, huyện *</label>
+                <select id="quan_huyen" name="quan_huyen" class="form-select">
+                    <option value="">Chọn</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label for="phuong_xa" class="form-label">Phường, xã *</label>
+                <select id="phuong_xa" name="phuong_xa" class="form-select">
+                    <option value="">Chọn</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label for="duong_pho" class="form-label">Đường, phố</label>
+                <select id="duong_pho" name="duong_pho" class="form-select">
+                    <option value="">Chọn</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label for="du_an" class="form-label">Dự án</label>
+                <select id="du_an" name="du_an" class="form-select">
+                    <option value="">Chọn</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-3 mt-3">
+            <label for="dia_chi_hien_thi" class="form-label">Địa chỉ hiển thị trên tin đăng *</label>
+            <input type="text" id="dia_chi_hien_thi" name="dia_chi_hien_thi" class="form-control"
+                   placeholder="Bạn có thể bổ sung hẻm, ngách, ngõ...">
+        </div>
+
+
+    </form>
+</div>
+
+<div class="container">
+    <h1>Thông tin bài viết</h1>
+    <p>Không gộp nhiều bất động sản trong một tin rao, để quá trình đăng tin và duyệt nhanh hơn, xin lưu ý: gõ tiếng Việt có dấu và không viết tắt...</p>
+
+    <form>
+        <!-- Title Field -->
+        <div class="field">
+            <label for="title">Tiêu đề *</label>
+            <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="VD: Bán nhà riêng 50m2 chính chủ tại Cầu Giấy"
+                    required
+            >
+            <small>Tối thiểu 30 ký tự, tối đa 99 ký tự</small>
+        </div>
+
+        <!-- Description Field -->
+        <div class="field">
+            <label for="description">Mô tả *</label>
+            <textarea
+                    id="description"
+                    name="description"
+                    placeholder="Nhập mô tả chung về bất động sản của bạn. Ví dụ: Khu nhà có vị trí thuận lợi, gần công viên, gần trường học ..."
+                    required>
+                </textarea>
+            <small>Tối thiểu 30 ký tự, tối đa 3.000 ký tự</small>
+        </div>
+
+    </form>
+</div>
+
+<div class="container" style="margin-top: 50px">
+    <h2>Thông tin bất động sản</h2>
+    <form>
+        <div class="form-group">
+            <label for="area">Diện tích <span>*</span></label>
+            <div class="form-row">
+                <input type="number" id="area" name="area" placeholder="Nhập diện tích" required>
+                <select>
+                    <option value="m2">m²</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Mức giá <span>*</span></label>
+            <div class="form-row">
+                <input type="number" id="price" name="price" placeholder="Nhập giá" required>
+                <select>
+                    <option value="vnd">VNĐ</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="legal">Giấy tờ pháp lý</label>
+            <select id="legal" name="legal">
+                <option value="no">Không</option>
+                <option value="yes">Có</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="bedrooms">Số phòng ngủ</label>
+                <input type="number" id="bedrooms" name="bedrooms">
+            </div>
+            <div class="form-group">
+                <label for="bathrooms">Số phòng tắm, vệ sinh</label>
+                <input type="number" id="bathrooms" name="bathrooms">
+            </div>
+            <div class="form-group">
+                <label for="floors">Số tầng</label>
+                <input type="number" id="floors" name="floors">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="direction">Hướng nhà</label>
+            <select id="direction" name="direction">
+                <option value="">Chọn hướng</option>
+                <option value="north">Bắc</option>
+                <option value="south">Nam</option>
+                <option value="east">Đông</option>
+                <option value="west">Tây</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="balcony">Hướng ban công</label>
+            <select id="balcony" name="balcony">
+                <option value="">Chọn hướng</option>
+                <option value="north">Bắc</option>
+                <option value="south">Nam</option>
+                <option value="east">Đông</option>
+                <option value="west">Tây</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="furniture">Nội thất</label>
+            <textarea id="furniture" name="furniture" placeholder="VD: Nội thất đầy đủ"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit">Lưu thông tin</button>
+        </div>
+    </form>
+</div>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

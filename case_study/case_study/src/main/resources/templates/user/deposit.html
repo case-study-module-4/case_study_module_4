@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Nạp Tiền</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        h2 {
+            color: #333;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        input {
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            text-align: center;
+            width: 200px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script>
+        function submitPayment(amount) {
+            let inputAmount = document.getElementById("customAmount").value;
+            if (amount === 0 && inputAmount) {
+                amount = parseFloat(inputAmount);
+            }
+            if (amount >= 10000) {
+                // Tạo form ẩn để gửi POST request
+                let form = document.createElement("form");
+                form.method = "POST";
+                form.action = "/paypal";
+
+                let input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "amount";
+                input.value = amount;
+
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            } else {
+                alert("Số tiền tối thiểu là 10.000 VND");
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Nạp tiền vào tài khoản</h2>
+
+    <!-- Nút chọn mệnh giá cố định -->
+    <button onclick="submitPayment(500000)">Nạp 500.000 VND</button>
+    <button onclick="submitPayment(1000000)">Nạp 1.000.000 VND</button>
+
+    <!-- Ô nhập số tiền tùy chọn -->
+    <div>
+        <label for="customAmount">Nhập số tiền muốn nạp:</label>
+        <br>
+        <input type="number" id="customAmount" min="10000" step="10000" placeholder="Nhập số tiền VND">
+        <br>
+        <button onclick="submitPayment(0)">Nạp tiền</button>
+    </div>
+</div>
+
+</body>
+</html>

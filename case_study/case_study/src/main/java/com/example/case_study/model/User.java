@@ -20,8 +20,8 @@ public class User {
     @Column(name = "id", columnDefinition = "INT")
     private Integer id;
 
-    @NotBlank(message = "Username must not be empty")
-    @Size(min = 5, max = 50, message = "Username must be between 5 and 50 characters")
+    @NotBlank(message = "Full name must not be empty")
+    @Size(min = 5, max = 50, message = "Full name must be between 5 and 50 characters")
     @Column(name = "full_name", columnDefinition = "VARCHAR(50)", unique = true)
     private String fullName;
 

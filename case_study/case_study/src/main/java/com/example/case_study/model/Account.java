@@ -19,7 +19,6 @@ public class Account {
     @Column(name = "id", columnDefinition = "INT")
     private Integer id;
 
-
     @NotBlank(message = "Username must not be empty")
     @Size(min = 5, max = 50, message = "Username must be between 5 and 50 characters")
     @Column(name = "username", columnDefinition = "VARCHAR(50)", unique = true)

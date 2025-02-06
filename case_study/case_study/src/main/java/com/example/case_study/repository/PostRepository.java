@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Integer> {
 
-    // Tìm bài đăng theo user và trạng thái
+    List<Post> findByStatus(String status);
+
     List<Post> findByUserIdAndStatus(Integer userId, String status);
 }

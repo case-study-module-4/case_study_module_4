@@ -21,7 +21,7 @@ public class UserController {
             return "redirect:/login";
         }
         String username = principal.getName();
-        User user = userService.findByUsername(username);
+        User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
         return "user/dashboard";
     }

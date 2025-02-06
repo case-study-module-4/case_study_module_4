@@ -29,6 +29,7 @@ public class UserService implements IUserService {
         return null;
     }
 
+
     @Override
     public void deleteById(Integer id) {
 
@@ -42,6 +43,12 @@ public class UserService implements IUserService {
 
     @Override
     public void updateUserBalance(Integer userId, BigDecimal amount) {
-        userRepository.updateUserBalance(userId, amount);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        user.setBalance(user.getBalance().add(amount));
+
+        userRepository.save(user);
+
     }
 }

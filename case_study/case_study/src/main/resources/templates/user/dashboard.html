@@ -16,7 +16,7 @@
         <div class="user-info">
             <!-- Hiển thị thông tin người dùng -->
             <div class="avatar">U</div>
-            <div class="user-name" th:text="${user.fullName}">Tên người dùng</div>
+<!--            <div class="user-name" th:text="${user.fullName}">Tên người dùng</div>-->
             <div class="points" th:text="'Điểm: ' + ${user.balance}">0 điểm</div>
             <div class="account-balance">
                 <p>Số dư tài khoản</p>
@@ -28,7 +28,8 @@
                     <span>Mã chuyển khoản:</span>
                     <span>BDS99</span>
                 </div>
-                <button class="btn btn-primary">Nạp tiền</button>
+                <a th:href="@{/deposit}">Nạp tiền</a>
+                <button onclick="window.location.href='/deposit'" class="btn btn-primary">Nạp tiền</button>
             </div>
         </div>
         <!-- Menu chính -->

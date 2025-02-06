@@ -1,14 +1,17 @@
 package com.example.case_study.controller;
 
+import com.example.case_study.model.User;
 import com.example.case_study.service.impl.PaypalService;
 import com.example.case_study.service.impl.UserService;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.Map;
 
 @Controller
@@ -20,7 +23,13 @@ public class PaypalController {
     private UserService userService;
 
     @GetMapping("/deposit")
-    public String showDepositForm(){
+    public String showDepositForm(Model model, Principal principal){
+        if (principal == null) {
+            return "redirect:/login";
+        }
+        String username = principal.getName();
+        User user = userService.findByUsername(username);
+        model.addAttribute("user", user);
         return "user/deposit"; // Hiển thị trang nạp tiền
     }
 
@@ -48,10 +57,12 @@ public class PaypalController {
     }
 
     @GetMapping("/success")
-    public String successPay(@RequestParam Map<String, String> params) {
+    public String successPay(@RequestParam Map<String, String> params, Principal principal) {
         String paymentId = params.get("paymentId");
         String payerId = params.get("PayerID");
-
+        if (principal == null) {
+            return "redirect:/login";
+        }
         try {
             Payment payment = payPalService.executePayment(paymentId, payerId);
             if (payment.getState().equals("approved")) {
@@ -59,10 +70,10 @@ public class PaypalController {
                 BigDecimal amountUSD = new BigDecimal(payment.getTransactions().get(0).getAmount().getTotal());
                 // Chuyển đổi USD sang VND
                 BigDecimal amountVND = amountUSD.multiply(new BigDecimal("24000"));
-                // Lấy ID người dùng (Giả sử userId = 1, bạn có thể lấy từ session)
-                Integer userId = 1;
+                String username = principal.getName();
+                User user = userService.findByUsername(username);
                 // Cập nhật số dư người dùng
-                userService.updateUserBalance(userId, amountVND);
+                userService.updateUserBalance(user.getId(), amountVND);
                 return "user/success";
             }
         } catch (PayPalRESTException e) {

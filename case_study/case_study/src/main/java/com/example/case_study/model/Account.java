@@ -17,8 +17,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "INT")
-
-      private Integer id;
+    private Integer id;
 
     @NotBlank(message = "Username must not be empty")
     @Size(min = 5, max = 50, message = "Username must be between 5 and 50 characters")

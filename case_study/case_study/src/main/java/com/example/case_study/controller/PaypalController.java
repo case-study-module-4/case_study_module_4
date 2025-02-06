@@ -1,7 +1,7 @@
 package com.example.case_study.controller;
 
-import com.example.case_study.service.implement.PaypalService;
-import com.example.case_study.service.implement.UserService;
+import com.example.case_study.service.impl.PaypalService;
+import com.example.case_study.service.impl.UserService;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import org.springframework.beans.factory.annotation.Autowired;

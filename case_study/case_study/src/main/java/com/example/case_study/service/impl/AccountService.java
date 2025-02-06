@@ -1,7 +1,8 @@
-package com.example.case_study.service.acounnt;
+package com.example.case_study.service.impl;
 
 import com.example.case_study.model.Account;
-import com.example.case_study.repository.Account.AccountRepository;
+import com.example.case_study.repository.AccountRepository;
+import com.example.case_study.service.IAccountService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -6,7 +6,7 @@ body {
     background-color: #f4f4f9;
 }
 
-.container {
+.container-fluid {
     display: flex;
     min-height: 100vh;
 }

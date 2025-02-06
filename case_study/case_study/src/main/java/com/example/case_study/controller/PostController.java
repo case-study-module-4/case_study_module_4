@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping()
+@RequestMapping("/posts")
 public class PostController {
 
     @Autowired

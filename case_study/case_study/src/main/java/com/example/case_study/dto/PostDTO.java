@@ -1,6 +1,5 @@
 package com.example.case_study.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -23,7 +22,7 @@ public class PostDTO {
     private Integer id;
 
     @NotBlank(message = "Trạng thái không được để trống")
-    private String status; // Giá trị mặc định
+    private String status;
 
     @NotBlank(message = "Tiêu đề không được để trống")
     @Size(max = 255, message = "Tiêu đề không được vượt quá 255 ký tự")
@@ -31,49 +30,11 @@ public class PostDTO {
 
     @NotBlank(message = "Nội dung không được để trống")
     private String content;
-    private LocalDate publishDate;
-    private String status;
-    public PostDTO() {
 
-    }
-    // Constructor nhận tham số là đối tượng Post
-    public PostDTO(Post post) {
-        this.id = post.getId();
-        this.title = post.getTitle();
-        this.content = post.getContent();
-        this.publishDate = post.getPublishDate();
-        this.status = post.getStatus();
-    }
-    public Integer getId() {
-        return id;
-    }
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public String getTitle() {
-        return title;
-    }
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    public String getContent() {
-        return content;
-    }
-    public void setContent(String content) {
-        this.content = content;
-    }
-    public LocalDate getPublishDate() {
-        return publishDate;
-    }
-    public void setPublishDate(LocalDate publishDate) {
-        this.publishDate = publishDate;
-    }
-    public String getStatus() {
-        return status;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @NotNull(message = "Ngày đăng không được để trống")
+    private LocalDate publishDate = LocalDate.now();
+
     @NotNull(message = "Mục đích không được để trống")
     private String purpose;
 
@@ -92,7 +53,13 @@ public class PostDTO {
     @NotNull(message = "Hình ảnh không được để trống")
     private MultipartFile image;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @NotNull(message = "Ngày đăng không được để trống")
-    private LocalDate publishDate = LocalDate.now();
+    // Constructor nhận tham số là đối tượng Post
+    public PostDTO(Post post) {
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.publishDate = post.getPublishDate();
+        this.status = post.getStatus();
+        // Nếu cần, bạn có thể ánh xạ thêm các trường khác từ Post sang PostDTO.
+    }
 }

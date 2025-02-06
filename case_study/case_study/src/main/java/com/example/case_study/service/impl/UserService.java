@@ -2,7 +2,7 @@ package com.example.case_study.service.impl;
 
 import com.example.case_study.model.Account;
 import com.example.case_study.model.User;
-import com.example.case_study.repository.Account.AccountRepository;
+import com.example.case_study.repository.AccountRepository;
 import com.example.case_study.repository.UserRepository;
 import com.example.case_study.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;

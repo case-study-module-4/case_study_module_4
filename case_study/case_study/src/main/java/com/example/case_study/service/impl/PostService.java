@@ -7,6 +7,7 @@ import com.example.case_study.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,6 +37,33 @@ public class PostService implements IPostService {
     public void deleteById(Integer id) {
         postRepository.deleteById(id);
     }
+
+
+    @Override
+    public void createPost(PostDTO postDTO) {
+        Post post = new Post();
+        // Copy các trường khác
+        post.setTitle(postDTO.getTitle());
+        post.setContent(postDTO.getContent());
+        // Các mapping cho các trường quan hệ (Purpose, RealEstate, …) cũng cần được xử lý ở đây
+
+        // Kiểm tra và gán giá trị mặc định cho status
+        if (postDTO.getStatus() == null || postDTO.getStatus().trim().isEmpty()) {
+            post.setStatus("Pending");
+        } else {
+            post.setStatus(postDTO.getStatus());
+        }
+
+        // Kiểm tra và gán giá trị mặc định cho publishDate
+        if (postDTO.getPublishDate() == null) {
+            post.setPublishDate(LocalDate.now());
+        } else {
+            post.setPublishDate(postDTO.getPublishDate());
+        }
+
+        postRepository.save(post);
+    }
+
 
     @Override
     public List<Post> getApprovedPosts() {

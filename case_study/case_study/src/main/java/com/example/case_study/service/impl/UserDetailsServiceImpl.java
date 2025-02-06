@@ -1,7 +1,7 @@
 package com.example.case_study.service.impl;
 
 import com.example.case_study.model.Account;
-import com.example.case_study.repository.Account.AccountRepository;
+import com.example.case_study.repository.AccountRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

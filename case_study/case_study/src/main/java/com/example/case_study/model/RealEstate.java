@@ -39,9 +39,13 @@ public class RealEstate {
 
     @Column(name = "image", columnDefinition = "TEXT")
     private String image;
-    @ManyToOne
-    @JoinColumn(name = "real_estate_type_id", columnDefinition = "INT")
-    private RealEstateType realEstateType;
+
+    @NotBlank(message = "Name must not be empty")
+    @Column(
+            name = "type",
+            columnDefinition = "ENUM('House', 'Apartment', 'Land', 'Hotel', 'Building')",
+            nullable = false)
+    private String type;
 
     @Column(name = "is_delete", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isDelete = false;

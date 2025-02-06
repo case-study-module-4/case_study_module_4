@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách bài đăng</title>
+</head>
+<body>
+
+<h1>Danh sách bài đăng</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>STT</th>
+        <th>Tiêu đề</th>
+        <th>Nội dung</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="post, stat : ${posts}">
+        <td th:text="${stat.index + 1}"></td>
+        <td th:text="${post.title}"></td>
+        <td th:text="${post.content}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

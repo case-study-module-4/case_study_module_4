@@ -1,19 +1,16 @@
 package com.example.case_study.controller;
 
-import com.example.case_study.dto.PostDTO;
 import com.example.case_study.model.Post;
 import com.example.case_study.model.User;
 import com.example.case_study.service.IPostService;
 import com.example.case_study.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/posts")
@@ -56,7 +53,7 @@ public class PostController {
         String username = principal.getName();
         User user = userService.findUserByUsername(username);
         List<Post> approvedPosts = postService.getApprovedPostsByUserId(user.getId());
-        model.addAttribute("approvedPosts", approvedPosts);
+        model.addAttribute("posts", approvedPosts);
 
         return "user/approved-posts";
     }
@@ -66,7 +63,7 @@ public class PostController {
         String username = principal.getName();
         User user = userService.findUserByUsername(username);
         List<Post> draftPosts = postService.getDraftPostsByUserId(user.getId());
-        model.addAttribute("draftPosts", draftPosts);
+        model.addAttribute("posts", draftPosts);
 
         return "user/drafts-posts";
     }

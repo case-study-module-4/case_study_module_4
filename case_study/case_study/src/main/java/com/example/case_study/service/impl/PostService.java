@@ -1,6 +1,5 @@
 package com.example.case_study.service.impl;
 
-import com.example.case_study.dto.PostDTO;
 import com.example.case_study.model.Post;
 import com.example.case_study.repository.PostRepository;
 import com.example.case_study.service.IPostService;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PostService implements IPostService {

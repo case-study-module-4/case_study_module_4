@@ -39,9 +39,9 @@ public class WebSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/home", "/login", "/signin", "/403").permitAll()
+                        .requestMatchers("/home", "/login", "/register", "/403").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Bảo vệ đường dẫn admin
-                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN") // Người dùng có thể vào
+                        .requestMatchers("/user/**").hasAnyRole("USER", " ADMIN") // Người dùng có thể vào
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

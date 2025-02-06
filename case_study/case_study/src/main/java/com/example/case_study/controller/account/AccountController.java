@@ -1,6 +1,6 @@
 package com.example.case_study.controller.account;
 
-import com.example.case_study.service.acounnt.IAccountService;
+import com.example.case_study.service.IAccountService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

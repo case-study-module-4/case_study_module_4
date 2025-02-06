@@ -188,3 +188,8 @@
     background-color: #fff;
     color: #5a0b08;
 }
+
+.table-header {
+    background-color: #d9392e; /* Màu đỏ đậm */
+    color: white; /* Chữ màu trắng để dễ nhìn */
+}

@@ -19,7 +19,4 @@ public class Role {
 
     @Column(name = "name", columnDefinition = "VARCHAR(50)", unique = true, nullable = false)
     private String name;
-
-    @Column(name = "is_delete", columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private Boolean isDelete = false;
 }

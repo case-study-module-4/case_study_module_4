@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -27,12 +27,12 @@
                     <label for="firstName" class="form-label">Tên</label>
                   </div>
                 </div>
-                <div class="col-12">
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Last Name" required>
-                    <label for="lastName" class="form-label">Họ</label>
-                  </div>
-                </div>
+<!--                <div class="col-12">-->
+<!--                  <div class="form-floating mb-3">-->
+<!--                    <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Last Name" required>-->
+<!--                    <label for="lastName" class="form-label">Họ</label>-->
+<!--                  </div>-->
+<!--                </div>-->
                 <div class="col-12">
                   <div class="form-floating mb-3">
                     <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com" required>
@@ -43,6 +43,12 @@
                   <div class="form-floating mb-3">
                     <input type="password" class="form-control" name="password" id="password" value="" placeholder="Password" required>
                     <label for="password" class="form-label">Mật khẩu</label>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-floating mb-3">
+                    <input type="password" class="form-control" name="confirmPassword" value="" placeholder="Xác nhận mật khẩu" required>
+                    <label class="form-label">Xác nhận mật khẩu</label>
                   </div>
                 </div>
                 <div class="col-12">
@@ -59,7 +65,7 @@
                   </div>
                 </div>
                 <div class="col-12">
-                  <p class="m-0 text-secondary text-center">Bạn đã có tài khoản? <a href="#!" class="link-danger text-decoration-none"> Đăng nhập</a></p>
+                  <p class="m-0 text-secondary text-center">Bạn đã có tài khoản? <a href="/login" class="link-danger text-decoration-none"> Đăng nhập</a></p>
                 </div>
               </div>
             </form>

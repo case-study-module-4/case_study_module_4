@@ -128,7 +128,7 @@ body {
 .submenu {
     list-style: none;
     padding-left: 20px;
-    display: none;
+    display: block;
 }
 
 .menu-item:hover .submenu {
@@ -147,6 +147,7 @@ body {
 
 .submenu a:hover {
     color: #d32f2f;
+    text-decoration: none;
 }
 
 /* Main Content */

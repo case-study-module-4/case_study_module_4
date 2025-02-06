@@ -7,10 +7,11 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="/style/user-dashboard.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/style/header.css">
 </head>
 <body>
 <div th:insert="~{/layout/layout::header}"></div>
-<div class="container">
+<div class="container-fluid">
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="user-info">
@@ -23,10 +24,6 @@
                 <div>
                     <span>TK Chính:</span>
                     <span th:text="${user.balance}">0</span>
-                </div>
-                <div class="transfer-code">
-                    <span>Mã chuyển khoản:</span>
-                    <span>BDS99</span>
                 </div>
                 <button class="btn btn-primary">Nạp tiền</button>
             </div>

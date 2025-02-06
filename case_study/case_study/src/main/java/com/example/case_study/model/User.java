@@ -22,8 +22,8 @@ public class User {
 
     @NotBlank(message = "Username must not be empty")
     @Size(min = 5, max = 50, message = "Username must be between 5 and 50 characters")
-    @Column(name = "username", columnDefinition = "VARCHAR(50)", unique = true)
-    private String username;
+    @Column(name = "full_name", columnDefinition = "VARCHAR(50)", unique = true)
+    private String fullName;
 
     @Size(max = 15, message = "Phone number must not exceed 15 characters")
     @Column(name = "phone", columnDefinition = "VARCHAR(15)")

@@ -2,13 +2,16 @@ package com.example.case_study.controller;
 
 import com.example.case_study.dto.PostDTO;
 import com.example.case_study.model.Post;
+import com.example.case_study.model.User;
 import com.example.case_study.service.IPostService;
+import com.example.case_study.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +21,9 @@ public class PostController {
 
     @Autowired
     private IPostService postService;
+
+    @Autowired
+    private IUserService userService;
 
     @GetMapping
     public String getAllPosts(Model model) {
@@ -45,23 +51,25 @@ public class PostController {
         return "redirect:/posts";
     }
 
-    @GetMapping("/user/posts/approved")
-    public String showApprovedPosts(Model model, Integer userId) {
-        model.addAttribute("posts", postService.getApprovedPostsByUser(userId));
-        return "user/approved-posts"; // Trả về trang HTML danh sách tin đã phê duyệt
+    @GetMapping("/approved")
+    public String getApprovedPostsForUser(Model model, Principal principal) {
+        String username = principal.getName();
+        User user = userService.findUserByUsername(username);
+        List<Post> approvedPosts = postService.getApprovedPostsByUserId(user.getId());
+        model.addAttribute("approvedPosts", approvedPosts);
+
+        return "user/approved-posts";
     }
 
-    @GetMapping("/user/posts/drafts")
-    public String showDraftPosts(Model model, Integer userId) {
-        model.addAttribute("posts", postService.getDraftPostsByUser(userId));
-        return "user/draft-posts"; // Trả về trang HTML danh sách tin nháp
+    @GetMapping("/drafts")
+    public String getDraftPostsForUser(Model model, Principal principal) {
+        String username = principal.getName();
+        User user = userService.findUserByUsername(username);
+        List<Post> draftPosts = postService.getDraftPostsByUserId(user.getId());
+        model.addAttribute("draftPosts", draftPosts);
+
+        return "user/drafts-posts";
     }
 
-    @GetMapping("/user/posts/{id}/details")
-    public String showPostDetails(@PathVariable("id") Integer id, Model model) {
-        PostDTO post = postService.getPostById(id);
-        model.addAttribute("post", post);
-        return "user/post-details"; // Trả về trang chi tiết bài đăng
-    }
 }
 

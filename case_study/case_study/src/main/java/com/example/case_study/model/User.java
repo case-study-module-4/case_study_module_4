@@ -43,10 +43,7 @@ public class User {
     @Column(name = "image", columnDefinition = "TEXT")
     private String image;
 
-    @ManyToOne
-    @JoinColumn(name = "account_id", referencedColumnName = "id")
-    private Account account;
-
     @Column(name = "is_delete", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isDelete = false;
+
 }

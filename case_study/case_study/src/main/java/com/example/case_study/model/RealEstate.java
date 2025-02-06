@@ -37,11 +37,16 @@ public class RealEstate {
     @Column(name = "price", columnDefinition = "DECIMAL(15,2)")
     private Double price;
 
+    @NotNull(message = "Area must not be null")
+    @Column(name = "area", columnDefinition = "DECIMAL(15,2)")
+    private Double area;
+
     @Column(name = "image", columnDefinition = "TEXT")
     private String image;
     @ManyToOne
     @JoinColumn(name = "real_estate_type_id", columnDefinition = "INT")
     private RealEstateType realEstateType;
+
 
     @Column(name = "is_delete", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isDelete = false;

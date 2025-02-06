@@ -1,12 +1,15 @@
-.header {
-    height: 80px;
-    background-color: black;
-}
+/*.header {*/
+/*    height: 80px;*/
+/*    background-color: black;*/
+/*    position: fixed;*/
+/*    width: 100%;*/
+/*    z-index: 1000;*/
+/*}*/
 
-.navbar-nav .nav-link:hover {
-    color: black;
-    background-color: #C1CDCD;
-}
+/*.navbar-nav .nav-link:hover {*/
+/*    color: black;*/
+/*    background-color: #C1CDCD;*/
+/*}*/
 
 /*layout 1*/
 .main-layout {

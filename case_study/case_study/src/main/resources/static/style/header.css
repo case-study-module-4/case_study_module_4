@@ -1,0 +1,9 @@
+/*Ai đem thanh header đi đâu thì nhớ vác thêm cả cái này nữa nha.*/
+.header {
+    background-color: black;
+}
+
+.navbar-nav .nav-link:hover {
+    color: black;
+    background-color: #C1CDCD;
+}

@@ -14,11 +14,10 @@
 </th:block>
 
 <th:block th:fragment="header">
-    <header class="header" style=" height: 80px;
-    background-color: black;">
-        <nav class="navbar navbar-expand-lg " style="height: 80px ; background-color: #E6E6FA">
+    <header class="header" style=" height: 80px ; margin-top: 0 ; background-color: black;">
+        <nav class="navbar navbar-expand-lg " style="height: 80px ; background-color: #E6E6FA ; position: fixed ; width: 100% ; z-index: 1000 "  >
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="/home">
                     <img src="https://staticfile.batdongsan.com.vn/images/logo/standard/red/logo.svg" alt="Logo"
                          style="height: 40px;"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -65,7 +64,8 @@
 
                         <li class="nav-item dropdown me-3" sec:authorize="isAuthenticated()">
                             <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" aria-expanded="false">
-                                <b th:text="${#authentication.name}"></b>
+<!--                                <b th:text="${#authentication.name}"></b>-->
+                                <span th:text="${#authentication != null ? #authentication.name : 'Guest'}"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/profile">Hồ sơ của tôi</a></li>

@@ -3,10 +3,7 @@ package com.example.case_study.controller;
 import com.example.case_study.dto.PostDTO;
 import com.example.case_study.model.Post;
 import com.example.case_study.model.User;
-import com.example.case_study.service.IPostService;
-import com.example.case_study.service.IUserService;
-import com.example.case_study.service.IPurposeService;
-import com.example.case_study.service.IRealEstateService;
+import com.example.case_study.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +29,7 @@ public class PostController {
     @Autowired
     private IRealEstateService realEstateService;
 
+
     @Autowired
     private IUserService userService;
 
@@ -39,7 +37,7 @@ public class PostController {
     public String getAllPosts(Model model) {
         List<Post> posts = postService.findAll();
         model.addAttribute("posts", posts);
-        return "post/post";
+        return "post/post-sale";
     }
 
     @GetMapping("/create")
@@ -47,6 +45,7 @@ public class PostController {
         model.addAttribute("postDTO", new PostDTO()); // Đảm bảo postDTO được truyền vào model
         model.addAttribute("purposes", purposeService.findAll());
         model.addAttribute("realEstates", realEstateService.findAll());
+
         return "post/create-post";
     }
 
@@ -122,4 +121,3 @@ public class PostController {
     }
 
 }
-

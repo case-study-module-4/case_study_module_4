@@ -1,4 +1,4 @@
-package com.example.case_study.controller.account;
+package com.example.case_study.controller;
 
 import com.example.case_study.service.IAccountService;
 import jakarta.transaction.Transactional;

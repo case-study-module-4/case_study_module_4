@@ -1,23 +1,20 @@
 package com.example.case_study.controller;
 
+
 import com.example.case_study.dto.PostDTO;
 import com.example.case_study.model.Post;
 import com.example.case_study.model.User;
-import com.example.case_study.service.IPostService;
-import com.example.case_study.service.IUserService;
-import com.example.case_study.service.IPurposeService;
-import com.example.case_study.service.IRealEstateService;
+import com.example.case_study.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/posts")
@@ -32,6 +29,7 @@ public class PostController {
     @Autowired
     private IRealEstateService realEstateService;
 
+
     @Autowired
     private IUserService userService;
 
@@ -39,7 +37,7 @@ public class PostController {
     public String getAllPosts(Model model) {
         List<Post> posts = postService.findAll();
         model.addAttribute("posts", posts);
-        return "post/post";
+        return "post/post-sale";
     }
 
     @GetMapping("/create")
@@ -47,34 +45,21 @@ public class PostController {
         model.addAttribute("postDTO", new PostDTO()); // Đảm bảo postDTO được truyền vào model
         model.addAttribute("purposes", purposeService.findAll());
         model.addAttribute("realEstates", realEstateService.findAll());
+
         return "post/create-post";
     }
 
     @PostMapping()
     public String createPost(@Valid @ModelAttribute("postDTO") PostDTO postDTO,
                              BindingResult result,
-                             @RequestParam("image") MultipartFile image,
                              Model model) {
+        model.addAttribute("postDTO", new PostDTO());
+        model.addAttribute("purposes", purposeService.findAll());
+        model.addAttribute("realEstates", realEstateService.findAll());
+
         if (result.hasErrors()) {
-            model.addAttribute("purposes", purposeService.findAll());
-            model.addAttribute("realEstates", realEstateService.findAll());
             return "post/create-post";
         }
-
-        if (!image.isEmpty()) {
-            postDTO.setImage(image);
-        }
-
-        // Kiểm tra và thiết lập giá trị mặc định cho status nếu nó bị trống
-        if (postDTO.getStatus() == null || postDTO.getStatus().isBlank()) {
-            postDTO.setStatus("Pending"); // hoặc giá trị mặc định khác
-        }
-
-        // Kiểm tra và thiết lập giá trị mặc định cho publishDate nếu nó bị null
-        if (postDTO.getPublishDate() == null) {
-            postDTO.setPublishDate(LocalDate.now()); // hoặc giá trị mặc định khác
-        }
-
         postService.createPost(postDTO);
         return "redirect:/home";
     }
@@ -120,6 +105,19 @@ public class PostController {
 
         return "user/drafts-posts";
     }
-
+    @GetMapping("/{id}")
+    public String viewPostDetail(@PathVariable Integer id, Model model) {
+        Optional<Post> postOptional = postService.findById(id);
+        if (postOptional.isPresent()) {
+            Post post = postOptional.get();
+            model.addAttribute("post", post);
+            String imageBase64 = post.getImage();
+            if (imageBase64 != null) {
+                String imageDataUrl = "data:image/jpeg;base64," + imageBase64;
+                model.addAttribute("imageDataUrl", imageDataUrl);
+            }
+            return "post/detail";
+        }
+        return "redirect:/posts?error=notfound";
+    }
 }
-

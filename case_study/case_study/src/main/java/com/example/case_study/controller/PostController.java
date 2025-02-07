@@ -91,7 +91,7 @@ public class PostController {
         String username = principal.getName();
         User user = userService.findUserByUsername(username);
         List<Post> approvedPosts = postService.getApprovedPostsByUserId(user.getId());
-        model.addAttribute("approvedPosts", approvedPosts);
+        model.addAttribute("posts", approvedPosts);
 
         return "user/approved-posts";
     }
@@ -101,7 +101,7 @@ public class PostController {
         String username = principal.getName();
         User user = userService.findUserByUsername(username);
         List<Post> draftPosts = postService.getDraftPostsByUserId(user.getId());
-        model.addAttribute("draftPosts", draftPosts);
+        model.addAttribute("posts", draftPosts);
 
         return "user/drafts-posts";
     }

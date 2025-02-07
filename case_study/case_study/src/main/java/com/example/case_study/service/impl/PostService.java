@@ -135,16 +135,6 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public List<Post> getApprovedPosts() {
-        return postRepository.findByStatus("Approved") ;
-    }
-
-    @Override
-    public List<Post> getDraftPosts() {
-        return postRepository.findByStatus("Pending") ;
-    }
-
-    @Override
     public List<Post> getApprovedPostsByUserId(Integer userId) {
         return postRepository.findByUserIdAndStatus(userId, "Approved") ;
     }

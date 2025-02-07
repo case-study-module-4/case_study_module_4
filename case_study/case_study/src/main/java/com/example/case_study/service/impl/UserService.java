@@ -15,6 +15,8 @@ import java.util.Optional;
 public class UserService implements IUserService {
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Override
     public List<User> findAll() {
         return List.of();
@@ -37,6 +39,14 @@ public class UserService implements IUserService {
     @Override
     public User findUserByUsername(String username) {
         return accountRepository.findByUsername(username).get().getUser();
+    }
+
+    @Override
+    public void updateUser(User user) {
+        if (user.getFullName() == null || user.getFullName().isEmpty()) {
+            throw new IllegalArgumentException("Họ và tên không được để trống.");
+        }
+        userRepository.save(user);
     }
 
 }

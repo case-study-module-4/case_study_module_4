@@ -1,10 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-</html>
+<h1 class="text-center my-4">Danh sách tin nháp</h1>
+
+<div class="container">
+  <table class="table table-bordered table-striped table-hover">
+    <thead class="thead-dark">
+    <tr>
+      <th>STT</th>
+      <th>Tiêu đề</th>
+      <th>Nội dung</th>
+      <th>Ngày đăng</th>
+      <th colspan="3">Chức năng</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="post, stat : ${posts}">
+      <td th:text="${stat.index + 1}"></td>
+      <td th:text="${post.title}"></td>
+      <td th:text="${post.content}"></td>
+      <td th:text="${post.publishDate}"></td>
+      <td>Xem chi tiết</td>
+      <td>Sửa</td>
+      <td>Xóa</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+

@@ -1,5 +1,6 @@
 package com.example.case_study.service.impl;
 
+import com.example.case_study.dto.PostDTO;
 import com.example.case_study.model.Post;
 import com.example.case_study.repository.PostRepository;
 import com.example.case_study.service.IPostService;
@@ -60,17 +61,6 @@ public class PostService implements IPostService {
         }
 
         postRepository.save(post);
-    }
-
-
-    @Override
-    public List<Post> getApprovedPosts() {
-        return postRepository.findByStatus("Approved") ;
-    }
-
-    @Override
-    public List<Post> getDraftPosts() {
-        return postRepository.findByStatus("Pending") ;
     }
 
     @Override

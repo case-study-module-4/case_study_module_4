@@ -3,27 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <title>Danh sách tin nháp</title>
+  <div th:insert="~{/layout/layout::library}"></div>
+  <link rel="stylesheet" href="/style/user-dashboard.css">
 </head>
 <body>
 
-<h1>Danh sách tin nháp</h1>
+<h1 class="text-center my-4">Danh sách tin nháp</h1>
 
-<table>
-  <thead>
-  <tr>
-    <th>STT</th>
-    <th>Tiêu đề</th>
-    <th>Nội dung</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="post, stat : ${posts}">
-    <td th:text="${stat.index + 1}"></td>
-    <td th:text="${post.title}"></td>
-    <td th:text="${post.content}"></td>
-  </tr>
-  </tbody>
-</table>
+<div class="container">
+  <table class="table table-bordered table-striped table-hover">
+    <thead class="thead-dark">
+    <tr>
+      <th>STT</th>
+      <th>Tiêu đề</th>
+      <th>Nội dung</th>
+      <th>Ngày đăng</th>
+      <th colspan="3">Chức năng</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="post, stat : ${posts}">
+      <td th:text="${stat.index + 1}"></td>
+      <td th:text="${post.title}"></td>
+      <td th:text="${post.content}"></td>
+      <td th:text="${post.publishDate}"></td>
+      <td>Xem chi tiết</td>
+      <td>Sửa</td>
+      <td>Xóa</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
 
 </body>
 </html>

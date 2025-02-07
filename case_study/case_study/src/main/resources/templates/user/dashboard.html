@@ -18,7 +18,6 @@
             <!-- Hiển thị thông tin người dùng -->
             <div class="avatar">U</div>
             <div class="full-name" th:text="${user.fullName}">Tên người dùng</div>
-            <div class="points" th:text="'Điểm: ' + ${user.balance}">0 điểm</div>
             <div class="account-balance">
                 <p>Số dư tài khoản</p>
                 <div>
@@ -31,9 +30,9 @@
         <!-- Menu chính -->
         <ul class="menu">
             <li>
-                <a href="#" class="menu-link">Quản lý tin đăng</a>
+                <a href="#" class="menu-link" data-url="">Quản lý tin đăng</a>
                 <ul class="submenu">
-                    <li><a href="" class="submenu-link">Đăng tin mới</a></li>
+                    <li><a href="/posts/create" class="submenu-link">Đăng tin mới</a></li>
                     <li><a href="#" class="submenu-link" data-url="/posts/approved">Danh sách tin</a></li>
                     <li><a href="#" class="submenu-link" data-url="/posts/drafts">Tin nháp</a></li>
                 </ul>
@@ -42,8 +41,9 @@
             <li>
                 <a href="#" class="menu-link" data-url="/user/account">Quản lý tài khoản</a>
                 <ul class="submenu">
-                    <li><a href="#" class="submenu-link" data-url="/user/account/edit">Chỉnh sửa thông tin</a></li>
-                    <li><a href="#" class="submenu-link" data-url="/user/account/settings">Cài đặt tài khoản</a></li>
+                    <li><a href="#" class="submenu-link" data-url="/profile/edit">Chỉnh sửa thông tin</a></li>
+                    <li><a href="accounts/form-password" class="submenu-link">Cài đặt tài khoản</a></li>
+<!--                    <li><a href="#" class="submenu-link" data-url="/accounts/update-password">Cài đặt tài khoản</a></li>-->
                 </ul>
             </li>
         </ul>
@@ -60,17 +60,16 @@
 
 <script>
     $(document).ready(function () {
-        // Xử lý click vào menu hoặc submenu
         $('.menu-link, .submenu-link').on('click', function (e) {
-            e.preventDefault();
-            const url = $(this).data('url');
-
+            const url = $(this).data('url'); // Lấy URL từ data-url
             if (url) {
+                e.preventDefault();
                 $.ajax({
                     url: url,
                     type: 'GET',
                     success: function (data) {
-                        $('#main-content').html(data);
+                        $('#main-content').html(data); // Đổ nội dung vào main-content
+                        initEditProfileScript(); // Gọi lại script liên quan
                     },
                     error: function () {
                         alert('Không thể tải nội dung.');
@@ -78,8 +77,35 @@
                 });
             }
         });
+
+        function initEditProfileScript() {
+            // Gắn sự kiện click cho nút Lưu
+            $('#save-profile-btn').on('click', function () {
+                const formData = {
+                    fullName: $('#fullName').val(),
+                    phone: $('#phone').val()
+                };
+
+                $.ajax({
+                    url: '/profile/update',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        $('#success-message').text(response.message).show();
+                        setTimeout(() => $('#success-message').fadeOut(), 3000);
+                    },
+                    error: function (xhr) {
+                        const errors = xhr.responseJSON.errors || {};
+                        $('#fullName-error').text(errors.fullName || '');
+                        $('#phone-error').text(errors.phone || '');
+                    }
+                });
+            });
+        }
     });
 </script>
+
 <div th:insert="~{/layout/layout::footer}"></div>
 
 </body>

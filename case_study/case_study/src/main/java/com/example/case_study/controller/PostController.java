@@ -1,5 +1,6 @@
 package com.example.case_study.controller;
 
+import com.example.case_study.dto.PostDTO;
 import com.example.case_study.model.Post;
 import com.example.case_study.model.User;
 import com.example.case_study.service.IPostService;

@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,9 +25,7 @@ public class Post {
 
     private Integer id;
 
-
     @NotBlank(message = "Status must not be empty")
-    @Column(name = "status", columnDefinition = "ENUM('Pending', 'Approved', 'Rejected')", nullable = false)
     private String status;
 
     @NotBlank(message = "Title must not be empty")
@@ -53,9 +53,7 @@ public class Post {
     private User user;
 
     @NotNull(message = "Publish Date must not be null")
-    @Column(name = "publish_date", columnDefinition = "DATE", nullable = false)
-    private java.time.LocalDate publishDate;
+    private LocalDate publishDate;
 
-    @Column(name = "end_date", columnDefinition = "DATE")
-    private java.time.LocalDate endDate;
+
 }

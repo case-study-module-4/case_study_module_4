@@ -1,4 +1,4 @@
-package com.example.case_study.service.acounnt;
+package com.example.case_study.service;
 
 import com.example.case_study.model.Account;
 

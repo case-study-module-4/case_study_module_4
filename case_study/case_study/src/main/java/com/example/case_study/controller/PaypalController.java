@@ -28,7 +28,7 @@ public class PaypalController {
             return "redirect:/login";
         }
         String username = principal.getName();
-        User user = userService.findByUsername(username);
+        User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
         return "user/deposit"; // Hiển thị trang nạp tiền
     }
@@ -71,7 +71,7 @@ public class PaypalController {
                 // Chuyển đổi USD sang VND
                 BigDecimal amountVND = amountUSD.multiply(new BigDecimal("24000"));
                 String username = principal.getName();
-                User user = userService.findByUsername(username);
+                User user = userService.findUserByUsername(username);
                 // Cập nhật số dư người dùng
                 userService.updateUserBalance(user.getId(), amountVND);
                 return "user/success";

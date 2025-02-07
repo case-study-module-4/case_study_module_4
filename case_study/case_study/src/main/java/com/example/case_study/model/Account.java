@@ -29,7 +29,7 @@ public class Account {
     @Column(name = "password", columnDefinition = "VARCHAR(100)")
     private String password;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "id_role", referencedColumnName = "id", nullable = false)
     private Role role;
 
@@ -38,4 +38,8 @@ public class Account {
 
     @Column(name = "is_delete", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isDelete = false;
+
+    @OneToOne
+    @JoinColumn(name = "id_user", referencedColumnName = "id", nullable = false)
+    private User user;
 }

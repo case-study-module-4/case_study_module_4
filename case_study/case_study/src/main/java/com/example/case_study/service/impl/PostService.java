@@ -7,6 +7,7 @@ import com.example.case_study.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,24 +38,50 @@ public class PostService implements IPostService {
         postRepository.deleteById(id);
     }
 
-    // Lấy danh sách bài đăng đã phê duyệt của user
+
     @Override
-    public List<PostDTO> getApprovedPostsByUser(Integer userId) {
-        List<Post> posts = postRepository.findByUserIdAndStatus(userId, "Approved");
-        return posts.stream().map(post -> new PostDTO(post)).collect(Collectors.toList());
+    public void createPost(PostDTO postDTO) {
+        Post post = new Post();
+        // Copy các trường khác
+        post.setTitle(postDTO.getTitle());
+        post.setContent(postDTO.getContent());
+        // Các mapping cho các trường quan hệ (Purpose, RealEstate, …) cũng cần được xử lý ở đây
+
+        // Kiểm tra và gán giá trị mặc định cho status
+        if (postDTO.getStatus() == null || postDTO.getStatus().trim().isEmpty()) {
+            post.setStatus("Pending");
+        } else {
+            post.setStatus(postDTO.getStatus());
+        }
+
+        // Kiểm tra và gán giá trị mặc định cho publishDate
+        if (postDTO.getPublishDate() == null) {
+            post.setPublishDate(LocalDate.now());
+        } else {
+            post.setPublishDate(postDTO.getPublishDate());
+        }
+
+        postRepository.save(post);
     }
 
-    // Lấy danh sách tin nháp của user
+
     @Override
-    public List<PostDTO> getDraftPostsByUser(Integer userId) {
-        List<Post> posts = postRepository.findByUserIdAndStatus(userId,"Draft");
-        return posts.stream().map(post -> new PostDTO(post)).collect(Collectors.toList());
+    public List<Post> getApprovedPosts() {
+        return postRepository.findByStatus("Approved") ;
     }
 
-    // Lấy chi tiết bài đăng theo ID
     @Override
-    public PostDTO getPostById(Integer id) {
-        Optional<Post> post = postRepository.findById(id);
-        return post.map(PostDTO::new).orElse(null);
+    public List<Post> getDraftPosts() {
+        return postRepository.findByStatus("Pending") ;
+    }
+
+    @Override
+    public List<Post> getApprovedPostsByUserId(Integer userId) {
+        return postRepository.findByUserIdAndStatus(userId, "Approved") ;
+    }
+
+    @Override
+    public List<Post> getDraftPostsByUserId(Integer userId) {
+        return postRepository.findByUserIdAndStatus(userId, "Pending") ;
     }
 }

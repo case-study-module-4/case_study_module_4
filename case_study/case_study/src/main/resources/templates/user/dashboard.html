@@ -7,16 +7,21 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="/style/user-dashboard.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/style/header.css">
 </head>
 <body>
 <div th:insert="~{/layout/layout::header}"></div>
-<div class="container">
+<div class="container-fluid">
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="user-info">
             <!-- Hiển thị thông tin người dùng -->
             <div class="avatar">U</div>
+<<<<<<< HEAD
 <!--            <div class="user-name" th:text="${user.fullName}">Tên người dùng</div>-->
+=======
+            <div class="full-name" th:text="${user.fullName}">Tên người dùng</div>
+>>>>>>> 8271d873414834d394f6c0c74a878afae0c08eee
             <div class="points" th:text="'Điểm: ' + ${user.balance}">0 điểm</div>
             <div class="account-balance">
                 <p>Số dư tài khoản</p>
@@ -24,22 +29,26 @@
                     <span>TK Chính:</span>
                     <span th:text="${user.balance}">0</span>
                 </div>
+<<<<<<< HEAD
                 <div class="transfer-code">
                     <span>Mã chuyển khoản:</span>
                     <span>BDS99</span>
                 </div>
                 <a th:href="@{/deposit}">Nạp tiền</a>
                 <button onclick="window.location.href='/deposit'" class="btn btn-primary">Nạp tiền</button>
+=======
+                <button class="btn btn-primary">Nạp tiền</button>
+>>>>>>> 8271d873414834d394f6c0c74a878afae0c08eee
             </div>
         </div>
         <!-- Menu chính -->
         <ul class="menu">
             <li>
-                <a href="#" class="menu-link" data-url="/user/posts/approved">Quản lý tin đăng</a>
+                <a href="#" class="menu-link">Quản lý tin đăng</a>
                 <ul class="submenu">
-                    <li><a href="/user/posts/new" class="submenu-link">Đăng tin mới</a></li>
-                    <li><a href="#" class="submenu-link" data-url="/user/posts/approved">Danh sách tin</a></li>
-                    <li><a href="#" class="submenu-link" data-url="/user/posts/drafts">Tin nháp</a></li>
+                    <li><a href="" class="submenu-link">Đăng tin mới</a></li>
+                    <li><a href="#" class="submenu-link" data-url="/posts/approved">Danh sách tin</a></li>
+                    <li><a href="#" class="submenu-link" data-url="/posts/drafts">Tin nháp</a></li>
                 </ul>
             </li>
             <li><a href="#" class="menu-link" data-url="/user/customers">Quản lý khách hàng</a></li>

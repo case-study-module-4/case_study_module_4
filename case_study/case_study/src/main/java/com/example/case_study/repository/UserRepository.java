@@ -16,7 +16,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Transactional
     @Query("UPDATE user u SET u.balance = u.balance + :amount WHERE u.id = :userId")
     void updateUserBalance(@Param("userId") Integer userId, @Param("amount") BigDecimal amount);
-
-    Optional<User> findByAccountUsername(String username);
-
 }

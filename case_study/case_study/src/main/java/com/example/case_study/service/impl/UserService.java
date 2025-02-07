@@ -1,6 +1,8 @@
 package com.example.case_study.service.impl;
 
+import com.example.case_study.model.Account;
 import com.example.case_study.model.User;
+import com.example.case_study.repository.AccountRepository;
 import com.example.case_study.repository.UserRepository;
 import com.example.case_study.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ import java.math.BigDecimal;
 public class UserService implements IUserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
     @Override
     public List<User> findAll() {
         return List.of();
@@ -34,11 +39,9 @@ public class UserService implements IUserService {
     public void deleteById(Integer id) {
 
     }
-
     @Override
-    public User findByUsername(String username) {
-        return userRepository.findByAccountUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+    public User findUserByUsername(String username) {
+        return accountRepository.findByUsername(username).get().getUser();
     }
 
     @Override
@@ -49,6 +52,5 @@ public class UserService implements IUserService {
         user.setBalance(user.getBalance().add(amount));
 
         userRepository.save(user);
-
     }
 }

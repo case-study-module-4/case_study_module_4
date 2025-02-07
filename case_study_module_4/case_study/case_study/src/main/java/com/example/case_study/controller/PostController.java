@@ -1,15 +1,18 @@
 package com.example.case_study.controller;
 
+import com.example.case_study.dto.PostDTO;
 import com.example.case_study.model.Post;
 import com.example.case_study.service.IPostService;
+import com.example.case_study.service.IPurposeService;
+import com.example.case_study.service.IRealEstateService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/posts")
@@ -18,6 +21,12 @@ public class PostController {
     @Autowired
     private IPostService postService;
 
+    @Autowired
+    private IPurposeService purposeService;
+
+    @Autowired
+    private IRealEstateService realEstateService;
+
     @GetMapping
     public String getAllPosts(Model model) {
         List<Post> posts = postService.findAll();
@@ -25,9 +34,25 @@ public class PostController {
         return "post/post";
     }
 
+    @GetMapping("/create")
+    public String showCreateForm(Model model) {
+        model.addAttribute("postDTO", new PostDTO()); // Đảm bảo postDTO được truyền vào model
+        model.addAttribute("purposes", purposeService.findAll());
+        model.addAttribute("realEstates", realEstateService.findAll());
+        return "post/create-post";
+    }
+
     @PostMapping
-    public String createPost(@ModelAttribute Post post) {
-        postService.save(post);
+    public String createPost(@Valid @ModelAttribute("postDTO") PostDTO postDTO,
+                             BindingResult result,
+                             Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("purposes", purposeService.findAll());
+            model.addAttribute("realEstates", realEstateService.findAll());
+            return "post/create-post"; // Quay lại trang create nếu có lỗi
+        }
+
+        postService.createPost(postDTO);
         return "redirect:/posts";
     }
 
@@ -44,4 +69,3 @@ public class PostController {
         return "redirect:/posts";
     }
 }
-

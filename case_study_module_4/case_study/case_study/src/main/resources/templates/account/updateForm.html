@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cập nhật mật khẩu</title>
+  <!-- Bootstrap CSS -->
+  <th:block th:replace="~{layout/layout::library}"></th:block>
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .form-container {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-title {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #007bff;
+    }
+  </style>
+</head>
+<body>
+<div th:insert="_header :: header"></div>
+
+<div class="container">
+  <div class="form-container">
+    <h2 class="form-title">Cập nhật mật khẩu</h2>
+    <form action="/accounts/update-password" method="post">
+      <div class="mb-3">
+        <label for="newPassword" class="form-label">Nhập mật khẩu mới:</label>
+        <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+      </div>
+      <div class="mb-3">
+        <label for="authentic" class="form-label">Xác nhận mật khẩu mới:</label>
+        <input type="password" class="form-control" id="authentic" name="authentic" required>
+      </div>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<th:block th:replace="_footer :: footer"></th:block>
+</body>
+</html>

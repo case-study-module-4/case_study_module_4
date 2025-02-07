@@ -17,9 +17,7 @@ public class RealEstateType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "INT")
-
     private Integer id;
-
 
     @NotNull(message = "Type name must not be null")
     @Column(name = "type_name", columnDefinition = "ENUM('HOUSE', 'APARTMENT')", nullable = false)

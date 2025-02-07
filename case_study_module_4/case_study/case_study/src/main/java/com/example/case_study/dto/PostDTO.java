@@ -1,6 +1,6 @@
 package com.example.case_study.dto;
 
-import com.example.case_study.model.*;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -8,9 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Setter
@@ -20,41 +20,44 @@ public class PostDTO {
 
     private Integer id;
 
-    @NotBlank(message = "Status must not be empty")
+    @NotBlank(message = "Trạng thái không được để trống")
     private String status;
 
-    @NotBlank(message = "Title must not be empty")
-    @Size(max = 255, message = "Title must be at most 255 characters")
+    @NotBlank(message = "Tiêu đề không được để trống")
+    @Size(max = 255, message = "Tiêu đề không được vượt quá 255 ký tự")
     private String title;
 
+    @NotBlank(message = "Nội dung không được để trống")
     private String content;
 
-    private Purpose purpose;
+    @NotNull(message = "Mục đích không được để trống")
+    @Column(name = "purpose", columnDefinition = "ENUM('SALE', 'RENT')", nullable = false)
+    private String purpose;
 
-    private RealEstate realEstate;
+    @NotBlank(message = "Loại không được để trống")
+    @Column(
+            name = "type",
+            columnDefinition = "ENUM('House', 'Apartment', 'Land', 'Hotel', 'Building')",
+            nullable = false
+    )
+    private String type;
 
-    private User user;
+    @Size(max = 255, message = "Địa điểm không được vượt quá 255 ký tự")
+    @Column(name = "location", columnDefinition = "VARCHAR(255)")
+    private String location;
 
-    @NotNull(message = "Publish Date must not be null")
+    @Size(max = 50, message = "Hướng không được vượt quá 50 ký tự")
+    @Column(name = "direction", columnDefinition = "VARCHAR(50)")
+    private String direction;
+
+    @NotNull(message = "Giá không được để trống")
+    @Column(name = "price", columnDefinition = "DECIMAL(15,2)")
+    private Double price;
+
+    @NotBlank(message = "Hình ảnh không được để trống")
+    private String image; // Sử dụng String thay cho List<String> để đơn giản hóa
+
+    @NotNull(message = "Ngày đăng không được để trống")
+    @DateTimeFormat(pattern = "mm-dd-yyyy")
     private LocalDate publishDate;
-
-    private LocalDate endDate;
-
-    // Thêm danh sách hình ảnh
-    private List<Image> images;
-
-    // Constructor để ánh xạ từ Post entity sang PostDTO
-    public PostDTO(Post post) {
-        this.id = post.getId();
-        this.status = post.getStatus();
-        this.title = post.getTitle();
-        this.content = post.getContent();
-        this.purpose = post.getPurpose();
-        this.realEstate = post.getRealEstate();
-        this.user = post.getUser();
-        this.publishDate = post.getPublishDate();
-        this.endDate = post.getEndDate();
-        // Nếu Post có danh sách hình ảnh, bạn có thể thêm chúng vào đây
-        // Ví dụ: this.images = post.getImages();
-    }
 }

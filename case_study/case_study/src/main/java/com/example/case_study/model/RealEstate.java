@@ -19,13 +19,7 @@ public class RealEstate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "INT")
-
     private Integer id;
-
-
-    @NotBlank(message = "Status must not be empty")
-    @Column(name = "status", columnDefinition = "ENUM('Available', 'Sold', 'Rented')", nullable = false)
-    private String status;
 
     @Size(max = 255, message = "Location must be at most 255 characters")
     @Column(name = "location", columnDefinition = "VARCHAR(255)")
@@ -42,11 +36,13 @@ public class RealEstate {
     @Column(name = "image", columnDefinition = "TEXT")
     private String image;
 
-    @NotNull(message = "ID Real Estate Type must not be null")
-    @Column(name = "real_estate_type_id", columnDefinition = "INT")
-    private int realEstateTypeId;
+    @NotBlank(message = "Name must not be empty")
+    @Column(
+            name = "type",
+            columnDefinition = "ENUM('House', 'Apartment', 'Land', 'Hotel', 'Building')",
+            nullable = false)
+    private String type;
 
     @Column(name = "is_delete", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isDelete = false;
-
 }

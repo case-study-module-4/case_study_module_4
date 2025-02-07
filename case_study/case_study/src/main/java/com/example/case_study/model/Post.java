@@ -4,10 +4,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jdk.jfr.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -22,9 +25,7 @@ public class Post {
 
     private Integer id;
 
-
     @NotBlank(message = "Status must not be empty")
-    @Column(name = "status", columnDefinition = "ENUM('Pending', 'Approved', 'Rejected')", nullable = false)
     private String status;
 
     @NotBlank(message = "Title must not be empty")
@@ -35,26 +36,24 @@ public class Post {
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
-    @NotNull(message = "Category ID must not be null")
-    @Column(name = "category_id", columnDefinition = "INT")
-    private int categoryId;
+    @ManyToOne
+    @JoinColumn(name = "post_type_id", columnDefinition = "INT")
+    private PostType postType;
 
-    @NotNull(message = "Purpose ID must not be null")
-    @Column(name = "purpose_id", columnDefinition = "INT")
-    private int purposeId;
+    @ManyToOne
+    @JoinColumn(name = "purpose_id", columnDefinition = "INT")
+    private Purpose purpose;
 
-    @NotNull(message = "Real Estate ID must not be null")
-    @Column(name = "real_estate_id", columnDefinition = "INT")
-    private int realEstateId;
+    @ManyToOne
+    @JoinColumn(name = "real_estate_id", columnDefinition = "INT")
+    private RealEstate realEstate;
 
-    @NotNull(message = "User ID must not be null")
-    @Column(name = "user_id", columnDefinition = "INT")
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", columnDefinition = "INT")
+    private User user;
 
     @NotNull(message = "Publish Date must not be null")
-    @Column(name = "publish_date", columnDefinition = "DATE", nullable = false)
-    private java.time.LocalDate publishDate;
+    private LocalDate publishDate;
 
-    @Column(name = "end_date", columnDefinition = "DATE")
-    private java.time.LocalDate endDate;
+
 }

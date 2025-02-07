@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="style/home.css">
+</head>
+<body>
+
+<div th:insert="~{/layout/layout::header}"></div>
+
+<div class="container-fluid">
+
+    <!--    layuot thứ 1 : (4 phần theo hàng ngang)-->
+    <div class="main-layout">
+        <!--        phần nội dung(3 phần. Theo hàng ngang hiển thị form tìm kiếm)-->
+        <main class="main-content">
+            <div class="search-wrapper">
+                <div class="search-tabs">
+                    <a class="tab " href="/posts">Nhà đất bán</a>
+                    <button class="tab">Nhà đất cho thuê</button>
+                    <button class="tab">Dự án</button>
+                    <div class="switch">
+                        <label for="toggle-search">Dùng phiên bản Tìm kiếm mới</label>
+                        <input type="checkbox" id="toggle-search" checked/>
+                    </div>
+                </div>
+                <form method="post" action="#">
+                    <div class="search-bar">
+                        <div class="input-group">
+                            <span class="icon"><i class="fas fa-search"></i></span>
+                            <input type="text" placeholder="Trên toàn quốc" name=""/>
+                            <button class="search-btn">Tìm kiếm</button>
+                        </div>
+                        <div class="filter-group">
+                            <select name="">
+                                <option value="">Loại nhà đất</option>
+                                <option value="">Chung cư</option>
+                                <option value="">Biệt thự</option>
+                            </select>
+                            <select name="">
+                                <option value="">Mức giá</option>
+                                <option value="">Dưới 1 tỷ</option>
+                                <option value="">1-3 tỷ</option>
+                            </select>
+                            <select name="">
+                                <option value="">Diện tích</option>
+                                <option value="">Dưới 50m²</option>
+                                <option value="">50-100m²</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <!--        phần nội dung ở rìa phải(1 phần. Theo hàng ngang hiển thị ảnh)-->
+        <aside class="sidebar">
+            <img src="https://xaydungancu.com.vn/wp-content/uploads/2023/04/mau-nha-2-tang-mai-thai-o-nong-thon-26.jpg"
+                 class="img-fluid custom-img" alt="...">
+        </aside>
+    </div>
+</div>
+<div class="container-fluid">
+    <!--    layuot thứ 2 : (4 phần theo hàng ngang)-->
+    <div class="main-layout2">
+        <!--        phần nội dung(3 phần)-->
+        <main class="main-content2">
+
+        </main>
+
+        <!--        phần nội dung ở rìa phải(1 phần. Theo hàng ngang )-->
+        <aside class="sidebar2">
+
+        </aside>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <!--    layuot thứ 3 : (4 phần theo hàng ngang)-->
+    <div class="main-layout3">
+        <div class="container">
+            <div class="row">
+                <h2>Bất động sản dành cho bạn</h2>
+            </div>
+            <div class="row">
+                <div class="card" style="width: 18rem;">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
+                            the card's content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="main-layout4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <!--                   dùng card là link-->
+                    <!--                    <a href="#!"-->
+                    <!--                       class="no-underline link-opacity-0 link-black">-->
+                    <div style="width: 75%;">
+                        <img src="https://staticfile.batdongsan.com.vn/images/box-link-footer/ForSale.svg"
+                             class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5>Bất động sản bán</h5>
+                            <p class="card-text">Bạn có thể tìm thấy ngôi nhà mơ ước hoặc cơ hội đầu tư hấp dẫn thông
+                                qua lượng tin rao lớn, uy tín về các loại hình bất động sản bán tại Việt Nam, bao gồm
+                                bán nhà riêng, bán nhà mặt tiền, bán căn hộ chung cư, bán biệt thự, bán đất, bán
+                                shophouse và các loại hình BĐS khác.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div style="width: 75%;">
+                        <img src="https://staticfile.batdongsan.com.vn/images/box-link-footer/ForRent.svg"
+                             class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5>Bất động sản cho thuê</h5>
+                            <p class="card-text">Cập nhật thường xuyên và đầy đủ các loại hình bất động sản cho thuê
+                                như: thuê phòng trọ, nhà riêng, thuê biệt thự, văn phòng, kho xưởng hay thuê mặt bằng
+                                kinh doanh giúp bạn nhanh chóng tìm được bất động sản ưng ý.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div style="width: 75%;">
+                        <img src="https://staticfile.batdongsan.com.vn/images/box-link-footer/Projects.svg"
+                             class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5>Đánh giá dự án</h5>
+                            <p class="card-text">Các video đánh giá tổng quan dự án cung cấp góc nhìn khách quan của các
+                                chuyên gia về những dự án nổi bật tại Việt Nam, giúp bạn đưa ra quyết định đúng đắn cho
+                                nơi an cư lý tưởng hoặc cơ hội đầu tư sinh lời.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div style="width: 75%;">
+                        <img src="https://staticfile.batdongsan.com.vn/images/box-link-footer/Wiki.svg"
+                             class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5>Wiki BĐS</h5>
+                            <p class="card-text">Ngoài cập nhật những biến động thị trường, chúng tôi còn cung cấp kiến
+                                ​​thức, kinh nghiệm về mua bán, cho thuê, đầu tư, vay mua nhà, phong thủy, thiết kế nhà,
+                                mọi thông tin cần thiết để dẫn lối người tìm nhà tìm thấy căn nhà mơ ước.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:insert="~{/layout/layout::footer}"></div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</html>

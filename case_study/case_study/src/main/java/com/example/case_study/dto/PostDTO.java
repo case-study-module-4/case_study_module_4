@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
-import com.example.case_study.model.Post;
+import java.util.List;
 
 import java.time.LocalDate;
 
@@ -50,16 +50,7 @@ public class PostDTO {
     @NotNull(message = "Giá không được để trống")
     private Double price;
 
-    @NotNull(message = "Hình ảnh không được để trống")
-    private MultipartFile image;
 
-    // Constructor nhận tham số là đối tượng Post
-    public PostDTO(Post post) {
-        this.id = post.getId();
-        this.title = post.getTitle();
-        this.content = post.getContent();
-        this.publishDate = post.getPublishDate();
-        this.status = post.getStatus();
-        // Nếu cần, bạn có thể ánh xạ thêm các trường khác từ Post sang PostDTO.
-    }
+    private List<MultipartFile> imageFiles;
+
 }

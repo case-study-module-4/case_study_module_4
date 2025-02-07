@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import jdk.jfr.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -55,5 +55,9 @@ public class Post {
     @NotNull(message = "Publish Date must not be null")
     private LocalDate publishDate;
 
+    @Column(name = "image", columnDefinition = "LONGTEXT")
+    private String image;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Image> images;
 }

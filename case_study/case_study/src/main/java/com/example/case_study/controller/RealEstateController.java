@@ -1,9 +1,11 @@
 package com.example.case_study.controller;
 
+import com.example.case_study.dto.SearchDto;
 import com.example.case_study.model.RealEstate;
 import com.example.case_study.service.IRealEstateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,4 +51,5 @@ public class RealEstateController {
         }
         return ResponseEntity.notFound().build();
     }
+
 }

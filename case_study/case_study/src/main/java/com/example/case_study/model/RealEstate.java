@@ -33,6 +33,10 @@ public class RealEstate {
     @Column(name = "price", columnDefinition = "DECIMAL(15,2)")
     private Double price;
 
+    @NotNull(message = "Area must not be null")
+    @Column(name = "area", columnDefinition = "DECIMAL(15,2)")
+    private Double area;
+
     @Column(name = "image", columnDefinition = "TEXT")
     private String image;
 
@@ -42,6 +46,7 @@ public class RealEstate {
             columnDefinition = "ENUM('House', 'Apartment', 'Land', 'Hotel', 'Building')",
             nullable = false)
     private String type;
+
 
     @Column(name = "is_delete", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isDelete = false;

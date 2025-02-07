@@ -1,4 +1,4 @@
-package com.example.case_study.controller.home;
+package com.example.case_study.controller;
 
 import com.example.case_study.dto.SearchDto;
 import com.example.case_study.model.RealEstate;

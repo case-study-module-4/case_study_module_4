@@ -21,10 +21,6 @@ public class RealEstate {
     @Column(name = "id", columnDefinition = "INT")
     private Integer id;
 
-    @NotBlank(message = "Status must not be empty")
-    @Column(name = "status", columnDefinition = "ENUM('Available', 'Sold', 'Rented')", nullable = false)
-    private String status;
-
     @Size(max = 255, message = "Location must be at most 255 characters")
     @Column(name = "location", columnDefinition = "VARCHAR(255)")
     private String location;

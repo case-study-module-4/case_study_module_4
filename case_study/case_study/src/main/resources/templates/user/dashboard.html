@@ -15,7 +15,6 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="user-info">
-            <!-- Hiển thị thông tin người dùng -->
             <div class="avatar">U</div>
             <div class="full-name" th:text="${user.fullName}">Tên người dùng</div>
             <div class="account-balance">
@@ -30,7 +29,7 @@
         <!-- Menu chính -->
         <ul class="menu">
             <li>
-                <a href="#" class="menu-link" data-url="">Quản lý tin đăng</a>
+                <a href="#" class="menu-link">Quản lý tin đăng</a>
                 <ul class="submenu">
                     <li><a href="/posts/create" class="submenu-link">Đăng tin mới</a></li>
                     <li><a href="#" class="submenu-link" data-url="/posts/approved">Danh sách tin</a></li>
@@ -39,10 +38,10 @@
             </li>
             <li><a href="#" class="menu-link" data-url="/user/customers">Quản lý khách hàng</a></li>
             <li>
-                <a href="#" class="menu-link" data-url="/user/account">Quản lý tài khoản</a>
+                <a href="#" class="menu-link">Quản lý tài khoản</a>
                 <ul class="submenu">
                     <li><a href="#" class="submenu-link" data-url="/profile/edit">Chỉnh sửa thông tin</a></li>
-                    <li><a href="accounts/form-password" class="submenu-link">Cài đặt tài khoản</a></li>
+                    <li><a href="/accounts/form-password" class="submenu-link">Cài đặt tài khoản</a></li>
 <!--                    <li><a href="#" class="submenu-link" data-url="/accounts/update-password">Cài đặt tài khoản</a></li>-->
                 </ul>
             </li>

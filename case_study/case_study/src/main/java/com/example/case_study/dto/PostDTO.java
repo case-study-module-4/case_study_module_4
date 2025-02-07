@@ -1,5 +1,6 @@
 package com.example.case_study.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -43,6 +44,10 @@ public class PostDTO {
 
     @Size(max = 255, message = "Địa điểm không được vượt quá 255 ký tự")
     private String location;
+
+    @NotNull(message = "Area must not be null")
+    @Column(name = "area", columnDefinition = "DECIMAL(15,2)")
+    private Double area;
 
     @Size(max = 50, message = "Hướng không được vượt quá 50 ký tự")
     private String direction;

@@ -69,6 +69,7 @@ public class PostService implements IPostService {
             realEstate.setType(postDTO.getType());
             realEstate.setLocation(postDTO.getLocation());
             realEstate.setDirection(postDTO.getDirection());
+            realEstate.setArea(postDTO.getArea());
             realEstate.setPrice(postDTO.getPrice());
             realEstateRepository.save(realEstate);
 

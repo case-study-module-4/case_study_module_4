@@ -65,6 +65,13 @@
                 <div th:if="${#fields.hasErrors('location')}" th:errors="*{location}" class="text-danger"></div>
             </div>
 
+            <!-- Diện tích -->
+            <div class="mb-3">
+                <label for="area" class="form-label fw-bold">Diện tích (m²)</label>
+                <input type="number" step="0.01" class="form-control" id="area" th:field="*{area}" required>
+                <div th:if="${#fields.hasErrors('area')}" th:errors="*{area}" class="text-danger"></div>
+            </div>
+
             <!-- Hướng -->
             <div class="mb-3">
                 <label for="direction" class="form-label fw-bold">Hướng</label>

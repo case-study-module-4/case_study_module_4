@@ -20,6 +20,12 @@
       <p><strong>Purpose:</strong> <span th:text="${post.purpose != null ? post.purpose.purpose : 'N/A'}"></span></p>
       <p><strong>Type:</strong> <span th:text="${post.realEstate != null ? post.realEstate.type : 'N/A'}"></span></p>
       <p><strong>Location:</strong> <span th:text="${post.realEstate != null ? post.realEstate.location : 'N/A'}"></span></p>
+      <!-- Hiển thị diện tích -->
+      <p>
+        <strong>Diện tích:</strong>
+        <span th:text="${post.realEstate != null ? #numbers.formatDecimal(post.realEstate.area, 0, 'COMMA', 2, 'POINT') : 'N/A'}"></span>
+        m²
+      </p>
       <p><strong>Direction:</strong> <span th:text="${post.realEstate != null ? post.realEstate.direction : 'N/A'}"></span></p>
       <p>
         <strong>Price:</strong>

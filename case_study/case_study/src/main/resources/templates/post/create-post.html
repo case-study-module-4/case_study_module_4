@@ -15,28 +15,28 @@
             <!-- Trạng thái -->
             <div class="mb-3">
                 <label for="status" class="form-label fw-bold">Trạng thái</label>
-                <input type="text" class="form-control" id="status" name="status" th:field="*{status}" required>
+                <input type="text" class="form-control" id="status" th:field="*{status}" required>
                 <div th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="text-danger"></div>
             </div>
 
             <!-- Tiêu đề -->
             <div class="mb-3">
                 <label for="title" class="form-label fw-bold">Tiêu đề</label>
-                <input type="text" class="form-control" id="title" name="title" th:field="*{title}" required>
+                <input type="text" class="form-control" id="title" th:field="*{title}" required>
                 <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-danger"></div>
             </div>
 
             <!-- Nội dung -->
             <div class="mb-3">
                 <label for="content" class="form-label fw-bold">Nội dung</label>
-                <textarea class="form-control" id="content" name="content" th:field="*{content}" rows="4" required></textarea>
+                <textarea class="form-control" id="content" th:field="*{content}" rows="4" required></textarea>
                 <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="text-danger"></div>
             </div>
 
             <!-- Mục đích -->
             <div class="mb-3">
                 <label for="purpose" class="form-label fw-bold">Mục đích</label>
-                <select class="form-select" id="purpose" name="purpose" th:field="*{purpose}" required>
+                <select class="form-select" id="purpose" th:field="*{purpose}" required>
                     <option value="">Chọn mục đích</option>
                     <option value="SALE">Bán</option>
                     <option value="RENT">Cho thuê</option>
@@ -47,7 +47,7 @@
             <!-- Loại -->
             <div class="mb-3">
                 <label for="type" class="form-label fw-bold">Loại</label>
-                <select class="form-select" id="type" name="type" th:field="*{type}" required>
+                <select class="form-select" id="type" th:field="*{type}" required>
                     <option value="">Chọn loại</option>
                     <option value="House">Nhà</option>
                     <option value="Apartment">Căn hộ</option>
@@ -61,36 +61,42 @@
             <!-- Địa điểm -->
             <div class="mb-3">
                 <label for="location" class="form-label fw-bold">Địa điểm</label>
-                <input type="text" class="form-control" id="location" name="location" th:field="*{location}">
+                <input type="text" class="form-control" id="location" th:field="*{location}">
                 <div th:if="${#fields.hasErrors('location')}" th:errors="*{location}" class="text-danger"></div>
+            </div>
+
+            <!-- Diện tích -->
+            <div class="mb-3">
+                <label for="area" class="form-label fw-bold">Diện tích (m²)</label>
+                <input type="number" step="0.01" class="form-control" id="area" th:field="*{area}" required>
+                <div th:if="${#fields.hasErrors('area')}" th:errors="*{area}" class="text-danger"></div>
             </div>
 
             <!-- Hướng -->
             <div class="mb-3">
                 <label for="direction" class="form-label fw-bold">Hướng</label>
-                <input type="text" class="form-control" id="direction" name="direction" th:field="*{direction}">
+                <input type="text" class="form-control" id="direction" th:field="*{direction}">
                 <div th:if="${#fields.hasErrors('direction')}" th:errors="*{direction}" class="text-danger"></div>
             </div>
 
             <!-- Giá -->
             <div class="mb-3">
                 <label for="price" class="form-label fw-bold">Giá</label>
-                <input type="number" step="0.01" class="form-control" id="price" name="price" th:field="*{price}" required>
+                <input type="number" step="0.01" class="form-control" id="price" th:field="*{price}" required>
                 <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger"></div>
             </div>
 
             <!-- Hình ảnh -->
             <div class="mb-3">
-                <label for="image" class="form-label fw-bold">Hình ảnh chính</label>
-                <input type="file" class="form-control" id="image" name="image" accept="image/*">
-                <div th:if="${#fields.hasErrors('image')}" th:errors="*{image}" class="text-danger"></div>
+                <label for="imageFiles" class="form-label fw-bold">Hình ảnh</label>
+                <input type="file" class="form-control" id="imageFiles" th:field="*{imageFiles}" accept="image/*" multiple required>
+                <div th:if="${#fields.hasErrors('imageFiles')}" th:errors="*{imageFiles}" class="text-danger"></div>
             </div>
 
             <!-- Ngày đăng -->
             <div class="mb-3">
                 <label for="publishDate" class="form-label fw-bold">Ngày đăng</label>
-                <input type="text" class="form-control" id="publishDate" name="publishDate"
-                       th:field="*{publishDate}" placeholder="dd/MM/yyyy" pattern="\d{2}/\d{2}/\d{4}" required>
+                <input type="text" class="form-control" id="publishDate" th:field="*{publishDate}" placeholder="dd/MM/yyyy" pattern="\d{2}/\d{2}/\d{4}" required>
                 <div th:if="${#fields.hasErrors('publishDate')}" th:errors="*{publishDate}" class="text-danger"></div>
             </div>
 

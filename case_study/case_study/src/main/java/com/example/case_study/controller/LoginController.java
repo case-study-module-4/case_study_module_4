@@ -1,11 +1,10 @@
-    package com.example.case_study.controller.login;
+    package com.example.case_study.controller;
 
     import org.springframework.security.core.Authentication;
     import org.springframework.security.core.GrantedAuthority;
     import org.springframework.stereotype.Controller;
     import org.springframework.web.bind.annotation.GetMapping;
 
-    import java.security.Principal;
     import java.util.Set;
     import java.util.stream.Collectors;
 

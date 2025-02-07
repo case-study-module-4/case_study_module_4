@@ -44,6 +44,7 @@
     </script>
 </head>
 <body>
+
 <div th:insert="~{/layout/layout::header}"></div>
 <div class="container mt-5">
     <h1 class="mb-4 text-center">Post Management</h1>
@@ -75,7 +76,7 @@
             <td th:text="${post.title}"></td>
             <td th:text="${post.content}"></td>
             <td>
-                <button class="btn btn-info btn-sm" onclick="openDetailModal('${post.title}', '${post.content}')">Detail</button>
+                <a class="btn btn-info btn-sm" th:href="@{/posts/{id}(id=${post.id})}">Detail</a>
                 <button class="btn btn-warning btn-sm"
                         th:attr="onclick='openEditModal(\'' + ${post.id} + '\', \'' + ${post.title} + '\', \'' + ${post.content} + '\')'">
                     Edit
@@ -110,22 +111,6 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Update Post</button>
                     </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Detail Post Modal -->
-    <div class="modal fade" id="detailPostModal" tabindex="-1" aria-labelledby="detailPostModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="detailPostModalLabel">Post Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <h3 id="detailTitle"></h3>
-                    <p id="detailContent"></p>
                 </div>
             </div>
         </div>

@@ -39,7 +39,7 @@ public class PostService implements IPostService {
 
     @Override
     public List<Post> findAll() {
-        return postRepository.findByPayable("yes");
+        return postRepository.findByPayableOrderByPostTypeIdDesc("yes");
     }
 
     @Override

@@ -1,8 +1,10 @@
 package com.example.case_study.controller;
 
 import com.example.case_study.model.Post;
+import com.example.case_study.model.PostType;
 import com.example.case_study.model.Transaction;
 import com.example.case_study.model.User;
+import com.example.case_study.repository.PostTypeRepository;
 import com.example.case_study.service.ITransactionService;
 import com.example.case_study.service.IUserService;
 import com.example.case_study.service.impl.PostService;
@@ -12,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Controller
@@ -26,6 +29,9 @@ public class TransactionController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private PostTypeRepository postTypeRepository;
 
 
     @GetMapping("/transaction")
@@ -51,28 +57,30 @@ public class TransactionController {
         return "transaction/transaction";
     }
 
+
     @PostMapping("/pay")
     public String processPayment(@RequestParam("postId") Integer postId,
                                  @RequestParam("postType") String postType,
                                  @RequestParam("days") int days,
                                  Model model,
                                  Principal principal) {
-
-        // Lấy thông tin người dùng hiện hành
         User user = userService.findUserByUsername(principal.getName());
-
-        // Gọi service xử lý giao dịch
         Transaction transaction = transactionService.processTransaction(postId, postType, days, user);
 
         if ("SUCCESS".equalsIgnoreCase(transaction.getStatus())) {
-            // Nếu thanh toán thành công, cập nhật bài post có postId chuyển payable thành "yes"
             Optional<Post> postOptional = postService.findById(postId);
             if (postOptional.isPresent()) {
                 Post post = postOptional.get();
                 post.setPayable("yes");
-                postService.save(post);  // Giả sử bạn có phương thức save để lưu lại bài post
+                post.setPaymentExpiryDate(LocalDate.now().plusDays(days));
+
+                // Lấy PostType từ CSDL
+                PostType updatedPostType = postTypeRepository.findByTypeName(postType)
+                        .orElseThrow(() -> new RuntimeException("Không tìm thấy PostType: " + postType));
+                post.setPostType(updatedPostType);
+
+                postService.save(post);
             }
-            // Có thể thêm thông báo giao dịch thành công nếu cần (ví dụ qua model hoặc session)
             return "redirect:/home";
         } else {
             model.addAttribute("error", "Số dư trong tài khoản không đủ để thanh toán.");

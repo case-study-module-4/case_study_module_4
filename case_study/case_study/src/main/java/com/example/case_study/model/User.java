@@ -46,4 +46,8 @@ public class User {
     @Column(name = "is_delete", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isDelete = false;
 
+    @OneToOne(mappedBy = "user")
+    private Account account;
+
+
 }

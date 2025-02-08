@@ -142,10 +142,20 @@ public class PostController {
     }
 
     @PostMapping("/{id}/delete")
-    public String deletePost(@PathVariable Integer id) {
-        postService.deleteById(id);
+    public String deletePost(@PathVariable Integer id, Principal principal) {
+        Optional<Post> postOptional = postService.findById(id);
+        if (postOptional.isPresent()) {
+            Post post = postOptional.get();
+            User user = userService.findUserByUsername(principal.getName());
+            // Kiểm tra quyền sở hữu bài đăng
+            if (post.getUser() == null || !post.getUser().equals(user)) {
+                return "redirect:/403"; // Hoặc trả về view lỗi phù hợp
+            }
+            postService.deleteById(id);
+        }
         return "redirect:/posts?message=deleted";
     }
+
 
     @GetMapping("/approved")
     public String getApprovedPostsForUser(Model model, Principal principal) {
@@ -205,7 +215,7 @@ public class PostController {
                         && post.getPurpose().getPurpose().equalsIgnoreCase("SALE"))
                 .collect(Collectors.toList());
         model.addAttribute("posts", rentPosts);
-        return "post/post-rent"; // Template dành cho bài đăng cho thuê
+        return "post/post-sale"; //
     }
 
 }

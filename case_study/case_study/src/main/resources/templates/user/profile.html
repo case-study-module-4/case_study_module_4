@@ -20,11 +20,15 @@
   </div>
 
   <h3>User Posts</h3>
+  <!-- Hiển thị tổng số bài đăng -->
+  <div th:if="${posts != null}">
+    <p><strong>Tổng số bài đăng:</strong> <span th:text="${#lists.size(posts)}"></span></p>
+  </div>
+
   <div th:if="${posts != null and !#lists.isEmpty(posts)}">
     <table class="table table-bordered">
       <thead>
       <tr>
-        <th>ID</th>
         <th>Title</th>
         <th>Status</th>
         <th>Published Date</th>
@@ -32,7 +36,6 @@
       </thead>
       <tbody>
       <tr th:each="post : ${posts}">
-        <td th:text="${post.id}"></td>
         <td>
           <a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}"></a>
         </td>

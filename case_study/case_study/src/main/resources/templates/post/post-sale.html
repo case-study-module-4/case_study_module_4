@@ -1,70 +1,32 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post Management</title>
     <link rel="stylesheet" href="/style/home.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
-    <script>
-        // Hàm tìm kiếm theo tiêu đề
-        function searchPost() {
-            let input = document.getElementById("search").value.toLowerCase();
-            let rows = document.querySelectorAll("#postTable tbody tr");
-
-            rows.forEach(row => {
-                let title = row.querySelector("td:nth-child(2)").innerText.toLowerCase();
-                row.style.display = title.includes(input) ? "" : "none";
-            });
-        }
-
-        // Hàm mở modal xác nhận xóa
-        function openDeleteModal(button) {
-            let postId = button.getAttribute('data-post-id');
-            // Gán postId cho nút xác nhận xóa trong modal
-            document.getElementById("confirmDeleteBtn").setAttribute('data-post-id', postId);
-            // Hiển thị modal
-            const modal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
-            modal.show();
-        }
-
-        // Khi người dùng xác nhận xóa trong modal
-        document.addEventListener("DOMContentLoaded", function(){
-            document.getElementById("confirmDeleteBtn").addEventListener("click", function(){
-                let postId = this.getAttribute("data-post-id");
-                let form = document.getElementById("deletePostForm");
-                // Đặt action của form để xóa bài viết theo đúng URL
-                form.action = "/posts/" + postId + "/delete";
-                form.submit();
-            });
-        });
-    </script>
 </head>
 <body>
-<!-- Chèn header (nếu có) -->
+<!-- Header (nếu có) -->
 <div th:insert="~{/layout/layout::header}"></div>
 
 <div class="container mt-5">
     <h1 class="mb-4 text-center">Post Management</h1>
 
-    <!-- Hiển thị thông báo thành công nếu xóa bài viết -->
-    <div th:if="${param.message == 'deleted'}" class="alert alert-success" role="alert">
-        Đã xóa thành công.
-    </div>
-
-    <!-- Hộp tìm kiếm -->
+    <!-- Search Box -->
     <div class="mb-4">
         <input type="text" id="search" class="form-control" placeholder="Search post by title..." onkeyup="searchPost()">
     </div>
 
-    <a class="btn btn-primary text-white mb-3" href="/posts/create">Đăng tin</a>
+    <a class="btn btn-primary text-white" href="/posts/create">Đăng tin</a>
 
-    <!-- Bảng danh sách bài viết -->
+    <!-- Post List -->
     <h2 class="mb-3">List of Posts</h2>
     <table class="table table-bordered" id="postTable">
         <thead class="table-header">
         <tr>
-            <th>ID</th>
             <th>Title</th>
             <th>Content</th>
             <th>Actions</th>
@@ -72,20 +34,31 @@
         </thead>
         <tbody>
         <tr th:if="${posts.isEmpty()}">
-            <td colspan="4" class="text-center text-muted">Chưa có bài viết nào. Hãy thêm bài viết mới!</td>
+            <td colspan="3" class="text-center text-muted">Chưa có bài viết nào. Hãy thêm bài viết mới!</td>
         </tr>
         <tr th:each="post : ${posts}">
-            <td th:text="${post.id}"></td>
             <td th:text="${post.title}"></td>
             <td th:text="${post.content}"></td>
             <td>
+                <!-- Nút Detail luôn hiển thị -->
                 <a class="btn btn-info btn-sm" th:href="@{/posts/{id}(id=${post.id})}">Detail</a>
-                <a class="btn btn-warning btn-sm" th:href="@{/posts/{id}/edit(id=${post.id})}">Edit</a>
-                <!-- Nút xóa kích hoạt modal -->
+                <!-- Nút Edit chỉ hiển thị nếu user hiện hành là người đăng bài -->
+                <a class="btn btn-warning btn-sm"
+                   th:if="${#authentication.name == post.user.account.username}"
+
+                   th:href="@{/posts/{id}/edit(id=${post.id})}">
+                    Edit
+                </a>
+                <!-- Nút Delete chỉ hiển thị nếu user hiện hành là người đăng bài -->
                 <button type="button" class="btn btn-danger btn-sm"
+                        th:if="${#authentication.name == post.user.account.username}"
+
                         th:attr="data-post-id=${post.id}"
-                        onclick="openDeleteModal(this)">Delete</button>
+                        onclick="openDeleteModal(this)">
+                    Delete
+                </button>
             </td>
+
         </tr>
         </tbody>
     </table>
@@ -100,21 +73,63 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
             </div>
             <div class="modal-body">
-                Bạn có chắc chắn muốn xóa không? Nếu xóa thì sẽ không hoàn tác lại được.
+                Bạn có chắc chắn muốn xóa bài đăng này không? Thao tác này không thể hoàn tác.
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Xóa</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Xóa</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Form ẩn dùng để submit xóa bài viết -->
+<!-- Form ẩn dùng để submit xóa bài đăng -->
 <form id="deletePostForm" method="post" style="display:none;">
     <input type="hidden" name="_method" value="delete">
 </form>
 
+<!-- Tải Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Các script xử lý -->
+<script>
+    // Hàm tìm kiếm theo tiêu đề (sử dụng cột đầu tiên)
+    function searchPost() {
+        let input = document.getElementById("search").value.toLowerCase();
+        let rows = document.querySelectorAll("#postTable tbody tr");
+
+        rows.forEach(row => {
+            let titleCell = row.querySelector("td:nth-child(1)");
+            if(titleCell){
+                let title = titleCell.innerText.toLowerCase();
+                row.style.display = title.includes(input) ? "" : "none";
+            }
+        });
+    }
+
+    // Lưu lại ID của bài đăng được chọn để xóa
+    let currentPostId = null;
+
+    // Hàm mở modal xác nhận xóa
+    function openDeleteModal(button) {
+        currentPostId = button.getAttribute('data-post-id');
+        console.log("Post ID selected for deletion:", currentPostId);
+        const modalElem = document.getElementById('deleteConfirmationModal');
+        if (!modalElem) {
+            console.error("Modal element not found!");
+            return;
+        }
+        const modal = new bootstrap.Modal(modalElem);
+        modal.show();
+    }
+
+    // Gán sự kiện cho nút xác nhận xóa sau khi DOM đã sẵn sàng
+    document.addEventListener('DOMContentLoaded', function(){
+        document.getElementById('confirmDeleteButton').addEventListener('click', function(){
+            // Đặt action cho form theo postId và submit
+            document.getElementById('deletePostForm').action = '/posts/' + currentPostId + '/delete';
+            document.getElementById('deletePostForm').submit();
+        });
+    });
+</script>
 </body>
 </html>

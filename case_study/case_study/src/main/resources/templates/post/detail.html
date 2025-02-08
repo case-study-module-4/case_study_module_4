@@ -58,9 +58,7 @@
       <!-- Hiển thị danh sách hình ảnh (nếu có) -->
       <div th:if="${post.images != null and not #lists.isEmpty(post.images)}">
         <div class="row">
-          <!-- Lặp qua từng ảnh trong danh sách post.images -->
           <div class="col-md-3" th:each="img : ${post.images}">
-            <!-- Khi bấm vào ảnh sẽ kích hoạt modal hiển thị ảnh chi tiết -->
             <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal"
                th:attr="data-image=@{${img.image}}">
               <img th:src="@{${img.image}}" alt="Ảnh bài đăng" class="img-fluid mb-2"
@@ -69,6 +67,7 @@
           </div>
         </div>
       </div>
+
 
       <a href="/posts" class="btn btn-secondary mt-3">Back to Posts</a>
     </div>
@@ -86,21 +85,17 @@
   </div>
 </div>
 
-<!-- Script của Bootstrap và JavaScript để xử lý modal -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     var imageModal = document.getElementById('imageModal');
     imageModal.addEventListener('show.bs.modal', function (event) {
-      // Lấy phần tử (thẻ <a>) mà người dùng đã click vào
       var button = event.relatedTarget;
-      // Lấy đường dẫn ảnh được truyền thông qua thuộc tính data-image
       var imageUrl = button.getAttribute('data-image');
-      // Gán đường dẫn ảnh vào thuộc tính src của thẻ <img> trong modal
       var modalImage = document.getElementById('modalImage');
       modalImage.src = imageUrl;
     });
   });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

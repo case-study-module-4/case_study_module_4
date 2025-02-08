@@ -191,6 +191,7 @@ public class PostController {
         }
         return "redirect:/posts?error=notfound";
     }
+
     @GetMapping("/rent")
     public String getRentPosts(Model model) {
         // Lấy danh sách tất cả các bài đăng

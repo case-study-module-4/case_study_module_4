@@ -144,9 +144,15 @@
 
             <!-- Nút Submit và Hủy bỏ -->
             <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-warning w-100 me-2">Cập nhật</button>
+                <button type="submit"
+                        name="action"
+                        th:attr="value=${post.payable == 'no' ? 'continue' : 'update'}"
+                        class="btn btn-warning w-100 me-2"
+                        th:text="${post.payable == 'no' ? 'Tiếp tục' : 'Cập nhật'}">
+                </button>
                 <a th:href="@{/posts}" class="btn btn-outline-secondary w-100">Hủy bỏ</a>
             </div>
+
         </form>
     </div>
 </div>

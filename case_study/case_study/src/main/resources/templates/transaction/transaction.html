@@ -1,10 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Thanh Toán Bài Đăng</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<div class="container mt-5">
+    <h1 class="mb-4">Thanh Toán Bài Đăng</h1>
 
+    <!-- Hiển thị số dư hiện có của người dùng -->
+    <div class="mb-3">
+        <label class="form-label">Số dư hiện tại:</label>
+        <div>
+            <strong th:text="${#numbers.formatDecimal(user.balance, 0, 'COMMA', 0, 'POINT')}"></strong> VND
+        </div>
+    </div>
+
+    <!-- Form giao dịch -->
+    <form id="transactionForm" th:action="@{/transaction/pay}" method="post">
+        <!-- Input ẩn để truyền mã bài đăng -->
+        <input type="hidden" name="postId" th:value="${postId}" />
+
+        <!-- Chọn loại bài đăng -->
+        <div class="mb-3">
+            <label for="postType" class="form-label">Chọn loại bài đăng:</label>
+            <select id="postType" name="postType" class="form-select" onchange="calculateTotal()">
+                <option value="STANDARD" data-price="4000">STANDARD - 4.000 VND/ngày</option>
+                <option value="VIP_SILVER" data-price="30000">VIP_SILVER - 30.000 VND/ngày</option>
+                <option value="VIP_GOLD" data-price="120000">VIP_GOLD - 120.000 VND/ngày</option>
+                <option value="VIP_DIAMOND" data-price="300000">VIP_DIAMOND - 300.000 VND/ngày</option>
+            </select>
+        </div>
+
+        <!-- Chọn số ngày duy trì bài đăng -->
+        <div class="mb-3">
+            <label class="form-label">Chọn số ngày duy trì:</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="days10" name="days" value="10" checked onclick="calculateTotal()">
+                <label class="form-check-label" for="days10">10 ngày (không giảm giá)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="days20" name="days" value="20" onclick="calculateTotal()">
+                <label class="form-check-label" for="days20">20 ngày (giảm 5%)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="days30" name="days" value="30" onclick="calculateTotal()">
+                <label class="form-check-label" for="days30">30 ngày (giảm 10%)</label>
+            </div>
+        </div>
+
+        <!-- Hiển thị tổng tiền thanh toán -->
+        <div class="mb-3">
+            <label class="form-label">Tổng tiền cần thanh toán:</label>
+            <div class="alert alert-success" role="alert">
+                <span id="totalAmount">0</span> VND
+            </div>
+        </div>
+
+        <!-- Hiển thị thông báo lỗi nếu số dư không đủ -->
+        <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
+
+        <!-- Input ẩn để truyền tổng tiền nếu cần -->
+        <input type="hidden" id="totalInput" name="totalAmount" value="0">
+
+        <!-- Nút thanh toán -->
+        <button type="button" class="btn btn-primary" onclick="processPayment()">Thanh toán</button>
+        <!-- Nút hủy thanh toán -->
+        <button type="button" class="btn btn-danger ms-2" onclick="cancelPayment()">Hủy thanh toán</button>
+    </form>
+
+    <!-- Lưu số dư người dùng vào một element ẩn để JavaScript dễ lấy -->
+    <span id="userBalance" th:text="${user.balance}" style="display: none;"></span>
+</div>
+
+<!-- Modal xác nhận hủy thanh toán -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelModalLabel">Xác nhận hủy thanh toán</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn hủy thanh toán? Bài đăng sẽ vẫn giữ trạng thái chưa thanh toán.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>
+                <button type="button" class="btn btn-danger" id="confirmCancel">Hủy thanh toán</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS Bundle (bao gồm Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function calculateTotal() {
+        var postTypeSelect = document.getElementById("postType");
+        var selectedOption = postTypeSelect.options[postTypeSelect.selectedIndex];
+        var pricePerDay = parseFloat(selectedOption.getAttribute("data-price"));
+        var days = parseInt(document.querySelector('input[name="days"]:checked').value);
+        var total = pricePerDay * days;
+        var discount = 0;
+        if (days === 20) {
+            discount = 0.05;
+        } else if (days === 30) {
+            discount = 0.10;
+        }
+        total = total - (total * discount);
+        document.getElementById("totalAmount").innerText = total.toLocaleString('vi-VN');
+        document.getElementById("totalInput").value = total;
+    }
+
+    function processPayment() {
+        var totalText = document.getElementById("totalAmount").innerText.replace(/\./g, '').replace(/,/g, '');
+        var totalAmount = parseFloat(totalText);
+        var userBalance = parseFloat(document.getElementById("userBalance").innerText);
+        if (userBalance >= totalAmount) {
+            document.getElementById("transactionForm").submit();
+        } else {
+            var errorMessage = document.getElementById("errorMessage");
+            errorMessage.style.display = "block";
+            errorMessage.innerText = "Số dư trong tài khoản không đủ để thanh toán. Vui lòng nạp thêm tiền.";
+        }
+    }
+
+    // Hàm hủy thanh toán: hiển thị modal xác nhận
+    function cancelPayment() {
+        var cancelModal = new bootstrap.Modal(document.getElementById('cancelModal'));
+        cancelModal.show();
+    }
+
+    // Lắng nghe sự kiện click của nút xác nhận hủy thanh toán trong modal
+    document.getElementById('confirmCancel').addEventListener('click', function() {
+        // Sau khi người dùng xác nhận, chuyển hướng về trang danh sách bài viết nháp (hoặc trang phù hợp)
+        window.location.href = "/posts/drafts?message=cancelPayment";
+    });
+
+    document.addEventListener("DOMContentLoaded", calculateTotal);
+</script>
 </body>
 </html>

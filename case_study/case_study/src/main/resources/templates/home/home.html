@@ -171,6 +171,27 @@
         </div>
     </div>
 </div>
+<!-- Modal hiển thị thông báo -->
+<div id="notificationModal" style="display: none;">
+    <div>
+        <p th:text="${message}"></p>
+        <button onclick="closeModal()">Đóng</button>
+    </div>
+</div>
+
+<!-- Script để hiển thị modal khi có thông báo -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const message = /*[[${message}]]*/ null;
+        if (message) {
+            document.getElementById("notificationModal").style.display = "block";
+        }
+    });
+
+    function closeModal() {
+        document.getElementById("notificationModal").style.display = "none";
+    }
+</script>
 
 <div th:insert="~{/layout/layout::footer}"></div>
 </body>

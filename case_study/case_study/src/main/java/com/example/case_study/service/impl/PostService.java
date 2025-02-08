@@ -39,7 +39,7 @@ public class PostService implements IPostService {
 
     @Override
     public List<Post> findAll() {
-        return postRepository.findAll();
+        return postRepository.findByPayable("yes");
     }
 
     @Override
@@ -59,7 +59,7 @@ public class PostService implements IPostService {
 
 
     @Override
-    public void createPost(@Valid PostDTO postDTO, User user) {
+    public Post createPost(@Valid PostDTO postDTO, User user) {
         try {
             // Tạo đối tượng RealEstate từ PostDTO
             RealEstate realEstate = new RealEstate();
@@ -83,9 +83,8 @@ public class PostService implements IPostService {
             post.setPublishDate(postDTO.getPublishDate() != null ? postDTO.getPublishDate() : LocalDate.now());
             post.setPurpose(purpose);
             post.setRealEstate(realEstate);
-
-            // **Gán user cho bài đăng**
             post.setUser(user);
+            post.setPayable("no");
 
             // Xử lý lưu ảnh (như đã code)
             List<MultipartFile> files = postDTO.getImageFiles();
@@ -105,7 +104,8 @@ public class PostService implements IPostService {
             }
             post.setRealEstate(realEstate);
             // Lưu Post để có id nếu cần dùng cho Image sau này
-            postRepository.save(post);
+            Post savedPost = postRepository.save(post);
+
 
             // Xử lý lưu các ảnh khác (nếu có)
             if (files != null && !files.isEmpty()) {
@@ -126,7 +126,7 @@ public class PostService implements IPostService {
                     }
                 }
             }
-
+            return savedPost;
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Lỗi khi xử lý file ảnh: " + e.getMessage());
@@ -262,8 +262,11 @@ public class PostService implements IPostService {
         return postRepository.findByUserIdAndStatus(userId, "Approved");
     }
 
+
     @Override
     public List<Post> getDraftPostsByUserId(Integer userId) {
-        return postRepository.findByUserIdAndStatus(userId, "Pending");
+        // Trả về các bài viết của user có payable = "no"
+        return postRepository.findByUserIdAndPayable(userId, "no");
     }
+
 }

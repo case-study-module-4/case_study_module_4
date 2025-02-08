@@ -60,4 +60,10 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Image> images;
+
+    @Column(name = "payable", columnDefinition = "VARCHAR(3) DEFAULT 'no'")
+    private String payable = "no";
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<Transaction> transactions;
 }

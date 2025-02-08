@@ -103,7 +103,12 @@
 
             <!-- Nút bấm -->
             <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-primary w-100 me-2">Tạo bài viết</button>
+                <button type="submit" name="action" value="continue" class="btn btn-primary w-50 me-2">
+                    Tiếp tục
+                </button>
+                <button type="submit" name="action" value="save" class="btn btn-secondary w-50">
+                    Lưu bài viết
+                </button>
                 <a th:href="@{/home}" class="btn btn-outline-secondary w-100">Hủy bỏ</a>
             </div>
         </form>

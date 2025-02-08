@@ -61,4 +61,6 @@ public class PostDTO {
     private String image;
 
     private List<Image> images;
+
+    private String payable;
 }

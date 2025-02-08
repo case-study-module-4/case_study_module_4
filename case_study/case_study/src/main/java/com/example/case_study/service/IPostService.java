@@ -12,7 +12,7 @@ import java.util.List;
 public interface IPostService extends IService<Post> {
 
 
-    void createPost(@Valid PostDTO postDTO, User user);
+    Post createPost(@Valid PostDTO postDTO, User user);
 
     // Trong PostService.java
     void updatePost(Post post, @Valid PostDTO postDTO, List<Integer> deleteImageIds);

@@ -14,9 +14,10 @@
         <form th:action="@{/posts}" method="post" enctype="multipart/form-data" th:object="${postDTO}">
             <!-- Trạng thái -->
             <div class="mb-3">
-                <label for="status" class="form-label fw-bold">Trạng thái</label>
-                <input type="text" class="form-control" id="status" th:field="*{status}" required>
-                <div th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="text-danger"></div>
+                <label for="statusDisplay" class="form-label fw-bold">Trạng thái</label>
+                <input type="text" class="form-control" id="statusDisplay"
+                       th:value="${statusDisplay}" disabled>
+                <input type="hidden" th:field="*{status}" />
             </div>
 
             <!-- Tiêu đề -->

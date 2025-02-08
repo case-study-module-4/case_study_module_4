@@ -2,7 +2,6 @@ package com.example.case_study.controller;
 
 
 import com.example.case_study.dto.PostDTO;
-import com.example.case_study.model.Image;
 import com.example.case_study.model.Post;
 import com.example.case_study.model.User;
 import com.example.case_study.repository.ImageRepository;
@@ -20,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 @Controller
 @RequestMapping("/posts")
@@ -50,12 +51,16 @@ public class PostController {
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
-        model.addAttribute("postDTO", new PostDTO()); // Đảm bảo postDTO được truyền vào model
+        PostDTO postDTO = new PostDTO();
+        postDTO.setStatus("Available");
+        model.addAttribute("statusDisplay", "Chưa Giao Dịch");
+        model.addAttribute("postDTO", postDTO);  // Sử dụng đối tượng đã được cấu hình
         model.addAttribute("purposes", purposeService.findAll());
         model.addAttribute("realEstates", realEstateService.findAll());
 
         return "post/create-post";
     }
+
 
     @PostMapping()
     public String createPost(@Valid @ModelAttribute("postDTO") PostDTO postDTO,
@@ -176,4 +181,31 @@ public class PostController {
         }
         return "redirect:/posts?error=notfound";
     }
+    @GetMapping("/rent")
+    public String getRentPosts(Model model) {
+        // Lấy danh sách tất cả các bài đăng
+        List<Post> allPosts = postService.findAll();
+        // Lọc các bài đăng có purpose là "RENT"
+        List<Post> rentPosts = allPosts.stream()
+                .filter(post -> post.getPurpose() != null
+                        && post.getPurpose().getPurpose() != null
+                        && post.getPurpose().getPurpose().equalsIgnoreCase("RENT"))
+                .collect(Collectors.toList());
+        model.addAttribute("posts", rentPosts);
+        return "post/post-rent"; // Template dành cho bài đăng cho thuê
+    }
+    @GetMapping("/sale")
+    public String getSalePosts(Model model) {
+        // Lấy danh sách tất cả các bài đăng
+        List<Post> allPosts = postService.findAll();
+        // Lọc các bài đăng có purpose là "SALE"
+        List<Post> rentPosts = allPosts.stream()
+                .filter(post -> post.getPurpose() != null
+                        && post.getPurpose().getPurpose() != null
+                        && post.getPurpose().getPurpose().equalsIgnoreCase("SALE"))
+                .collect(Collectors.toList());
+        model.addAttribute("posts", rentPosts);
+        return "post/post-rent"; // Template dành cho bài đăng cho thuê
+    }
+
 }

@@ -2,9 +2,14 @@ package com.example.case_study.controller;
 
 
 import com.example.case_study.dto.PostDTO;
+import com.example.case_study.model.Image;
 import com.example.case_study.model.Post;
 import com.example.case_study.model.User;
+import com.example.case_study.repository.ImageRepository;
 import com.example.case_study.service.*;
+import com.example.case_study.service.impl.PostService;
+import com.example.case_study.service.impl.PurposeService;
+import com.example.case_study.service.impl.RealEstateService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,13 +26,16 @@ import java.util.Optional;
 public class PostController {
 
     @Autowired
-    private IPostService postService;
+    private PostService postService;
 
     @Autowired
-    private IPurposeService purposeService;
+    private PurposeService purposeService;
 
     @Autowired
-    private IRealEstateService realEstateService;
+    private RealEstateService realEstateService;
+
+    @Autowired
+    private ImageRepository imageRepository;
 
 
     @Autowired
@@ -52,7 +60,8 @@ public class PostController {
     @PostMapping()
     public String createPost(@Valid @ModelAttribute("postDTO") PostDTO postDTO,
                              BindingResult result,
-                             Model model) {
+                             Model model,
+                             Principal principal) { // thêm Principal vào đây
         model.addAttribute("postDTO", new PostDTO());
         model.addAttribute("purposes", purposeService.findAll());
         model.addAttribute("realEstates", realEstateService.findAll());
@@ -60,30 +69,77 @@ public class PostController {
         if (result.hasErrors()) {
             return "post/create-post";
         }
-        postService.createPost(postDTO);
+        // Lấy user hiện hành dựa vào principal
+        User user = userService.findUserByUsername(principal.getName());
+        // Truyền user vào service để gán cho bài đăng
+        postService.createPost(postDTO, user);
         return "redirect:/home";
     }
 
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable Integer id, Model model) {
+        Optional<Post> postOptional = postService.findById(id);
+        if (postOptional.isPresent()) {
+            Post post = postOptional.get();
+            PostDTO postDTO = new PostDTO();
+            postDTO.setId(post.getId());
+            postDTO.setTitle(post.getTitle());
+            postDTO.setContent(post.getContent());
+            postDTO.setStatus(post.getStatus());
+            if (post.getPurpose() != null) {
+                postDTO.setPurpose(post.getPurpose().getPurpose());
+            } else {
+                postDTO.setPurpose("");
+            }
+            postDTO.setType(post.getRealEstate().getType());
+            postDTO.setLocation(post.getRealEstate().getLocation());
+            postDTO.setArea(post.getRealEstate().getArea());
+            postDTO.setDirection(post.getRealEstate().getDirection());
+            postDTO.setPrice(post.getRealEstate().getPrice());
+            // Gán ảnh chính
+            postDTO.setImage(post.getImage());
+            // Gán danh sách ảnh phụ (nếu có)
+            postDTO.setImages(post.getImages());
 
-    @PutMapping("/{id}")
-    public String updatePost(@PathVariable Integer id, @Valid @ModelAttribute Post post, BindingResult result) {
+            model.addAttribute("post", postDTO);
+            return "post/edit";
+        }
+        return "redirect:/posts?error=notfound";
+    }
+
+
+    @PostMapping("/{id}")
+    public String updatePost(@PathVariable Integer id,
+                             Principal principal,
+                             @Valid @ModelAttribute("post") PostDTO postDTO,
+                             BindingResult result,
+                             Model model,
+                             @RequestParam(value = "deleteImages", required = false) List<Integer> deleteImageIds) {
         if (result.hasErrors()) {
-            return "post/edit-post";
+            model.addAttribute("purposes", purposeService.findAll());
+            model.addAttribute("realEstates", realEstateService.findAll());
+            return "post/edit";
         }
+        Optional<Post> postOptional = postService.findById(id);
+        if (postOptional.isPresent()) {
+            Post post = postOptional.get();
+            User user = userService.findUserByUsername(principal.getName());
+            // Kiểm tra quyền sở hữu bài đăng (nếu cần)
+            if (post.getUser() == null || !post.getUser().equals(user)) {
+                return "redirect:/403";
+            }
 
-        if (postService.findById(id) == null) {
-            return "redirect:/posts?error=notfound";
+            // Gọi phương thức updatePost để cập nhật đầy đủ các trường
+            postService.updatePost(post, postDTO, deleteImageIds);
+            return "redirect:/posts";
         }
-
-        post.setId(id);
-        postService.save(post);
-        return "redirect:/posts";
+        return "redirect:/posts?error=notfound";
     }
 
     @PostMapping("/{id}/delete")
     public String deletePost(@PathVariable Integer id) {
         postService.deleteById(id);
-        return "redirect:/posts";
+        return "redirect:/posts?message=deleted";
     }
 
     @GetMapping("/approved")

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/style/home.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
     <script>
-        // Search functionality
+        // Hàm tìm kiếm theo tiêu đề
         function searchPost() {
             let input = document.getElementById("search").value.toLowerCase();
             let rows = document.querySelectorAll("#postTable tbody tr");
@@ -18,45 +18,48 @@
             });
         }
 
-        // Open the Edit modal
-        function openEditModal(id, title, content) {
-            document.getElementById("editId").value = id;
-            document.getElementById("editTitle").value = title;
-            document.getElementById("editContent").value = content;
-            const modal = new bootstrap.Modal(document.getElementById('editPostModal'));
+        // Hàm mở modal xác nhận xóa
+        function openDeleteModal(button) {
+            let postId = button.getAttribute('data-post-id');
+            // Gán postId cho nút xác nhận xóa trong modal
+            document.getElementById("confirmDeleteBtn").setAttribute('data-post-id', postId);
+            // Hiển thị modal
+            const modal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
             modal.show();
         }
 
-        // Open the Detail modal
-        function openDetailModal(title, content) {
-            document.getElementById("detailTitle").innerText = title;
-            document.getElementById("detailContent").innerText = content;
-            const modal = new bootstrap.Modal(document.getElementById('detailPostModal'));
-            modal.show();
-        }
-
-        // Confirm deletion
-        function confirmDelete(event) {
-            if (!confirm("Are you sure you want to delete this post?")) {
-                event.preventDefault();
-            }
-        }
+        // Khi người dùng xác nhận xóa trong modal
+        document.addEventListener("DOMContentLoaded", function(){
+            document.getElementById("confirmDeleteBtn").addEventListener("click", function(){
+                let postId = this.getAttribute("data-post-id");
+                let form = document.getElementById("deletePostForm");
+                // Đặt action của form để xóa bài viết theo đúng URL
+                form.action = "/posts/" + postId + "/delete";
+                form.submit();
+            });
+        });
     </script>
 </head>
 <body>
-
+<!-- Chèn header (nếu có) -->
 <div th:insert="~{/layout/layout::header}"></div>
+
 <div class="container mt-5">
     <h1 class="mb-4 text-center">Post Management</h1>
 
-    <!-- Search Box -->
+    <!-- Hiển thị thông báo thành công nếu xóa bài viết -->
+    <div th:if="${param.message == 'deleted'}" class="alert alert-success" role="alert">
+        Đã xóa thành công.
+    </div>
+
+    <!-- Hộp tìm kiếm -->
     <div class="mb-4">
         <input type="text" id="search" class="form-control" placeholder="Search post by title..." onkeyup="searchPost()">
     </div>
 
-    <a class="btn btn-primary text-white" href="/posts/create">Đăng tin</a>
+    <a class="btn btn-primary text-white mb-3" href="/posts/create">Đăng tin</a>
 
-    <!-- Post List -->
+    <!-- Bảng danh sách bài viết -->
     <h2 class="mb-3">List of Posts</h2>
     <table class="table table-bordered" id="postTable">
         <thead class="table-header">
@@ -77,45 +80,40 @@
             <td th:text="${post.content}"></td>
             <td>
                 <a class="btn btn-info btn-sm" th:href="@{/posts/{id}(id=${post.id})}">Detail</a>
-                <button class="btn btn-warning btn-sm"
-                        th:attr="onclick='openEditModal(\'' + ${post.id} + '\', \'' + ${post.title} + '\', \'' + ${post.content} + '\')'">
-                    Edit
-                </button>
-                <form th:action="@{/posts/{id}(id=${post.id})}" method="post" style="display:inline;" onsubmit="confirmDelete(event)">
-                    <input type="hidden" name="_method" value="delete">
-                    <button class="btn btn-danger btn-sm">Delete</button>
-                </form>
+                <a class="btn btn-warning btn-sm" th:href="@{/posts/{id}/edit(id=${post.id})}">Edit</a>
+                <!-- Nút xóa kích hoạt modal -->
+                <button type="button" class="btn btn-danger btn-sm"
+                        th:attr="data-post-id=${post.id}"
+                        onclick="openDeleteModal(this)">Delete</button>
             </td>
         </tr>
         </tbody>
     </table>
+</div>
 
-    <!-- Edit Post Modal -->
-    <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editPostModalLabel">Chỉnh sửa bài viết</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editForm" th:action="@{/posts}" method="post">
-                        <input type="hidden" id="editId" name="id">
-                        <div class="mb-3">
-                            <label for="editTitle" class="form-label">Title</label>
-                            <input type="text" class="form-control" id="editTitle" name="title" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editContent" class="form-label">Content</label>
-                            <textarea class="form-control" id="editContent" name="content" rows="3" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Update Post</button>
-                    </form>
-                </div>
+<!-- Modal xác nhận xóa -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa không? Nếu xóa thì sẽ không hoàn tác lại được.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Xóa</button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Form ẩn dùng để submit xóa bài viết -->
+<form id="deletePostForm" method="post" style="display:none;">
+    <input type="hidden" name="_method" value="delete">
+</form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>

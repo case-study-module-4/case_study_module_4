@@ -33,8 +33,9 @@ public class RealEstate {
     @Column(name = "price", columnDefinition = "DECIMAL(15,2)")
     private Double price;
 
-    @Column(name = "image", columnDefinition = "TEXT")
-    private String image;
+    @NotNull(message = "Area must not be null")
+    @Column(name = "area", columnDefinition = "DECIMAL(15,2)")
+    private Double area;
 
     @NotBlank(message = "Name must not be empty")
     @Column(

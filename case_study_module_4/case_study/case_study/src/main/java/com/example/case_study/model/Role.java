@@ -19,4 +19,5 @@ public class Role {
 
     @Column(name = "name", columnDefinition = "VARCHAR(50)", unique = true, nullable = false)
     private String name;
+
 }

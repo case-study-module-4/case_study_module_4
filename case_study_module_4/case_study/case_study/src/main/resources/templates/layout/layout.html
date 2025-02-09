@@ -14,11 +14,10 @@
 </th:block>
 
 <th:block th:fragment="header">
-    <header class="header" style=" height: 80px;
-    background-color: black;">
-        <nav class="navbar navbar-expand-lg " style="height: 80px ; background-color: #E6E6FA">
+    <header class="header" style=" height: 80px ; margin-top: 0 ; background-color: black;">
+        <nav class="navbar navbar-expand-lg " style="height: 80px ; background-color: #E6E6FA ; position: fixed ; width: 100% ; z-index: 1000 "  >
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="/home">
                     <img src="https://staticfile.batdongsan.com.vn/images/logo/standard/red/logo.svg" alt="Logo"
                          style="height: 40px;"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -29,13 +28,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link me-3 active" aria-current="page" href="#">Trang chủ</a>
+                            <a class="nav-link me-3 active" aria-current="page" href="/home">Trang chủ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link me-3 active" href="#">Nhà đất bán</a>
+                            <a class="nav-link me-3 active" href="/posts/sale">Nhà đất bán</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link me-3 active" href="#">Nhà đất cho thuê</a>
+                            <a class="nav-link me-3 active" href="/posts/rent">Nhà đất cho thuê</a>
                         </li>
                         <!--                        <li class="nav-item me-3 dropdown">-->
                         <!--                            <a class="nav-link active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"-->
@@ -56,19 +55,20 @@
                         <!--                        </li>-->
                     </ul>
                     <ul class="navbar-nav mb-2 mb-lg-0">
-<!--                                                <li class="nav-item me-3">-->
-<!--                                                    <a class="nav-link active" href="#" >Đăng nhập</a>-->
-<!--                                                </li>-->
+                        <!--                                                <li class="nav-item me-3">-->
+                        <!--                                                    <a class="nav-link active" href="#" >Đăng nhập</a>-->
+                        <!--                                                </li>-->
                         <li class="nav-item me-3" sec:authorize="!isAuthenticated()">
                             <a class="nav-link active" href="/login">Đăng nhập</a>
                         </li>
 
                         <li class="nav-item dropdown me-3" sec:authorize="isAuthenticated()">
                             <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" aria-expanded="false">
-                                <b th:text="${#authentication.name}"></b>
+                                <!--                                <b th:text="${#authentication.name}"></b>-->
+                                <span th:text="${#authentication != null ? #authentication.name : 'Guest'}"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/profile">Hồ sơ của tôi</a></li>
+                                <li><a class="dropdown-item" href="/dashboard">Hồ sơ của tôi</a></li>
                                 <li>
                                     <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changePasswordUserModal">
                                         Thay Đổi Mật Khẩu

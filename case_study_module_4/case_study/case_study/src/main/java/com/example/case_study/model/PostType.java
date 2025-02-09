@@ -1,7 +1,8 @@
 package com.example.case_study.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,9 @@ public class PostType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "INT")
+
     private Integer id;
+
 
     @NotNull(message = "Type name must not be null")
     @Column(name = "type_name", columnDefinition = "ENUM('STANDARD', 'VIP_SILVER', 'VIP_GOLD', 'VIP_DIAMOND')", nullable = false)

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Kết quả tìm kiếm</h2>
+
+<div th:if="${realEstates != null and realEstates.isEmpty()}">
+  <p>Không có kết quả tìm kiếm nào.</p>
+</div>
+
+<table th:if="${realEstates != null and !realEstates.isEmpty()}">
+  <thead>
+  <tr>
+    <th>Địa điểm</th>
+    <th>Loại nhà đất</th>
+    <th>Giá</th>
+    <th>Diện tích</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="realEstate : ${realEstates}">
+    <td th:text="${realEstate.location}"></td>
+    <td th:text="${realEstate.type}"></td>
+    <td th:text="${realEstate.price} + ' tỷ'"></td>
+    <td th:text="${realEstate.area} + ' m²'"></td>
+  </tr>
+  </tbody>
+</table>
+
+<a href="/home">Quay lại trang chủ</a>
+</body>
+</html>

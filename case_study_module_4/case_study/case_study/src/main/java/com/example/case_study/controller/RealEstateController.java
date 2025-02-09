@@ -49,4 +49,5 @@ public class RealEstateController {
         }
         return ResponseEntity.notFound().build();
     }
+
 }

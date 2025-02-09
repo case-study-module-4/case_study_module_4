@@ -17,16 +17,18 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "INT")
-
     private Integer id;
 
-
-    @NotNull(message = "Real Estate ID must not be null")
     @ManyToOne
-    @JoinColumn(name = "real_estate_id", referencedColumnName = "id")
+    @JoinColumn(name = "post_id", referencedColumnName = "id", nullable = true)
+    private Post post;
+
+    @ManyToOne
+    @JoinColumn(name = "real_estate_id", referencedColumnName = "id", nullable = true)
     private RealEstate realEstate;
 
     @NotBlank(message = "Image URL must not be empty")
     @Column(name = "image_url", columnDefinition = "TEXT", nullable = false)
-    private String imageUrl;
+    private String image;
 }
+

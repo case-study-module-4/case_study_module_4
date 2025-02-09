@@ -1,5 +1,7 @@
 package com.example.case_study.dto;
 
+import com.example.case_study.model.Image;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -9,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
-import com.example.case_study.model.Post;
+import java.util.List;
 
 import java.time.LocalDate;
 
@@ -44,22 +46,21 @@ public class PostDTO {
     @Size(max = 255, message = "Địa điểm không được vượt quá 255 ký tự")
     private String location;
 
+    @NotNull(message = "Area must not be null")
+    @Column(name = "area", columnDefinition = "DECIMAL(15,2)")
+    private Double area;
+
     @Size(max = 50, message = "Hướng không được vượt quá 50 ký tự")
     private String direction;
 
     @NotNull(message = "Giá không được để trống")
     private Double price;
 
-    @NotNull(message = "Hình ảnh không được để trống")
-    private MultipartFile image;
+    private List<MultipartFile> imageFiles;
 
-    // Constructor nhận tham số là đối tượng Post
-    public PostDTO(Post post) {
-        this.id = post.getId();
-        this.title = post.getTitle();
-        this.content = post.getContent();
-        this.publishDate = post.getPublishDate();
-        this.status = post.getStatus();
-        // Nếu cần, bạn có thể ánh xạ thêm các trường khác từ Post sang PostDTO.
-    }
+    private String image;
+
+    private List<Image> images;
+
+    private String payable;
 }

@@ -7,9 +7,27 @@
     <title>Post Management</title>
     <link rel="stylesheet" href="/style/home.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <style>
+        /* Định nghĩa các class màu cho Post Type */
+        .vip-diamond {
+            color: #40E0D0; /* màu xanh ngọc */
+        }
+
+        .vip-gold {
+            color: #FFD700; /* màu vàng kim */
+        }
+
+        .vip-silver {
+            color: #C0C0C0; /* màu bạc */
+        }
+
+        .standard {
+            color: #008000; /* màu xanh lá */
+        }
+    </style>
 </head>
 <body>
-<!-- Header (nếu có) -->
+<!-- Chèn header (nếu có) -->
 <div th:insert="~{/layout/layout::header}"></div>
 
 <div class="container mt-5">
@@ -17,55 +35,67 @@
 
     <!-- Search Box -->
     <div class="mb-4">
-        <input type="text" id="search" class="form-control" placeholder="Search post by title..." onkeyup="searchPost()">
+        <input type="text" id="search" class="form-control" placeholder="Search post by title..."
+               onkeyup="searchPost()">
     </div>
 
     <a class="btn btn-primary text-white" href="/posts/create">Đăng tin</a>
 
-    <!-- Post List -->
+    <!-- Danh sách bài viết -->
     <h2 class="mb-3">List of Posts</h2>
     <table class="table table-bordered" id="postTable">
         <thead class="table-header">
         <tr>
             <th>Title</th>
+            <th>Post Type</th>
             <th>Content</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
+        <!-- Nếu danh sách bài viết rỗng -->
         <tr th:if="${posts.isEmpty()}">
-            <td colspan="3" class="text-center text-muted">Chưa có bài viết nào. Hãy thêm bài viết mới!</td>
+            <td colspan="4" class="text-center text-muted">
+                Chưa có bài viết nào. Hãy thêm bài viết mới!
+            </td>
         </tr>
+        <!-- Duyệt qua danh sách bài viết -->
         <tr th:each="post : ${posts}">
             <td th:text="${post.title}"></td>
+            <td>
+                        <span th:text="${post.postType.typeName}"
+                              th:class="${#strings.toUpperCase(post.postType.typeName) == 'VIP_DIAMOND' ? 'vip-diamond' :
+                (#strings.toUpperCase(post.postType.typeName) == 'VIP_GOLD' ? 'vip-gold' :
+                (#strings.toUpperCase(post.postType.typeName) == 'VIP_SILVER' ? 'vip-silver' : 'standard'))}">
+</span>
+
+            </td>
             <td th:text="${post.content}"></td>
             <td>
                 <!-- Nút Detail luôn hiển thị -->
                 <a class="btn btn-info btn-sm" th:href="@{/posts/{id}(id=${post.id})}">Detail</a>
-                <!-- Nút Edit chỉ hiển thị nếu user hiện hành là người đăng bài -->
+                <!-- Nút Edit chỉ hiển thị nếu người dùng hiện hành là người đăng bài -->
                 <a class="btn btn-warning btn-sm"
                    th:if="${#authentication.name == post.user.account.username}"
-
                    th:href="@{/posts/{id}/edit(id=${post.id})}">
                     Edit
                 </a>
-                <!-- Nút Delete chỉ hiển thị nếu user hiện hành là người đăng bài -->
+                <!-- Nút Delete chỉ hiển thị nếu người dùng hiện hành là người đăng bài -->
                 <button type="button" class="btn btn-danger btn-sm"
                         th:if="${#authentication.name == post.user.account.username}"
-
                         th:attr="data-post-id=${post.id}"
                         onclick="openDeleteModal(this)">
                     Delete
                 </button>
             </td>
-
         </tr>
         </tbody>
     </table>
 </div>
 
 <!-- Modal xác nhận xóa -->
-<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -84,29 +114,28 @@
 </div>
 
 <!-- Form ẩn dùng để submit xóa bài đăng -->
-<form id="deletePostForm" method="post" style="display:none;">
+<form id="deletePostForm" method="post" style="display: none;">
     <input type="hidden" name="_method" value="delete">
 </form>
 
-<!-- Tải Bootstrap JS -->
+<!-- Tải Bootstrap JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Các script xử lý -->
 <script>
-    // Hàm tìm kiếm theo tiêu đề (sử dụng cột đầu tiên)
+    // Hàm tìm kiếm bài đăng theo tiêu đề (dựa vào cột Title)
     function searchPost() {
         let input = document.getElementById("search").value.toLowerCase();
         let rows = document.querySelectorAll("#postTable tbody tr");
 
-        rows.forEach(row => {
+        rows.forEach(function (row) {
             let titleCell = row.querySelector("td:nth-child(1)");
-            if(titleCell){
+            if (titleCell) {
                 let title = titleCell.innerText.toLowerCase();
                 row.style.display = title.includes(input) ? "" : "none";
             }
         });
     }
 
-    // Lưu lại ID của bài đăng được chọn để xóa
+    // Biến lưu lại ID của bài đăng được chọn để xóa
     let currentPostId = null;
 
     // Hàm mở modal xác nhận xóa
@@ -122,10 +151,9 @@
         modal.show();
     }
 
-    // Gán sự kiện cho nút xác nhận xóa sau khi DOM đã sẵn sàng
-    document.addEventListener('DOMContentLoaded', function(){
-        document.getElementById('confirmDeleteButton').addEventListener('click', function(){
-            // Đặt action cho form theo postId và submit
+    // Gán sự kiện cho nút xác nhận xóa sau khi DOM sẵn sàng
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('confirmDeleteButton').addEventListener('click', function () {
             document.getElementById('deletePostForm').action = '/posts/' + currentPostId + '/delete';
             document.getElementById('deletePostForm').submit();
         });

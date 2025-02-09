@@ -194,7 +194,7 @@ public class PostController {
     public String getApprovedPostsForUser(Model model, Principal principal) {
         String username = principal.getName();
         User user = userService.findUserByUsername(username);
-        List<Post> approvedPosts = postService.getApprovedPostsByUserId(user.getId());
+        List<Post> approvedPosts = postService.findAll();
         model.addAttribute("posts", approvedPosts);
 
         return "user/approved-posts";

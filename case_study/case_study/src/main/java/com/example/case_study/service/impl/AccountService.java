@@ -1,11 +1,15 @@
 package com.example.case_study.service.impl;
 
+import com.example.case_study.dto.AccountDTO;
 import com.example.case_study.model.Account;
 import com.example.case_study.repository.AccountRepository;
 import com.example.case_study.service.IAccountService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccountService implements IAccountService {
@@ -40,5 +44,21 @@ public class AccountService implements IAccountService {
 
     public boolean checkAccount(String username) {
         return accountRepository.findByUsername(username).isPresent();
+    }
+
+    @Override
+    public List<AccountDTO> getAllAccounts() {
+        return accountRepository.findAllAccountDetails();
+    }
+    @Override
+    public boolean softDeleteAccount(Integer id) {
+        Optional<Account> optionalAccount = accountRepository.findById(id);
+        if (optionalAccount.isPresent()) {
+            Account account = optionalAccount.get();
+            account.setIsDelete(true);
+            accountRepository.save(account); // Cập nhật vào database
+            return true;
+        }
+        return false;
     }
 }

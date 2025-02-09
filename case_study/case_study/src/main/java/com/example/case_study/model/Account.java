@@ -42,4 +42,12 @@ public class Account {
     @OneToOne
     @JoinColumn(name = "id_user", referencedColumnName = "id", nullable = false)
     private User user;
+
+    @PrePersist
+    @PreUpdate
+    public void updateStatus() {
+        if (Boolean.TRUE.equals(isDelete)) {
+            this.status = "inactive";
+        }
+    }
 }

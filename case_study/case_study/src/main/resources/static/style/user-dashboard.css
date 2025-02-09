@@ -191,3 +191,23 @@ h1 {
     font-size: 14px;
     color: #7f8c8d;
 }
+.deposit-button {
+    border: 2px solid red; /* Viền đỏ */
+    background-color: white; /* Nền trắng */
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.deposit-button a {
+    text-decoration: none; /* Bỏ gạch chân */
+    color: red; /* Màu chữ đỏ */
+    font-size: 16px;
+    font-weight: bold;
+    display: block;
+}
+
+.deposit-button:hover {
+    background-color: rgba(255, 0, 0, 0.1); /* Màu nền đỏ nhạt khi hover */
+}

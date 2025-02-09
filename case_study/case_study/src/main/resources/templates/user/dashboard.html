@@ -17,19 +17,16 @@
         <div class="user-info">
             <!-- Hiển thị thông tin người dùng -->
             <div class="avatar">U</div>
-            <div class="full-name" th:text="${user.fullName}">Tên người dùng</div><div class="points" th:text="'Điểm: ' + ${user.balance}">0 điểm</div>
+            <div class="full-name" th:text="${user.fullName}">Tên người dùng</div>
             <div class="account-balance">
                 <p>Số dư tài khoản</p>
                 <div>
                     <span>TK Chính:</span>
                     <span th:text="${user.balance}">0</span>
                 </div>
-                <div class="transfer-code">
-                    <span>Mã chuyển khoản:</span>
-                    <span>BDS99</span>
-                </div>
-                <a th:href="@{/deposit}">Nạp tiền</a>
-                <button><a href="#"  class="submenu-link" data-url="/deposit" >Nạp tiền</a></button>
+                <button class="deposit-button">
+                    <a href="#" class="submenu-link" data-url="/deposit">Nạp tiền</a>
+                </button>
             </div>
         </div>
         <hr>

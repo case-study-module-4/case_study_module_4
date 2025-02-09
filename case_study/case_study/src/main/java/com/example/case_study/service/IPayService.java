@@ -11,5 +11,4 @@ public interface IPayService {
 
     Payment executePayment(String paymentId, String payerId) throws PayPalRESTException;
 
-    BigDecimal getExchangeRate();
 }

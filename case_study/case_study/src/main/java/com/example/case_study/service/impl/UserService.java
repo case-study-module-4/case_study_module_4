@@ -24,8 +24,9 @@ public class UserService implements IUserService {
 
     @Override
     public Optional<User> findById(Integer id) {
-        return Optional.empty();
+        return userRepository.findById(id);
     }
+
 
     @Override
     public User save(User user) {
@@ -48,5 +49,4 @@ public class UserService implements IUserService {
         }
         userRepository.save(user);
     }
-
 }

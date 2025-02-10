@@ -157,27 +157,27 @@
                    )
                 ) : 'N/A'}"></span>
         </p>
+        <div class="d-flex gap-3"
+             th:if="${post.user != null and post.user.account != null and #authentication.principal.username == post.user.account.username}">
+          <a th:href="@{/posts/{id}/edit(id=${post.id})}"
+             class="btn btn-outline-secondary btn-sm d-flex align-items-center">
+            <i class="bi bi-pencil me-1"></i> Sửa tin
+          </a>
+          <!-- Nút mở Modal Xác Nhận Xóa -->
+          <button type="button" class="btn btn-outline-danger btn-sm d-flex align-items-center"
+                  data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                  th:onclick="|setDeleteAction('/posts/' + ${post.id} + '/delete')|">
+            <i class="bi bi-trash me-1"></i> Xóa tin
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Nút quay lại danh sách bài đăng và các nút thao tác -->
-  <div class="d-flex gap-3">
-    <a href="/posts" class="btn btn-secondary">Back to Posts</a>
-    <div class="d-flex gap-3"
-         th:if="${post.user != null and post.user.account != null and #authentication.principal.username == post.user.account.username}">
-      <a th:href="@{/posts/{id}/edit(id=${post.id})}"
-         class="btn btn-outline-secondary btn-sm d-flex align-items-center">
-        <i class="bi bi-pencil me-1"></i> Sửa tin
-      </a>
-      <!-- Nút mở Modal Xác Nhận Xóa -->
-      <button type="button" class="btn btn-outline-danger btn-sm d-flex align-items-center"
-              data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-              th:onclick="|setDeleteAction('/posts/' + ${post.id} + '/delete')|">
-        <i class="bi bi-trash me-1"></i> Xóa tin
-      </button>
-    </div>
-  </div>
+
+
+
 
   <!-- Modal xác nhận xóa -->
   <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">

@@ -53,7 +53,7 @@ public class PostDTO {
     @NotNull(message = "Hình ảnh không được để trống")
     private MultipartFile image;
 
-    // Constructor nhận tham số là đối tượng Post
+//    // Constructor nhận tham số là đối tượng Post
     public PostDTO(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
@@ -62,4 +62,5 @@ public class PostDTO {
         this.status = post.getStatus();
         // Nếu cần, bạn có thể ánh xạ thêm các trường khác từ Post sang PostDTO.
     }
+
 }

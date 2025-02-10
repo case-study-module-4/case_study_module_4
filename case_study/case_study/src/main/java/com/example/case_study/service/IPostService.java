@@ -17,4 +17,5 @@ public interface IPostService extends IService<Post> {
     List<Post> getApprovedPostsByUserId(Integer userId);
 
     List<Post> getDraftPostsByUserId(Integer userId);
+
 }

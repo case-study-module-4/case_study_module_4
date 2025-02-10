@@ -53,5 +53,19 @@ public class HomeController {
     }
 
 
+//    @GetMapping("/search")
+//    public String searchPosts(
+//            @RequestParam(name = "location", required = false) String location,
+//            @RequestParam(name = "type", required = false) String type,
+//            @RequestParam(name = "price", required = false) String price,
+//            @RequestParam(name = "area", required = false) String area,
+//            Model model
+//    ) {
+//        List<PostDTO> posts = postService.searchPosts(location, type, price, area);
+//        model.addAttribute("posts", posts);
+//        model.addAttribute("postDto", new PostDTO());
+//        return "home/home";
+//    }
+
 
 }

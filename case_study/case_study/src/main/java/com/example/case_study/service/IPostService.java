@@ -25,4 +25,6 @@ public interface IPostService extends IService<Post> {
 
     List<Post> getDraftPostsByUserId(Integer userId);
 
+//    List<PostDTO> searchPosts(String location, String type, String price, String area);
+
 }

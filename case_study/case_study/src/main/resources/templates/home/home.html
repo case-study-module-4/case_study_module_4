@@ -120,6 +120,17 @@
                 </div>
             </div>
 
+            <div class="post-list">
+                <div th:each="post : ${posts}" class="post-item">
+                    <h2 th:text="${post.title}"></h2>
+                    <p><strong>Địa điểm:</strong> <span th:text="${post.location}"></span></p>
+                    <p><strong>Loại:</strong> <span th:text="${post.type}"></span></p>
+                    <p><strong>Giá:</strong> <span th:text="${post.price}"></span> VND</p>
+                    <p><strong>Diện tích:</strong> <span th:text="${post.area}"></span> m²</p>
+                    <p><strong>Mục đích:</strong> <span th:text="${post.purpose}"></span></p>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

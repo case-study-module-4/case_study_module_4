@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.http.HttpMethod;
 
 @Configuration
 @EnableWebSecurity
@@ -40,15 +39,12 @@ public class WebSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Các trang công khai, CSS, JS,...
-                        .requestMatchers("/home", "/login", "/register", "/403", "/style/**", "/uploads/**", "/images/**", "/js/**").permitAll()
+                        .requestMatchers("/home", "/login", "/register", "/403", "/style/**", "/uploads/**", "/images/**", "/js/**","/posts", "/posts/*").permitAll()
                         // Các endpoint thao tác cần đăng nhập
                         .requestMatchers("/posts/create", "/posts/*/edit", "/posts/*/delete").authenticated()
-                        // Cho phép GET request cho bài đăng
-                        .requestMatchers(HttpMethod.GET, "/posts", "/posts/*").permitAll()
-                        // Các endpoint khác
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -56,15 +52,18 @@ public class WebSecurityConfig {
                         .passwordParameter("password")
                         .loginPage("/login")
                         .failureUrl("/login?error=true")
+
+
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .deleteCookies("remove")
-                        .invalidateHttpSession(true)
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout=true")
+                        .invalidateHttpSession(true)  // Hủy session
+                        .clearAuthentication(true)    // Xóa xác thực
+                        .deleteCookies("JSESSIONID")  // Xóa cookie phiên đăng nhập
                         .permitAll()
                 );
         return http.build();

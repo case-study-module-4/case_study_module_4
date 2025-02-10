@@ -140,8 +140,7 @@ public class PostController {
                              BindingResult result,
                              Model model,
                              @RequestParam(value = "deleteImages", required = false) List<Integer> deleteImageIds,
-                             @RequestParam(value = "action", required = false, defaultValue = "update") String action,
-                             RedirectAttributes redirectAttributes) {  // nhận thêm tham số "action"
+                             @RequestParam(value = "action", required = false, defaultValue = "update") String action) {  // nhận thêm tham số "action"
         if (result.hasErrors()) {
             model.addAttribute("purposes", purposeService.findAll());
             model.addAttribute("realEstates", realEstateService.findAll());
@@ -165,15 +164,14 @@ public class PostController {
                 return "redirect:/transaction/transaction?postId=" + post.getId();
             } else {
                 // Ngược lại (payable = yes hoặc hành động là cập nhật) thì về trang danh sách bài viết
-                redirectAttributes.addFlashAttribute("success", "Bài viết đã cập nhật thành công!");
-                return "redirect:/posts/approved";
+                return "redirect:/posts";
             }
         }
         return "redirect:/posts?error=notfound";
     }
 
     @PostMapping("/{id}/delete")
-    public String deletePost(@PathVariable Integer id, Principal principal) {
+    public String deletePost(@PathVariable Integer id, Principal principal, RedirectAttributes redirectAttributes) {
         Optional<Post> postOptional = postService.findById(id);
         if (postOptional.isPresent()) {
             Post post = postOptional.get();
@@ -183,14 +181,19 @@ public class PostController {
             }
             postService.deleteById(id);
             if ("no".equalsIgnoreCase(post.getPayable())) {
+                redirectAttributes.addFlashAttribute("message", "Xóa bài đăng thành công!");
+                redirectAttributes.addFlashAttribute("alertClass", "alert-success");
                 return "redirect:/posts/drafts?message=deleted";
             } else {
-                return "redirect:/posts/approved?message=deleted";
+                redirectAttributes.addFlashAttribute("message", "Xóa bài đăng thành công!");
+                redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+                return "redirect:/posts?message=deleted";
             }
         }
+        redirectAttributes.addFlashAttribute("message", "Xóa bài đăng không thành công!");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
         return "redirect:/posts?error=notfound";
     }
-
 
     @GetMapping("/approved")
     public String getApprovedPostsForUser(Model model, Principal principal) {
@@ -198,9 +201,9 @@ public class PostController {
         User user = userService.findUserByUsername(username);
         List<Post> approvedPosts = postService.findAll();
         model.addAttribute("posts", approvedPosts);
+
         return "user/approved-posts";
     }
-
 
     @GetMapping("/drafts")
     public String getDraftPostsForUser(Model model, Principal principal) {

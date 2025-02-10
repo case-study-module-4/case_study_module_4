@@ -24,7 +24,101 @@
             top: 5px;
             right: 5px;
         }
+        .custom-btn {
+            border: 2px solid #00A19D;
+            color: #00A19D;
+            background-color: transparent;
+            border-radius: 50px;
+            font-weight: bold;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease-in-out;
+            font-size: 1rem;
+        }
+
+        .custom-btn i {
+            font-size: 1.3rem;
+        }
+
+        .custom-btn:hover {
+            background-color: #00A19D;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 161, 157, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .custom-btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .direction-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .direction-circle {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .direction-option {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .direction-option:hover {
+            background: #00A19D;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .direction-option.active {
+            background: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        .center-circle {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: #007bff;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+        }
+
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <body class="bg-light">
 
@@ -95,10 +189,11 @@
 
             <!-- Hướng -->
             <div class="mb-3">
-                <label for="direction" class="form-label fw-bold">Hướng</label>
-                <input type="text" class="form-control" id="direction" th:field="*{direction}">
-                <div th:if="${#fields.hasErrors('direction')}" th:errors="*{direction}" class="text-danger"></div>
+                <label class="form-label fw-bold">Hướng nhà</label>
+                <canvas id="directionChart" width="300" height="300"></canvas>
+                <input type="hidden" id="direction" th:field="*{direction}">
             </div>
+
 
             <!-- Giá -->
             <div class="mb-3">
@@ -124,18 +219,99 @@
             </div>
 
             <!-- Nút bấm -->
-            <div class="d-flex justify-content-between">
-                <button type="submit" name="action" value="continue" class="btn btn-primary w-50 me-2">
-                    Tiếp tục
+            <div class="d-flex justify-content-between gap-2">
+                <button type="submit" name="action" value="continue" class="btn custom-btn w-50">
+                    <i class="bi bi-arrow-right-circle-fill"></i> Tiếp tục
                 </button>
-                <button type="submit" name="action" value="save" class="btn btn-secondary w-50">
-                    Lưu bài viết
+                <button type="submit" name="action" value="save" class="btn custom-btn w-50">
+                    <i class="bi bi-bookmark-fill"></i> Lưu bài viết
                 </button>
-                <a th:href="@{/home}" class="btn btn-outline-secondary w-100">Hủy bỏ</a>
+                <a th:href="@{/home}" class="btn custom-btn w-100">
+                    <i class="bi bi-x-circle-fill"></i> Hủy bỏ
+                </a>
             </div>
         </form>
     </div>
 </div>
+<script th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const ctx = document.getElementById('directionChart').getContext('2d');
+        const directionInput = document.getElementById("direction");
+
+        const directions = ["Đông", "Đông Nam", "Nam", "Tây Nam", "Tây", "Tây Bắc", "Bắc", "Đông Bắc"];
+        // Đặt màu nền trắng cho các phần, thay đổi khi chọn
+        const colors = Array(directions.length).fill("#ffffff");
+
+        let selectedIndex = null;
+
+        const chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: directions,
+                datasets: [{
+                    data: Array(directions.length).fill(1),
+                    backgroundColor: colors,
+                    borderColor: '#000',
+                    borderWidth: 1,
+                    offset: 10,
+                }]
+            },
+            options: {
+                responsive: true,
+                // Điều chỉnh góc quay của hình tròn ở đây:
+                rotation: -Math.PI / 5, // Ví dụ: quay sao cho phần đầu tiên nằm ở vị trí 12 giờ.
+                cutout: "50%", // Tạo rỗng ở giữa
+                plugins: {
+                    legend: {
+                        display: false // Ẩn chú thích mặc định
+                    }
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        selectedIndex = index;
+                        directionInput.value = directions[index];
+
+                        // Cập nhật màu: phần được chọn đổi màu
+                        chart.data.datasets[0].backgroundColor = colors.map((color, i) =>
+                            i === selectedIndex ? "#007bff" : "#ffffff"
+                        );
+                        chart.update();
+                    }
+                }
+            },
+            plugins: [{
+                afterDraw: function (chart) {
+                    const ctx = chart.ctx;
+                    ctx.save();
+
+                    const meta = chart.getDatasetMeta(0);
+                    const innerRadius = meta.data[0].innerRadius;
+                    const outerRadius = meta.data[0].outerRadius;
+                    const centerX = chart.chartArea.left + chart.chartArea.width / 2;
+                    const centerY = chart.chartArea.top + chart.chartArea.height / 2;
+                    // Tính vị trí trung gian giữa inner và outer, có thể cộng thêm offset nếu cần
+                    const radius = (innerRadius + outerRadius) / 2 + 10;
+
+                    ctx.font = "bold 14px Arial";
+                    ctx.fillStyle = "#000";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+
+                    directions.forEach((direction, index) => {
+                        // Lưu ý: Nếu bạn muốn thay đổi vị trí của chữ, hãy điều chỉnh offset bán kính hoặc góc offset ở đây.
+                        const angle = (index / directions.length) * (2 * Math.PI) - Math.PI / 2.5;
+                        const x = centerX + Math.cos(angle) * radius;
+                        const y = centerY + Math.sin(angle) * radius;
+                        ctx.fillText(direction, x, y);
+                    });
+
+                    ctx.restore();
+                }
+            }]
+        });
+    });
+</script>
 
 <!-- Chèn fragment modal -->
 <div th:insert="~{fragments/image-modal :: imageModal}"></div>

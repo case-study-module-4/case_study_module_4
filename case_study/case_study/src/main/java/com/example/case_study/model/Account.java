@@ -50,4 +50,17 @@ public class Account {
             this.status = "inactive";
         }
     }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", status='" + status + '\'' +
+                ", isDelete=" + isDelete +
+                ", user=" + user +
+                '}';
+    }
 }

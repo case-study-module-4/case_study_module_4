@@ -10,10 +10,10 @@ import org.springframework.data.repository.query.Param;
 import java.math.BigDecimal;
 
 import java.util.Optional;
-
 public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Transactional
     @Query("UPDATE user u SET u.balance = u.balance + :amount WHERE u.id = :userId")
     void updateUserBalance(@Param("userId") Integer userId, @Param("amount") BigDecimal amount);
+    boolean existsByEmail(String email);
 }

@@ -30,15 +30,22 @@ public class UserService implements IUserService {
         return userRepository.findById(id);
     }
 
+
     @Override
     public User save(User user) {
-        return null;
+        return userRepository.save(user);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return false;
     }
 
     @Override
     public void deleteById(Integer id) {
 
     }
+
     @Override
     public User findUserByUsername(String username) {
         return accountRepository.findByUsername(username).get().getUser();
@@ -51,6 +58,7 @@ public class UserService implements IUserService {
         }
         userRepository.save(user);
     }
+
     @Override
     public void updateUserBalance(Integer userId, BigDecimal amount) {
         User user = userRepository.findById(userId)

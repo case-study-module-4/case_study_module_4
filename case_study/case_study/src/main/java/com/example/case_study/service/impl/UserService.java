@@ -30,13 +30,19 @@ public class UserService implements IUserService {
 
     @Override
     public User save(User user) {
-        return null;
+        return userRepository.save(user);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return false;
     }
 
     @Override
     public void deleteById(Integer id) {
 
     }
+
     @Override
     public User findUserByUsername(String username) {
         return accountRepository.findByUsername(username).get().getUser();
@@ -49,4 +55,5 @@ public class UserService implements IUserService {
         }
         userRepository.save(user);
     }
+
 }

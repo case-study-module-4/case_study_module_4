@@ -42,4 +42,17 @@ public class Account {
     @OneToOne
     @JoinColumn(name = "id_user", referencedColumnName = "id", nullable = false)
     private User user;
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", status='" + status + '\'' +
+                ", isDelete=" + isDelete +
+                ", user=" + user +
+                '}';
+    }
 }

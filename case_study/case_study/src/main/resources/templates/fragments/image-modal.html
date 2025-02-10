@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Modal Fragment</title>
+</head>
+<body>
+<!-- fragments/image-modal.html -->
+<div th:fragment="imageModal">
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-body position-relative p-0">
+                    <button class="btn btn-secondary btn-sm position-absolute top-50 start-0 translate-middle-y" id="prevImage">
+                        &lt;
+                    </button>
+                    <img id="modalImage" src="" class="img-fluid w-100" alt="Xem hình ảnh">
+                    <button class="btn btn-secondary btn-sm position-absolute top-50 end-0 translate-middle-y" id="nextImage">
+                        &gt;
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -37,7 +37,7 @@ public class User {
     @DecimalMin(value = "0.0", inclusive = true, message = "Balance must be zero or positive")
     @Digits(integer = 13, fraction = 2, message = "Balance must have at most 13 integer digits and 2 decimal places")
     @Column(name = "balance", columnDefinition = "DECIMAL(15,2)", nullable = false)
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @Lob
     @Column(name = "image", columnDefinition = "TEXT")
@@ -45,5 +45,9 @@ public class User {
 
     @Column(name = "is_delete", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isDelete = false;
+
+    @OneToOne(mappedBy = "user")
+    private Account account;
+
 
 }

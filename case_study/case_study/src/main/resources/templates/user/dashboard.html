@@ -15,7 +15,6 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="user-info">
-            <!-- Hiển thị thông tin người dùng -->
             <div class="avatar">U</div>
             <div class="full-name" th:text="${user.fullName}">Tên người dùng</div>
             <div class="account-balance">
@@ -35,8 +34,8 @@
             <li>
                 <a href="#" class="menu-link">Quản lý tin đăng</a>
                 <ul class="submenu">
-                    <li><a href="" class="submenu-link">Đăng tin mới</a></li>
-                    <li><a href="#" class="submenu-link" data-url="/posts/approved">Danh sách tin</a></li>
+                    <li><a href="/posts/create" class="submenu-link">Đăng tin mới</a></li>
+                    <li><a href="/posts" class="submenu-link" data-url="/posts/approved">Danh sách tin</a></li>
                     <li><a href="#" class="submenu-link" data-url="/posts/drafts">Tin nháp</a></li>
                 </ul>
             </li>
@@ -44,10 +43,11 @@
             <li><a href="#" class="menu-link" data-url="/user/customers">Quản lý khách hàng</a></li>
             <hr>
             <li>
-                <a href="#" class="menu-link" data-url="/user/account">Quản lý tài khoản</a>
+                <a href="#" class="menu-link">Quản lý tài khoản</a>
                 <ul class="submenu">
-                    <li><a href="#" class="submenu-link" data-url="/user/account/edit">Chỉnh sửa thông tin</a></li>
-                    <li><a href="#" class="submenu-link" data-url="/user/account/settings">Cài đặt tài khoản</a></li>
+                    <li><a href="#" class="submenu-link" data-url="/profile/edit">Chỉnh sửa thông tin</a></li>
+                    <li><a href="/accounts/form-password" class="submenu-link">Cài đặt tài khoản</a></li>
+<!--                    <li><a href="#" class="submenu-link" data-url="/accounts/update-password">Cài đặt tài khoản</a></li>-->
                 </ul>
             </li>
         </ul>
@@ -109,9 +109,8 @@
         }
     });
 </script>
+
 <div th:insert="~{/layout/layout::footer}"></div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+
 </body>
 </html>

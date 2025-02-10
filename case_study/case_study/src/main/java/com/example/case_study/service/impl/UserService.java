@@ -19,6 +19,7 @@ public class UserService implements IUserService {
 
     @Autowired
     private AccountRepository accountRepository;
+
     @Override
     public List<User> findAll() {
         return List.of();
@@ -26,14 +27,13 @@ public class UserService implements IUserService {
 
     @Override
     public Optional<User> findById(Integer id) {
-        return Optional.empty();
+        return userRepository.findById(id);
     }
 
     @Override
     public User save(User user) {
         return null;
     }
-
 
     @Override
     public void deleteById(Integer id) {
@@ -44,6 +44,13 @@ public class UserService implements IUserService {
         return accountRepository.findByUsername(username).get().getUser();
     }
 
+    @Override
+    public void updateUser(User user) {
+        if (user.getFullName() == null || user.getFullName().isEmpty()) {
+            throw new IllegalArgumentException("Họ và tên không được để trống.");
+        }
+        userRepository.save(user);
+    }
     @Override
     public void updateUserBalance(Integer userId, BigDecimal amount) {
         User user = userRepository.findById(userId)

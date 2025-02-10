@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 @EnableWebSecurity
@@ -39,9 +40,15 @@ public class WebSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/home", "/login", "/register", "/403", "/style/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // Bảo vệ đường dẫn admin
-                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN") // Người dùng có thể vào
+                        // Các trang công khai, CSS, JS,...
+                        .requestMatchers("/home", "/login", "/register", "/403", "/style/**", "/uploads/**", "/images/**", "/js/**").permitAll()
+                        // Các endpoint thao tác cần đăng nhập
+                        .requestMatchers("/posts/create", "/posts/*/edit", "/posts/*/delete").authenticated()
+                        // Cho phép GET request cho bài đăng
+                        .requestMatchers(HttpMethod.GET, "/posts", "/posts/*").permitAll()
+                        // Các endpoint khác
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -50,7 +57,7 @@ public class WebSecurityConfig {
                         .loginPage("/login")
                         .failureUrl("/login?error=true")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/home", true) // Chuyển hướng đến /home sau khi đăng nhập
+                        .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )
                 .logout(logout -> logout

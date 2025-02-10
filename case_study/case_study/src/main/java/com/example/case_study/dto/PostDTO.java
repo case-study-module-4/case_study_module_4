@@ -1,5 +1,6 @@
 package com.example.case_study.dto;
 
+import com.example.case_study.model.Image;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -55,7 +56,11 @@ public class PostDTO {
     @NotNull(message = "Giá không được để trống")
     private Double price;
 
-
     private List<MultipartFile> imageFiles;
 
+    private String image;
+
+    private List<Image> images;
+
+    private String payable;
 }

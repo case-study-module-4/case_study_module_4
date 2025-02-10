@@ -68,6 +68,9 @@
                                 <span th:text="${#authentication != null ? #authentication.name : 'Guest'}"></span>
                             </a>
                             <ul class="dropdown-menu">
+                                <li sec:authorize="hasRole('ROLE_ADMIN')">
+                                    <a class="dropdown-item" href="/admin/account">Quản lý người dùng</a>
+                                </li>
                                 <li><a class="dropdown-item" href="/dashboard">Hồ sơ của tôi</a></li>
                                 <li>
                                     <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changePasswordUserModal">

@@ -43,6 +43,14 @@ public class Account {
     @JoinColumn(name = "id_user", referencedColumnName = "id", nullable = false)
     private User user;
 
+    @PrePersist
+    @PreUpdate
+    public void updateStatus() {
+        if (Boolean.TRUE.equals(isDelete)) {
+            this.status = "inactive";
+        }
+    }
+
     @Override
     public String toString() {
         return "Account{" +

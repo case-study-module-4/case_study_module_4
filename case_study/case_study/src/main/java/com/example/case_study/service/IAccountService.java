@@ -1,9 +1,12 @@
 package com.example.case_study.service;
 
+import com.example.case_study.dto.AccountDTO;
 import com.example.case_study.dto.AccountRegisterDTO;
 import com.example.case_study.model.Account;
 import com.example.case_study.model.Role;
 import jakarta.validation.Valid;
+
+import java.util.List;
 
 public interface IAccountService {
     void register(Account account);
@@ -13,4 +16,10 @@ public interface IAccountService {
     Role getDefaultRole();
 
     String registerAccount(@Valid AccountRegisterDTO accountDTO, String confirmPassword);
+//    Account findAccountByUsername(String username);
+//    void updateAccount(String username, String newPass);
+//    void saveAccount(Account account);
+//    boolean checkAccount(String username);
+    List<AccountDTO> getAllAccounts();
+    boolean softDeleteAccount(Integer id);
 }

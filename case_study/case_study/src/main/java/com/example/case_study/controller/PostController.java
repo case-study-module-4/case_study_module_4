@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -170,7 +171,7 @@ public class PostController {
     }
 
     @PostMapping("/{id}/delete")
-    public String deletePost(@PathVariable Integer id, Principal principal) {
+    public String deletePost(@PathVariable Integer id, Principal principal, RedirectAttributes redirectAttributes) {
         Optional<Post> postOptional = postService.findById(id);
         if (postOptional.isPresent()) {
             Post post = postOptional.get();
@@ -180,15 +181,19 @@ public class PostController {
             }
             postService.deleteById(id);
             if ("no".equalsIgnoreCase(post.getPayable())) {
+                redirectAttributes.addFlashAttribute("message", "Xóa bài đăng thành công!");
+                redirectAttributes.addFlashAttribute("alertClass", "alert-success");
                 return "redirect:/posts/drafts?message=deleted";
             } else {
+                redirectAttributes.addFlashAttribute("message", "Xóa bài đăng thành công!");
+                redirectAttributes.addFlashAttribute("alertClass", "alert-success");
                 return "redirect:/posts?message=deleted";
             }
         }
+        redirectAttributes.addFlashAttribute("message", "Xóa bài đăng không thành công!");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
         return "redirect:/posts?error=notfound";
     }
-
-
 
     @GetMapping("/approved")
     public String getApprovedPostsForUser(Model model, Principal principal) {

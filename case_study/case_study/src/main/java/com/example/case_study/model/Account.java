@@ -29,7 +29,7 @@ public class Account {
     @Column(name = "password", columnDefinition = "VARCHAR(100)")
     private String password;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_role", referencedColumnName = "id", nullable = false)
     private Role role;
 

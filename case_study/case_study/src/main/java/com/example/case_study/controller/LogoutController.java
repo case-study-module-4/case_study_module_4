@@ -9,8 +9,8 @@ public class LogoutController {
     public String logoutSuccessful() {
         return "login/login";
     }
-//    @GetMapping("/admin")
-//    public String adminLogoutSuccessful() {
-//        return "redirect:/login";
-//    }
+    @GetMapping("/admin")
+    public String adminLogoutSuccessful() {
+        return "redirect:/login";
+    }
 }

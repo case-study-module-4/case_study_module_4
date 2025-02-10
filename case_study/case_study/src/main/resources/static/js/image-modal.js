@@ -13,6 +13,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // Khi modal được mở, cập nhật ảnh dựa trên phần tử kích hoạt
     imageModal.addEventListener('show.bs.modal', function (event) {
         const triggerElement = event.relatedTarget;
+
+        // Cập nhật lại danh sách ảnh trước khi hiển thị modal
+        const updatedImageLinks = document.querySelectorAll('[data-image]');
+        images = Array.from(updatedImageLinks).map(link => link.getAttribute('data-image'));
+
         const imageUrl = triggerElement.getAttribute("data-image");
         currentIndex = images.indexOf(imageUrl);
         modalImage.src = imageUrl;

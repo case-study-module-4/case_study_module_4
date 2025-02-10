@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import jdk.jfr.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -36,8 +36,8 @@ public class Post {
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
-    @ManyToOne
-    @JoinColumn(name = "post_type_id", columnDefinition = "INT")
+    @ManyToOne(fetch = FetchType.EAGER) // Hoặc LAZY nếu bạn muốn tải chậm
+    @JoinColumn(name = "post_type_id", referencedColumnName = "id")
     private PostType postType;
 
     @ManyToOne
@@ -55,5 +55,18 @@ public class Post {
     @NotNull(message = "Publish Date must not be null")
     private LocalDate publishDate;
 
+    @Column(name = "image", columnDefinition = "LONGTEXT")
+    private String image;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Image> images;
+
+    @Column(name = "payable", columnDefinition = "VARCHAR(3) DEFAULT 'no'")
+    private String payable = "no";
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<Transaction> transactions;
+
+    @Column(name = "payment_expiry_date")
+    private LocalDate paymentExpiryDate;
 }

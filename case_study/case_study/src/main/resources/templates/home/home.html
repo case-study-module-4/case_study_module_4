@@ -38,8 +38,8 @@
         <main class="main-content">
             <div class="search-wrapper">
                 <div class="search-tabs">
-                    <a class="tab " href="/posts">Nhà đất bán</a>
-                    <button class="tab">Nhà đất cho thuê</button>
+                    <a class="tab " href="/posts/sale">Nhà đất bán</a>
+                    <a class="tab " href="/posts/rent">Nhà đất cho thuê</a>
                     <button class="tab">Dự án</button>
                     <div class="switch">
                         <label for="toggle-search">Dùng phiên bản Tìm kiếm mới</label>
@@ -184,8 +184,28 @@
         </div>
     </div>
 </div>
+<!-- Modal hiển thị thông báo -->
+<div id="notificationModal" style="display: none;">
+    <div>
+        <p th:text="${message}"></p>
+        <button onclick="closeModal()">Đóng</button>
+    </div>
+</div>
+
+<!-- Script để hiển thị modal khi có thông báo -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const message = /*[[${message}]]*/ null;
+        if (message) {
+            document.getElementById("notificationModal").style.display = "block";
+        }
+    });
+
+    function closeModal() {
+        document.getElementById("notificationModal").style.display = "none";
+    }
+</script>
 
 <div th:insert="~{/layout/layout::footer}"></div>
-
 </body>
 </html>

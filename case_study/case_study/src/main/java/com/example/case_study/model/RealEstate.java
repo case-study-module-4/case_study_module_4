@@ -37,16 +37,12 @@ public class RealEstate {
     @Column(name = "area", columnDefinition = "DECIMAL(15,2)")
     private Double area;
 
-    @Column(name = "image", columnDefinition = "TEXT")
-    private String image;
-
     @NotBlank(message = "Name must not be empty")
     @Column(
             name = "type",
             columnDefinition = "ENUM('House', 'Apartment', 'Land', 'Hotel', 'Building')",
             nullable = false)
     private String type;
-
 
     @Column(name = "is_delete", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isDelete = false;

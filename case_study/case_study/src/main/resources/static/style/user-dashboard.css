@@ -1,4 +1,3 @@
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -17,6 +16,7 @@ body {
     width: 250px;
     background-color: #fff;
     color: #333;
+    border-right: 1px solid #ddd; /* Đường ngăn giữa */
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -191,3 +191,49 @@ h1 {
     font-size: 14px;
     color: #7f8c8d;
 }
+
+#main-content {
+    pointer-events: auto;
+    opacity: 1;
+    z-index: 1;
+}
+
+
+/* Định dạng chung cho bảng */
+.table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+/* Cải thiện giao diện tiêu đề bảng */
+.table thead {
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.table thead th {
+    font-weight: bold;
+}
+
+/* Hiệu ứng hover cho dòng bảng */
+.table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Canh giữa các tiêu đề */
+.text-center {
+    text-align: center;
+}
+
+.my-4 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+

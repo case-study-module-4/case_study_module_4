@@ -2,7 +2,7 @@ package com.example.case_study.service.impl;
 
 import com.example.case_study.model.Account;
 import com.example.case_study.model.User;
-import com.example.case_study.repository.Account.AccountRepository;
+import com.example.case_study.repository.AccountRepository;
 import com.example.case_study.repository.UserRepository;
 import com.example.case_study.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,9 @@ public class UserService implements IUserService {
 
     @Override
     public Optional<User> findById(Integer id) {
-        return Optional.empty();
+        return userRepository.findById(id);
     }
+
 
     @Override
     public User save(User user) {
@@ -47,5 +48,12 @@ public class UserService implements IUserService {
         return accountRepository.findByUsername(username).get().getUser();
     }
 
+    @Override
+    public void updateUser(User user) {
+        if (user.getFullName() == null || user.getFullName().isEmpty()) {
+            throw new IllegalArgumentException("Họ và tên không được để trống.");
+        }
+        userRepository.save(user);
+    }
 
 }

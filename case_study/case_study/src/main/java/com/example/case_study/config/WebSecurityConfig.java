@@ -39,9 +39,12 @@ public class WebSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/home", "/login", "/register", "/403", "/style/**").permitAll()
-                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN") // Sửa lại cho đúng
-                        .requestMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN") // Sửa lại cho đúng
+                        .requestMatchers("/home", "/login", "/register", "/403", "/style/**", "/uploads/**", "/images/**", "/js/**","/posts", "/posts/*").permitAll()
+                        // Các endpoint thao tác cần đăng nhập
+                        .requestMatchers("/posts/create", "/posts/*/edit", "/posts/*/delete").authenticated()
+
+                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -49,6 +52,8 @@ public class WebSecurityConfig {
                         .passwordParameter("password")
                         .loginPage("/login")
                         .failureUrl("/login?error=true")
+
+
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/home", true)
                         .permitAll()

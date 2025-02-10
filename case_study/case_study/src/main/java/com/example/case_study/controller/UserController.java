@@ -36,6 +36,9 @@ public class UserController {
         }
         String username = principal.getName();
         User user = userService.findUserByUsername(username);
+        if (user == null) {
+            return "redirect:/error";
+        }
         model.addAttribute("user", user);
         return "user/dashboard";
     }

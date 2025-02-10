@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -139,7 +140,8 @@ public class PostController {
                              BindingResult result,
                              Model model,
                              @RequestParam(value = "deleteImages", required = false) List<Integer> deleteImageIds,
-                             @RequestParam(value = "action", required = false, defaultValue = "update") String action) {  // nhận thêm tham số "action"
+                             @RequestParam(value = "action", required = false, defaultValue = "update") String action,
+                             RedirectAttributes redirectAttributes) {  // nhận thêm tham số "action"
         if (result.hasErrors()) {
             model.addAttribute("purposes", purposeService.findAll());
             model.addAttribute("realEstates", realEstateService.findAll());
@@ -163,7 +165,8 @@ public class PostController {
                 return "redirect:/transaction/transaction?postId=" + post.getId();
             } else {
                 // Ngược lại (payable = yes hoặc hành động là cập nhật) thì về trang danh sách bài viết
-                return "redirect:/posts";
+                redirectAttributes.addFlashAttribute("success", "Bài viết đã cập nhật thành công!");
+                return "redirect:/posts/approved";
             }
         }
         return "redirect:/posts?error=notfound";
@@ -182,12 +185,11 @@ public class PostController {
             if ("no".equalsIgnoreCase(post.getPayable())) {
                 return "redirect:/posts/drafts?message=deleted";
             } else {
-                return "redirect:/posts?message=deleted";
+                return "redirect:/posts/approved?message=deleted";
             }
         }
         return "redirect:/posts?error=notfound";
     }
-
 
 
     @GetMapping("/approved")
@@ -196,9 +198,9 @@ public class PostController {
         User user = userService.findUserByUsername(username);
         List<Post> approvedPosts = postService.findAll();
         model.addAttribute("posts", approvedPosts);
-
         return "user/approved-posts";
     }
+
 
     @GetMapping("/drafts")
     public String getDraftPostsForUser(Model model, Principal principal) {

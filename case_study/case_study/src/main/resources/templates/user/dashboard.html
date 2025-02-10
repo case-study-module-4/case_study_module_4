@@ -10,6 +10,10 @@
 </head>
 <body>
 <div th:insert="~{/layout/layout::header}"></div>
+<div th:if="${success}" class="alert alert-success">
+    <p th:text="${success}"></p>
+</div>
+
 <div class="container-fluid">
     <!-- Sidebar -->
     <aside class="sidebar">
@@ -32,8 +36,8 @@
                 <a class="menu-link">Quản lý tin đăng</a>
                 <ul class="submenu">
                     <li><a href="/posts/create" class="submenu-link">Đăng tin mới</a></li>
-                    <li><a href="/posts" class="submenu-link" data-url="/posts/approved">Danh sách tin</a></li>
-                    <li><a href="#" class="submenu-link" data-url="/posts/drafts">Tin nháp</a></li>
+                    <li><a href="/posts/approved" class="submenu-link">Danh sách tin</a></li>
+                    <li><a href="/posts/drafts" class="submenu-link">Tin nháp</a></li>
                 </ul>
             </li>
             <hr>
@@ -44,20 +48,16 @@
                 <ul class="submenu">
                     <li><a href="#" class="submenu-link" data-url="/profile/edit">Chỉnh sửa thông tin</a></li>
                     <li><a href="/accounts/form-password" class="submenu-link">Cài đặt tài khoản</a></li>
-<!--                    <li><a href="#" class="submenu-link" data-url="/accounts/update-password">Cài đặt tài khoản</a></li>-->
                 </ul>
             </li>
         </ul>
     </aside>
-
     <!-- Main Content -->
     <main class="main-content" id="main-content">
-        <div id="default-content">
-            <h2>Chào mừng bạn đến với trang cá nhân</h2>
-            <p>Chọn một mục từ menu để xem thông tin.</p>
-        </div>
+
     </main>
 </div>
+<div th:insert="~{/layout/layout::footer}"></div>
 
 <script>
     $(document).ready(function () {
@@ -107,7 +107,6 @@
     });
 </script>
 
-<div th:insert="~{/layout/layout::footer}"></div>
 
 </body>
 </html>

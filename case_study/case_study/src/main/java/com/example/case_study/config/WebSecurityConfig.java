@@ -40,8 +40,8 @@ public class WebSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/home", "/login", "/register", "/403", "/style/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // Bảo vệ đường dẫn admin
-                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN") // Người dùng có thể vào
+                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN") // Sửa lại cho đúng
+                        .requestMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN") // Sửa lại cho đúng
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -50,14 +50,15 @@ public class WebSecurityConfig {
                         .loginPage("/login")
                         .failureUrl("/login?error=true")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/home", true) // Chuyển hướng đến /home sau khi đăng nhập
+                        .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .deleteCookies("remove")
-                        .invalidateHttpSession(true)
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout=true")
+                        .invalidateHttpSession(true)  // Hủy session
+                        .clearAuthentication(true)    // Xóa xác thực
+                        .deleteCookies("JSESSIONID")  // Xóa cookie phiên đăng nhập
                         .permitAll()
                 );
         return http.build();

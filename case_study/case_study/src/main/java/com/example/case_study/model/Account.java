@@ -29,7 +29,7 @@ public class Account {
     @Column(name = "password", columnDefinition = "VARCHAR(100)")
     private String password;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_role", referencedColumnName = "id", nullable = false)
     private Role role;
 
@@ -42,4 +42,17 @@ public class Account {
     @OneToOne
     @JoinColumn(name = "id_user", referencedColumnName = "id", nullable = false)
     private User user;
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", status='" + status + '\'' +
+                ", isDelete=" + isDelete +
+                ", user=" + user +
+                '}';
+    }
 }

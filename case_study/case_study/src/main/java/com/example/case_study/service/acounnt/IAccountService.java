@@ -1,10 +1,16 @@
 package com.example.case_study.service.acounnt;
 
+import com.example.case_study.dto.AccountRegisterDTO;
 import com.example.case_study.model.Account;
+import com.example.case_study.model.Role;
+import jakarta.validation.Valid;
 
 public interface IAccountService {
-    Account findAccountByUsername(String username);
-    void updateAccount(String username, String newPass);
-    void saveAccount(Account account);
-    boolean checkAccount(String username);
+    void register(Account account);
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
+    String encodePassword(String rawPassword);
+    Role getDefaultRole();
+
+    String registerAccount(@Valid AccountRegisterDTO accountDTO, String confirmPassword);
 }

@@ -1,31 +1,43 @@
 package com.example.case_study.controller.login;
 
+import com.example.case_study.dto.AccountRegisterDTO;
+import com.example.case_study.service.acounnt.IAccountService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/register")
+@RequiredArgsConstructor
 public class RegisterController {
-    @GetMapping
-    public String showRegisterForm() {
+
+    private final IAccountService accountService;
+
+    @GetMapping("")
+    public String showRegisterForm(Model model) {
+        model.addAttribute("accountDTO", new AccountRegisterDTO());
         return "login/register";
     }
 
-    @PostMapping
-    public String processRegister(@RequestParam String username,
-                                  @RequestParam String password,
+    @PostMapping("")
+    public String processRegister(@Valid @ModelAttribute("accountDTO") AccountRegisterDTO accountDTO,
+                                  BindingResult result,
                                   @RequestParam String confirmPassword,
                                   Model model) {
-        if (!password.equals(confirmPassword)) {
-            model.addAttribute("error", "Mật khẩu xác nhận không khớp!");
+        if (result.hasErrors()) {
             return "login/register";
         }
 
-        model.addAttribute("message", "Đăng ký thành công! Hãy đăng nhập.");
-        return "login/login";
+        String responseMessage = accountService.registerAccount(accountDTO, confirmPassword);
+        if (responseMessage.equals("Đăng ký thành công! Hãy đăng nhập.")) {
+            model.addAttribute("message", responseMessage);
+            return "login/login";
+        } else {
+            model.addAttribute("error", responseMessage);
+            return "login/register";
+        }
     }
 }

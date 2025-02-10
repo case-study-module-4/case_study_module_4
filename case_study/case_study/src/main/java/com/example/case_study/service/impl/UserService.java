@@ -15,6 +15,8 @@ import java.util.Optional;
 public class UserService implements IUserService {
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Override
     public List<User> findAll() {
         return List.of();
@@ -27,16 +29,23 @@ public class UserService implements IUserService {
 
     @Override
     public User save(User user) {
-        return null;
+        return userRepository.save(user);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return false;
     }
 
     @Override
     public void deleteById(Integer id) {
 
     }
+
     @Override
     public User findUserByUsername(String username) {
         return accountRepository.findByUsername(username).get().getUser();
     }
+
 
 }

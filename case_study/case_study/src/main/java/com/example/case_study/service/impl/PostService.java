@@ -9,17 +9,22 @@ import com.example.case_study.repository.RealEstateRepository;
 import com.example.case_study.service.IPostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.UUID;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -268,5 +273,55 @@ public class PostService implements IPostService {
         // Trả về các bài viết của user có payable = "no"
         return postRepository.findByUserIdAndPayable(userId, "no");
     }
+
+
+
+    @Override
+    public List<PostDTO> searchPosts(String location, String type, String price, String area) {
+        List<Post> posts = postRepository.searchPosts(location, type, price, area);
+
+        return posts.stream().map(post -> {
+            PostDTO dto = new PostDTO();
+            dto.setId(post.getId());
+            dto.setStatus(post.getStatus());
+            dto.setTitle(post.getTitle());
+            dto.setContent(post.getContent());
+            dto.setPublishDate(post.getPublishDate());
+            dto.setPurpose(post.getPurpose() != null ? post.getPurpose().getPurpose() : null);
+            dto.setLocation(post.getRealEstate().getLocation());
+            dto.setArea(post.getRealEstate().getArea());
+            dto.setDirection(post.getRealEstate().getDirection());
+            dto.setPrice(post.getRealEstate().getPrice());
+            dto.setImage(post.getImage());
+            dto.setImages(post.getImages());
+            dto.setPayable(post.getPayable());
+            return dto;
+        }).toList();
+    }
+
+    @Override
+    public List<PostDTO> getListDefault() {
+        List<Post> posts = postRepository.findLatestPosts(PageRequest.of(0, 4));
+
+
+        return posts.stream().map(post -> {
+            PostDTO dto = new PostDTO();
+            dto.setId(post.getId());
+            dto.setStatus(post.getStatus());
+            dto.setTitle(post.getTitle());
+            dto.setContent(post.getContent());
+            dto.setPublishDate(post.getPublishDate());
+            dto.setPurpose(post.getPurpose() != null ? post.getPurpose().getPurpose() : null);
+            dto.setLocation(post.getRealEstate().getLocation());
+            dto.setArea(post.getRealEstate().getArea());
+            dto.setDirection(post.getRealEstate().getDirection());
+            dto.setPrice(post.getRealEstate().getPrice());
+            dto.setImage(post.getImage());
+            dto.setImages(post.getImages());
+            dto.setPayable(post.getPayable());
+            return dto;
+        }).toList();
+    }
+
 
 }

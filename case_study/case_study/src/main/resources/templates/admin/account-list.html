@@ -33,16 +33,17 @@
             <td th:text="${account.phone}"></td>
             <td th:text="${account.email}"></td>
             <td th:text="${account.balance}"></td>
-            <td>
-                <span th:classappend="${account.status == 'active' ? 'badge bg-success' : 'badge bg-danger'}"
-                      th:text="${account.status}">
-                </span>
+            <td class="text-center">
+    <span th:classappend="${account.status == 'active' ? 'badge bg-success' : 'badge bg-danger'}"
+          th:text="${account.status == 'active' ? 'Hoạt động' : 'Bị khóa'}">
+    </span>
             </td>
-            <td th:text="${account.postCount}"></td>
-            <td>
-                <form th:action="@{/admin/account/delete/{id}(id=${account.id})}" method="post"
-                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
-                    <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+            <td class="text-center">
+                <form th:action="@{/admin/account/toggle-status/{id}(id=${account.id})}" method="post">
+                    <button type="submit"
+                            th:classappend="${account.status == 'active' ? 'btn btn-warning btn-sm' : 'btn btn-success btn-sm'}"
+                            th:text="${account.status == 'active' ? 'Khóa' : 'Mở khóa'}">
+                    </button>
                 </form>
             </td>
         </tr>

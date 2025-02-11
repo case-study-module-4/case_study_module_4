@@ -14,12 +14,7 @@ public interface IAccountService {
     boolean existsByEmail(String email);
     String encodePassword(String rawPassword);
     Role getDefaultRole();
-
     String registerAccount(@Valid AccountRegisterDTO accountDTO, String confirmPassword);
-//    Account findAccountByUsername(String username);
-//    void updateAccount(String username, String newPass);
-//    void saveAccount(Account account);
-//    boolean checkAccount(String username);
     List<AccountDTO> getAllAccounts();
-    boolean softDeleteAccount(Integer id);
+    void toggleAccountStatus(Integer id);
 }

@@ -26,14 +26,9 @@ public class AdminController {
         return "admin/account-list";
     }
 
-    @PostMapping("/account/delete/{id}")
-    public String deleteAccount(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
-        boolean deleted = accountService.softDeleteAccount(id);
-        if (!deleted) {
-            redirectAttributes.addFlashAttribute("error", "Không tìm thấy tài khoản");
-        } else {
-            redirectAttributes.addFlashAttribute("success", "Xóa tài khoản thành công");
-        }
-        return "redirect:/admin";
+    @PostMapping("/toggle-status/{id}")
+    public String toggleAccountStatus(@PathVariable Integer id) {
+        accountService.toggleAccountStatus(id);
+        return "redirect:/admin/account/list";
     }
 }

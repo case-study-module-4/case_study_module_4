@@ -6,6 +6,7 @@ import com.example.case_study.model.Account;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,4 +37,8 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
             + "WHERE r.name = 'ROLE_USER' "
             + "GROUP BY a.id, u.fullName, u.phone, u.email, u.balance, u.image, a.isDelete, a.status")
     List<AccountDTO> findAllAccountDetails();
+
+    @Modifying
+    @Query("UPDATE account a SET a.status = :status WHERE a.id = :id")
+    void updateAccountStatus(@Param("id") Integer id, @Param("status") String status);
 }

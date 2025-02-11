@@ -176,7 +176,7 @@
         <span th:case="'Hotel'">Khách sạn</span>
         <span th:case="'Building'">Tòa nhà</span>
                                 </span></p>
-                                <p class="card-text"><strong>Giá:</strong> <span th:text="${post.price}"></span> VND</p>
+                                <p class="card-text"><strong>Giá:</strong> <span th:text="${post.price}" class="price"></span> </p>
                                 <p class="card-text"><strong>Diện tích:</strong> <span th:text="${post.area}"></span> m²
                                 </p>
                             </div>
@@ -280,6 +280,27 @@
     function viewPost(postId) {
         window.location.href = "/posts/" + postId;
     }
+
+    // Giá(Dũng)
+    document.addEventListener("DOMContentLoaded", function() {
+        let priceElements = document.querySelectorAll(".price"); // Lấy tất cả các thẻ có class "price"
+
+        priceElements.forEach(function(priceElement) {
+            let price = parseFloat(priceElement.innerText.replace(/,/g, '')); // Chuyển về số thực
+
+            if (!isNaN(price)) {
+                let formattedPrice;
+                if (price >= 1_000_000_000) {
+                    formattedPrice = (price / 1_000_000_000).toFixed(2).replace(/\.00$/, '') + " tỷ"; // Giữ 2 số thập phân, bỏ nếu tròn
+                } else if (price >= 1_000_000) {
+                    formattedPrice = (price / 1_000_000).toFixed(2).replace(/\.00$/, '') + " triệu";
+                } else {
+                    formattedPrice = price.toLocaleString('vi-VN') + " VND"; // Hiển thị dạng có dấu phân cách
+                }
+                priceElement.innerText = formattedPrice; // Gán lại giá trị mới
+            }
+        });
+    });
 </script>
 
 <div th:insert="~{/layout/layout::footer}"></div>

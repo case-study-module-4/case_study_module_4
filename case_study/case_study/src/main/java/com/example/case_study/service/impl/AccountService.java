@@ -111,8 +111,9 @@ public class AccountService implements IAccountService {
 
     @Transactional
     public void updatePassword(Account account, String newPassword) {
-        account.setPassword(encodePassword(newPassword));
+        account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
     }
+
 
 }

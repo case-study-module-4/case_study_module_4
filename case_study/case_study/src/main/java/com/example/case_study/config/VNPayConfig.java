@@ -33,13 +33,4 @@ public class VNPayConfig {
     public String getReturnUrl() {
         return returnUrl;
     }
-
-    @PostConstruct
-    public void init() {
-        System.out.println("VNPay Config Loaded:");
-        System.out.println("TmnCode: " + tmnCode);
-        System.out.println("HashSecret: " + hashSecret);
-        System.out.println("PayUrl: " + payUrl);
-        System.out.println("ReturnUrl: " + returnUrl);
-    }
 }

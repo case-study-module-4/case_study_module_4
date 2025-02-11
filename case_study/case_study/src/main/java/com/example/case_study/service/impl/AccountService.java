@@ -21,7 +21,6 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class AccountService implements IAccountService {
 
     private final AccountRepository accountRepository;
@@ -65,7 +64,7 @@ public class AccountService implements IAccountService {
                 .orElseThrow(() -> new RuntimeException("Vai trò ROLE_USER không tồn tại!"));
     }
 
-
+    @Transactional
     public String registerAccount(AccountRegisterDTO accountDTO, String confirmPassword) {
         if (!accountDTO.getPassword().equals(confirmPassword)) {
             return "Mật khẩu xác nhận không khớp!";
@@ -108,6 +107,7 @@ public class AccountService implements IAccountService {
     }
 
     @Override
+
     public void toggleAccountStatus(Integer id) {
         Optional<Account> optionalAccount = accountRepository.findById(id);
         if (optionalAccount.isPresent()) {

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -81,7 +82,7 @@ public class AccountService implements IAccountService {
             user.setFullName(accountDTO.getFullName());
             user.setPhone(accountDTO.getPhone());
             user.setEmail(accountDTO.getEmail());
-            user.setBalance(new BigDecimal(0.0));
+            user.setBalance(BigDecimal.ZERO);
             user = userRepository.save(user);
 
             // Tạo Account
@@ -96,5 +97,26 @@ public class AccountService implements IAccountService {
         } catch (Exception e) {
             return "Đã xảy ra lỗi khi đăng ký, vui lòng thử lại!";
         }
+    }
+
+    @Override
+    @Transactional
+    public boolean updateAccountPassword(String username, String currentPassword, String newPassword) {
+        Optional<Account> optionalAccount = accountRepository.findByUsername(username);
+
+        if (optionalAccount.isPresent()) {
+            Account account = optionalAccount.get();
+
+            // Kiểm tra mật khẩu cũ
+            if (!passwordEncoder.matches(currentPassword, account.getPassword())) {
+                return false; // Mật khẩu cũ không đúng
+            }
+
+            // Cập nhật mật khẩu mới
+            account.setPassword(passwordEncoder.encode(newPassword));
+            accountRepository.save(account);
+            return true;
+        }
+        return false; // Không tìm thấy tài khoản
     }
 }

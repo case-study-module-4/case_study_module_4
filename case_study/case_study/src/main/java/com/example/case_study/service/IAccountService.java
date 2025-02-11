@@ -13,4 +13,6 @@ public interface IAccountService {
     Role getDefaultRole();
 
     String registerAccount(@Valid AccountRegisterDTO accountDTO, String confirmPassword);
+
+    boolean updateAccountPassword(String username, String currentPassword, String newPassword);
 }

@@ -28,44 +28,46 @@ public class HomeController {
     @GetMapping("")
     public String home(Model model) {
         SearchDto searchDto = new SearchDto();
-        model.addAttribute("searchDto", searchDto);
-        return "/home/home";
+        List<PostDTO> posts = postService.getListDefault();
+        model.addAttribute("posts", posts);
+        model.addAttribute("postDto", searchDto);
+        return "home/home";
     }
-
-    @GetMapping("/search")
-    public String searchRealEstate(@RequestParam(required = false) String location,
-                                   @RequestParam(required = false) String type,
-                                   @RequestParam(required = false) Short price,
-                                   @RequestParam(required = false) Short area,
-                                   Model model) {
-
-        // Chuyển dữ liệu từ form thành SearchDto
-        SearchDto searchDto = new SearchDto(location, type, price, area);
-
-        // Thực hiện tìm kiếm bất động sản
-        List<RealEstate> results = realEstateService.searchRealEstate(searchDto);
-
-        // Thêm kết quả tìm kiếm vào model
-        model.addAttribute("realEstates", results);
-        model.addAttribute("searchDto", searchDto); // Truyền searchDto vào model để Thymeleaf hiển thị
-
-        return "/home/search-results"; // Trả về trang home.html với kết quả tìm kiếm
-    }
-
 
 //    @GetMapping("/search")
-//    public String searchPosts(
-//            @RequestParam(name = "location", required = false) String location,
-//            @RequestParam(name = "type", required = false) String type,
-//            @RequestParam(name = "price", required = false) String price,
-//            @RequestParam(name = "area", required = false) String area,
-//            Model model
-//    ) {
-//        List<PostDTO> posts = postService.searchPosts(location, type, price, area);
-//        model.addAttribute("posts", posts);
-//        model.addAttribute("postDto", new PostDTO());
-//        return "home/home";
+//    public String searchRealEstate(@RequestParam(required = false) String location,
+//                                   @RequestParam(required = false) String type,
+//                                   @RequestParam(required = false) Short price,
+//                                   @RequestParam(required = false) Short area,
+//                                   Model model) {
+//
+//        // Chuyển dữ liệu từ form thành SearchDto
+//        SearchDto searchDto = new SearchDto(location, type, price, area);
+//
+//        // Thực hiện tìm kiếm bất động sản
+//        List<RealEstate> results = realEstateService.searchRealEstate(searchDto);
+//
+//        // Thêm kết quả tìm kiếm vào model
+//        model.addAttribute("realEstates", results);
+//        model.addAttribute("searchDto", searchDto); // Truyền searchDto vào model để Thymeleaf hiển thị
+//
+//        return "/home/search-results"; // Trả về trang home.html với kết quả tìm kiếm
 //    }
+
+
+    @GetMapping("/search")
+    public String searchPosts(
+            @RequestParam(name = "location", required = false) String location,
+            @RequestParam(name = "type", required = false) String type,
+            @RequestParam(name = "price", required = false) String price,
+            @RequestParam(name = "area", required = false) String area,
+            Model model
+    ) {
+        List<PostDTO> posts = postService.searchPosts(location, type, price, area);
+        model.addAttribute("posts", posts);
+        model.addAttribute("postDto", new PostDTO());
+        return "/home/home";
+    }
 
 
 }

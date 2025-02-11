@@ -16,7 +16,7 @@ public interface RealEstateRepository extends JpaRepository<RealEstate, Integer>
             "((:price IS NULL) OR " +
             "(:price = 0 AND CAST(r.price AS double) < 1000000000) OR " +
             "(:price = 1 AND CAST(r.price AS double) BETWEEN 1000000000 AND 3000000000) OR (:price = 2 AND CAST(r.price AS double) > 3000000000)) AND " +
-            "((:area = 0 AND r.area < 50) OR (:area = 1 AND r.area BETWEEN 50 AND 100) OR :area IS NULL)"
+            "((:area = 0 AND r.area < 50) OR (:area = 1 AND r.area BETWEEN 50 AND 100) OR (:area = 2 AND r.area > 100) OR :area IS NULL)"
     )
     List<RealEstate> searchRealEstate(@Param("location") String location,
                                       @Param("type") String type,

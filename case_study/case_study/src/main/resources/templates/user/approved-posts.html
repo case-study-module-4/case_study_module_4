@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
+    <link rel="stylesheet" href="/style/user-dashboard.css">
     <th:block th:insert="~{/layout/layout::library}"></th:block>
     <link rel="stylesheet" href="/style/header.css">
     <style>
@@ -37,6 +38,46 @@
 <body>
 <div th:insert="~{/layout/layout::header}"></div>
 <div class="container-fluid">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="user-info">
+            <div class="avatar">U</div>
+            <div class="full-name" th:text="${user.fullName}">Tên người dùng</div>
+            <div class="account-balance">
+                <p>Số dư tài khoản</p>
+                <div>
+                    <span>TK Chính:</span>
+                    <span th:text="${user.balance}">0</span>
+                </div>
+                <button class="deposit-button">
+                    <a href="#" class="submenu-link" data-url="/deposit">Nạp tiền</a>
+                </button>
+            </div>
+        </div>
+        <hr>
+        <!-- Menu chính -->
+        <ul class="menu">
+            <li>
+                <a href="#" class="menu-link">Quản lý tin đăng</a>
+                <ul class="submenu">
+                    <li><a href="/posts/create" class="submenu-link">Đăng tin mới</a></li>
+                    <li><a href="/posts/approved" class="submenu-link">Danh sách tin</a></li>
+                    <li><a href="/posts/drafts" class="submenu-link">Tin nháp</a></li>
+                </ul>
+            </li>
+            <hr>
+            <li><a href="#" class="menu-link" data-url="/user/customers">Quản lý khách hàng</a></li>
+            <hr>
+            <li>
+                <a href="#" class="menu-link">Quản lý tài khoản</a>
+                <ul class="submenu">
+                    <li><a href="#" class="submenu-link" data-url="/profile/edit">Chỉnh sửa thông tin</a></li>
+                    <li><a href="/accounts/form-password" class="submenu-link">Cài đặt tài khoản</a></li>
+                    <!--                    <li><a href="#" class="submenu-link" data-url="/accounts/update-password">Cài đặt tài khoản</a></li>-->
+                </ul>
+            </li>
+        </ul>
+    </aside>
     <!-- Main Content -->
     <main class="main-content" id="main-content">
         <div id="default-content" class="content-wrapper">

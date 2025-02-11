@@ -200,6 +200,7 @@ public class PostController {
         String username = principal.getName();
         User user = userService.findUserByUsername(username);
         List<Post> approvedPosts = postService.findAll();
+        model.addAttribute("user", user);
         model.addAttribute("posts", approvedPosts);
 
         return "user/approved-posts";
@@ -211,6 +212,7 @@ public class PostController {
         User user = userService.findUserByUsername(username);
         // Lấy các bài viết của user có payable = "no"
         List<Post> draftPosts = postService.getDraftPostsByUserId(user.getId());
+        model.addAttribute("user", user);
         model.addAttribute("posts", draftPosts);
         return "user/drafts-posts"; // Giao diện hiển thị bài viết nháp
     }

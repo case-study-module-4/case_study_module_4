@@ -285,6 +285,7 @@ public class PostService implements IPostService {
             dto.setId(post.getId());
             dto.setStatus(post.getStatus());
             dto.setTitle(post.getTitle());
+            dto.setType(post.getRealEstate().getType());
             dto.setContent(post.getContent());
             dto.setPublishDate(post.getPublishDate());
             dto.setPurpose(post.getPurpose() != null ? post.getPurpose().getPurpose() : null);
@@ -309,6 +310,7 @@ public class PostService implements IPostService {
             dto.setId(post.getId());
             dto.setStatus(post.getStatus());
             dto.setTitle(post.getTitle());
+            dto.setType(post.getRealEstate().getType());
             dto.setContent(post.getContent());
             dto.setPublishDate(post.getPublishDate());
             dto.setPurpose(post.getPurpose() != null ? post.getPurpose().getPurpose() : null);

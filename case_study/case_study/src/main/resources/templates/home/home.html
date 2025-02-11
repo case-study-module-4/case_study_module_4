@@ -167,10 +167,18 @@
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${post.title}"></h5>
                                 <hr>
-                                <p class="card-text"><strong>Địa điểm:</strong> <span th:text="${post.location}"></span></p>
-                                <p class="card-text"><strong>Loại:</strong> <span th:text="${post.type}"></span></p>
+                                <p class="card-text"><strong>Địa điểm:</strong> <span th:text="${post.location}"></span>
+                                </p>
+                                <p class="card-text"><strong>Loại:</strong> <span th:switch="${post.type}">
+                                    <span th:case="'House'">Nhà</span>
+        <span th:case="'Apartment'">Căn hộ</span>
+        <span th:case="'Land'">Đất</span>
+        <span th:case="'Hotel'">Khách sạn</span>
+        <span th:case="'Building'">Tòa nhà</span>
+                                </span></p>
                                 <p class="card-text"><strong>Giá:</strong> <span th:text="${post.price}"></span> VND</p>
-                                <p class="card-text"><strong>Diện tích:</strong> <span th:text="${post.area}"></span> m²</p>
+                                <p class="card-text"><strong>Diện tích:</strong> <span th:text="${post.area}"></span> m²
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -182,7 +190,6 @@
                     <p class="text-center text-muted">Không có bảng tin phù hợp với thông tin bạn muốn tìm kiếm.</p>
                 </div>
             </div>
-
 
 
         </div>

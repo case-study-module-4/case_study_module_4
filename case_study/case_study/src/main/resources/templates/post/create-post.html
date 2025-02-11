@@ -25,8 +25,8 @@
             right: 5px;
         }
         .custom-btn {
-            border: 2px solid #00A19D;
-            color: #00A19D;
+            border: 2px solid #ff6666;
+            color: #ff6666;
             background-color: transparent;
             border-radius: 50px;
             font-weight: bold;
@@ -44,7 +44,7 @@
         }
 
         .custom-btn:hover {
-            background-color: #00A19D;
+            background-color: #ff6666;
             color: white;
             box-shadow: 0 4px 10px rgba(0, 161, 157, 0.4);
             transform: translateY(-2px);
@@ -90,7 +90,7 @@
         }
 
         .direction-option:hover {
-            background: #00A19D;
+            background: #ff6666;
             color: white;
             border-color: #007bff;
         }
@@ -114,6 +114,29 @@
             align-items: center;
             border-radius: 50%;
         }
+        #price-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .price-suggestion {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            background-color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .price-suggestion:hover {
+            background-color: #ff6666;
+            color: white;
+            border-color: #ff6666;
+        }
+
 
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -124,9 +147,7 @@
 
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="card shadow-lg p-4 w-50">
-        <h2 class="text-center text-primary mb-4">Thêm bài viết mới</h2>
-
-        <form id="createPostForm" th:action="@{/posts}" method="post" enctype="multipart/form-data" th:object="${postDTO}">
+        <form th:action="@{/posts}" method="post" enctype="multipart/form-data" th:object="${postDTO}">
             <!-- Trạng thái -->
             <div class="mb-3">
                 <label for="statusDisplay" class="form-label fw-bold">Trạng thái</label>
@@ -200,12 +221,20 @@
                 <label for="price" class="form-label fw-bold">Giá</label>
                 <input type="number" step="0.01" class="form-control" id="price" th:field="*{price}" required>
                 <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger"></div>
+                <!-- Gợi ý giá -->
+                <div id="price-suggestions" class="d-flex flex-wrap gap-2 mt-2" style="display: none;"></div>
             </div>
 
             <!-- Hình ảnh -->
             <div class="mb-3">
                 <label for="imageFiles" class="form-label fw-bold">Hình ảnh</label>
-                <input type="file" class="form-control" id="imageFiles" th:field="*{imageFiles}" accept="image/*" multiple required>
+                <input type="file"
+                       class="form-control"
+                       id="imageFiles"
+                       th:field="*{imageFiles}"
+                       accept="image/*"
+                       multiple
+                       required>
                 <div th:if="${#fields.hasErrors('imageFiles')}" th:errors="*{imageFiles}" class="text-danger"></div>
                 <!-- Khung hiển thị preview ảnh -->
                 <div id="imagePreview" class="mt-2"></div>
@@ -233,57 +262,23 @@
         </form>
     </div>
 </div>
-<script th:inline="javascript">
-    document.addEventListener("DOMContentLoaded", function () {
-        const ctx = document.getElementById('directionChart').getContext('2d');
-        const directionInput = document.getElementById("direction");
-
-        const directions = ["Đông", "Đông Nam", "Nam", "Tây Nam", "Tây", "Tây Bắc", "Bắc", "Đông Bắc"];
-        // Đặt màu nền trắng cho các phần, thay đổi khi chọn
-        const colors = Array(directions.length).fill("#ffffff");
-
-        let selectedIndex = null;
-
-        const chart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: directions,
-                datasets: [{
-                    data: Array(directions.length).fill(1),
-                    backgroundColor: colors,
-                    borderColor: '#000',
-                    borderWidth: 1,
-                    offset: 10,
-                }]
-            },
-            options: {
-                responsive: true,
-                // Điều chỉnh góc quay của hình tròn ở đây:
-                rotation: -Math.PI / 5, // Ví dụ: quay sao cho phần đầu tiên nằm ở vị trí 12 giờ.
-                cutout: "50%", // Tạo rỗng ở giữa
-                plugins: {
-                    legend: {
-                        display: false // Ẩn chú thích mặc định
-                    }
-                },
-                onClick: (event, elements) => {
-                    if (elements.length > 0) {
-                        const index = elements[0].index;
-                        selectedIndex = index;
-                        directionInput.value = directions[index];
-
-                        // Cập nhật màu: phần được chọn đổi màu
-                        chart.data.datasets[0].backgroundColor = colors.map((color, i) =>
-                            i === selectedIndex ? "#007bff" : "#ffffff"
-                        );
-                        chart.update();
-                    }
-                }
-            },
-            plugins: [{
-                afterDraw: function (chart) {
-                    const ctx = chart.ctx;
-                    ctx.save();
+<!-- Modal thông báo file không hợp lệ -->
+<div class="modal fade" id="fileTypeModal" tabindex="-1" aria-labelledby="fileTypeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fileTypeModalLabel">Thông báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Nội dung thông báo sẽ được cập nhật động -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 
                     const meta = chart.getDatasetMeta(0);
                     const innerRadius = meta.data[0].innerRadius;
@@ -293,28 +288,13 @@
                     // Tính vị trí trung gian giữa inner và outer, có thể cộng thêm offset nếu cần
                     const radius = (innerRadius + outerRadius) / 2 + 10;
 
-                    ctx.font = "bold 14px Arial";
-                    ctx.fillStyle = "#000";
-                    ctx.textAlign = "center";
-                    ctx.textBaseline = "middle";
-
-                    directions.forEach((direction, index) => {
-                        // Lưu ý: Nếu bạn muốn thay đổi vị trí của chữ, hãy điều chỉnh offset bán kính hoặc góc offset ở đây.
-                        const angle = (index / directions.length) * (2 * Math.PI) - Math.PI / 2.5;
-                        const x = centerX + Math.cos(angle) * radius;
-                        const y = centerY + Math.sin(angle) * radius;
-                        ctx.fillText(direction, x, y);
-                    });
-
-                    ctx.restore();
-                }
-            }]
-        });
-    });
-</script>
+<script src="/js/chart.js"></script>
+<script src="/js/suggestions.js"></script>
+<script src="/js/checkimage.js"></script>
 
 <!-- Chèn fragment modal -->
 <div th:insert="~{fragments/image-modal :: imageModal}"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
 <!-- Bootstrap JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

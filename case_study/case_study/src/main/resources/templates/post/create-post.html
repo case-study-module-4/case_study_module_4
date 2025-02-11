@@ -24,14 +24,129 @@
             top: 5px;
             right: 5px;
         }
+        .custom-btn {
+            border: 2px solid #ff6666;
+            color: #ff6666;
+            background-color: transparent;
+            border-radius: 50px;
+            font-weight: bold;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease-in-out;
+            font-size: 1rem;
+        }
+
+        .custom-btn i {
+            font-size: 1.3rem;
+        }
+
+        .custom-btn:hover {
+            background-color: #ff6666;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 161, 157, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .custom-btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .direction-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .direction-circle {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .direction-option {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .direction-option:hover {
+            background: #ff6666;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .direction-option.active {
+            background: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        .center-circle {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: #007bff;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+        }
+        #price-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .price-suggestion {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            background-color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .price-suggestion:hover {
+            background-color: #ff6666;
+            color: white;
+            border-color: #ff6666;
+        }
+
+
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <body class="bg-light">
 
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="card shadow-lg p-4 w-50">
-        <h2 class="text-center text-primary mb-4">Thêm bài viết mới</h2>
-
         <form th:action="@{/posts}" method="post" enctype="multipart/form-data" th:object="${postDTO}">
             <!-- Trạng thái -->
             <div class="mb-3">
@@ -95,22 +210,31 @@
 
             <!-- Hướng -->
             <div class="mb-3">
-                <label for="direction" class="form-label fw-bold">Hướng</label>
-                <input type="text" class="form-control" id="direction" th:field="*{direction}">
-                <div th:if="${#fields.hasErrors('direction')}" th:errors="*{direction}" class="text-danger"></div>
+                <label class="form-label fw-bold">Hướng nhà</label>
+                <canvas id="directionChart" width="300" height="300"></canvas>
+                <input type="hidden" id="direction" th:field="*{direction}">
             </div>
+
 
             <!-- Giá -->
             <div class="mb-3">
                 <label for="price" class="form-label fw-bold">Giá</label>
                 <input type="number" step="0.01" class="form-control" id="price" th:field="*{price}" required>
                 <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger"></div>
+                <!-- Gợi ý giá -->
+                <div id="price-suggestions" class="d-flex flex-wrap gap-2 mt-2" style="display: none;"></div>
             </div>
 
             <!-- Hình ảnh -->
             <div class="mb-3">
                 <label for="imageFiles" class="form-label fw-bold">Hình ảnh</label>
-                <input type="file" class="form-control" id="imageFiles" th:field="*{imageFiles}" accept="image/*" multiple required>
+                <input type="file"
+                       class="form-control"
+                       id="imageFiles"
+                       th:field="*{imageFiles}"
+                       accept="image/*"
+                       multiple
+                       required>
                 <div th:if="${#fields.hasErrors('imageFiles')}" th:errors="*{imageFiles}" class="text-danger"></div>
                 <!-- Khung hiển thị preview ảnh -->
                 <div id="imagePreview" class="mt-2"></div>
@@ -124,21 +248,53 @@
             </div>
 
             <!-- Nút bấm -->
-            <div class="d-flex justify-content-between">
-                <button type="submit" name="action" value="continue" class="btn btn-primary w-50 me-2">
-                    Tiếp tục
+            <div class="d-flex justify-content-between gap-2">
+                <button type="submit" name="action" value="continue" class="btn custom-btn w-50">
+                    <i class="bi bi-arrow-right-circle-fill"></i> Tiếp tục
                 </button>
-                <button type="submit" name="action" value="save" class="btn btn-secondary w-50">
-                    Lưu bài viết
+                <button type="submit" name="action" value="save" class="btn custom-btn w-50">
+                    <i class="bi bi-bookmark-fill"></i> Lưu bài viết
                 </button>
-                <a th:href="@{/home}" class="btn btn-outline-secondary w-100">Hủy bỏ</a>
+                <a th:href="@{/home}" class="btn custom-btn w-100">
+                    <i class="bi bi-x-circle-fill"></i> Hủy bỏ
+                </a>
             </div>
         </form>
     </div>
 </div>
+<!-- Modal thông báo file không hợp lệ -->
+<div class="modal fade" id="fileTypeModal" tabindex="-1" aria-labelledby="fileTypeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fileTypeModalLabel">Thông báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Nội dung thông báo sẽ được cập nhật động -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+                    const meta = chart.getDatasetMeta(0);
+                    const innerRadius = meta.data[0].innerRadius;
+                    const outerRadius = meta.data[0].outerRadius;
+                    const centerX = chart.chartArea.left + chart.chartArea.width / 2;
+                    const centerY = chart.chartArea.top + chart.chartArea.height / 2;
+                    // Tính vị trí trung gian giữa inner và outer, có thể cộng thêm offset nếu cần
+                    const radius = (innerRadius + outerRadius) / 2 + 10;
+
+<script src="/js/chart.js"></script>
+<script src="/js/suggestions.js"></script>
+<script src="/js/checkimage.js"></script>
 
 <!-- Chèn fragment modal -->
 <div th:insert="~{fragments/image-modal :: imageModal}"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
 <!-- Bootstrap JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

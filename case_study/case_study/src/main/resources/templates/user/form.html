@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Địa chỉ địa phương</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h1>Chọn địa chỉ</h1>
+
+<form>
+    <div>
+        <label for="province">Tỉnh/Thành phố:</label>
+        <select id="province" onchange="loadDistricts(this.value)">
+            <option value="">Chọn tỉnh/thành phố</option>
+        </select>
+    </div>
+    <div>
+        <label for="district">Quận/Huyện:</label>
+        <select id="district">
+            <option value="">Chọn quận/huyện</option>
+        </select>
+    </div>
+</form>
+
+<script>
+    // Load danh sách tỉnh/thành phố
+    $(document).ready(function () {
+        $.ajax({
+            url: '/api/locations/provinces',
+            type: 'GET',
+            success: function (data) {
+                const provinceSelect = $('#province');
+                for (let key in data) {
+                    const province = data[key];
+                    provinceSelect.append(`<option value="${province.code}">${province.name}</option>`);
+                }
+            }
+        });
+    });
+
+    // Hàm tải danh sách quận/huyện
+    function loadDistricts(provinceCode) {
+        if (!provinceCode) {
+            $('#district').html('<option value="">Chọn quận/huyện</option>');
+            return;
+        }
+
+        // TODO: Tích hợp API hoặc dữ liệu JSON để lấy quận/huyện
+        alert("Tải danh sách quận/huyện cho tỉnh/thành phố: " + provinceCode);
+    }
+</script>
+</body>
+</html>

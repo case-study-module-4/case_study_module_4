@@ -1,5 +1,6 @@
 package com.example.case_study.service.impl;
 
+import com.example.case_study.dto.AccountDTO;
 import com.example.case_study.dto.AccountRegisterDTO;
 import com.example.case_study.model.Account;
 import com.example.case_study.model.Role;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -118,5 +121,21 @@ public class AccountService implements IAccountService {
             return true;
         }
         return false; // Không tìm thấy tài khoản
+    }
+
+    @Override
+    public List<AccountDTO> getAllAccounts() {
+        return accountRepository.findAllAccountDetails();
+    }
+    @Override
+    public boolean softDeleteAccount(Integer id) {
+        Optional<Account> optionalAccount = accountRepository.findById(id);
+        if (optionalAccount.isPresent()) {
+            Account account = optionalAccount.get();
+            account.setIsDelete(true);
+            accountRepository.save(account); // Cập nhật vào database
+            return true;
+        }
+        return false;
     }
 }

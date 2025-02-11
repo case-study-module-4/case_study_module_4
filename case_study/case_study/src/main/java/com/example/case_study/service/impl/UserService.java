@@ -10,13 +10,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.math.BigDecimal;
 
 @Service
 public class UserService implements IUserService {
     @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
     @Override
     public List<User> findAll() {
         return List.of();
@@ -56,4 +59,13 @@ public class UserService implements IUserService {
         userRepository.save(user);
     }
 
+    @Override
+    public void updateUserBalance(Integer userId, BigDecimal amount) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        user.setBalance(user.getBalance().add(amount));
+
+        userRepository.save(user);
+    }
 }

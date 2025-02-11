@@ -302,7 +302,7 @@ public class PostService implements IPostService {
 
     @Override
     public List<PostDTO> getListDefault() {
-        List<Post> posts = postRepository.findLatestPosts(PageRequest.of(0, 4));
+        List<Post> posts = postRepository.findLatestPosts(PageRequest.of(0, 8));
 
 
         return posts.stream().map(post -> {

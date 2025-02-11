@@ -48,7 +48,9 @@ public class UserService implements IUserService {
 
     @Override
     public User findUserByUsername(String username) {
-        return accountRepository.findByUsername(username).get().getUser();
+        return accountRepository.findByUsername(username)
+                .map(Account::getUser)
+                .orElse(null);
     }
 
     @Override

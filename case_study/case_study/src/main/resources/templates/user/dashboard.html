@@ -23,7 +23,7 @@
                     <span>TK Chính:</span>
                     <span th:text="${user.balance}">0</span>
                 </div>
-                <button class="btn btn-danger text-white">
+                <button class="deposit-button">
                     <a href="#" class="submenu-link" data-url="/deposit">Nạp tiền</a>
                 </button>
             </div>
@@ -35,8 +35,8 @@
                 <a href="#" class="menu-link">Quản lý tin đăng</a>
                 <ul class="submenu">
                     <li><a href="/posts/create" class="submenu-link">Đăng tin mới</a></li>
-                    <li><a href="/posts" class="submenu-link" data-url="/posts/approved">Danh sách tin</a></li>
-                    <li><a href="#" class="submenu-link" data-url="/posts/drafts">Tin nháp</a></li>
+                    <li><a href="/posts/approved" class="submenu-link">Danh sách tin</a></li>
+                    <li><a href="/posts/drafts" class="submenu-link">Tin nháp</a></li>
                 </ul>
             </li>
             <hr>

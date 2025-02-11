@@ -164,7 +164,7 @@ public class PostController {
                 return "redirect:/transaction/transaction?postId=" + post.getId();
             } else {
                 // Ngược lại (payable = yes hoặc hành động là cập nhật) thì về trang danh sách bài viết
-                return "redirect:/posts";
+                return "redirect:/posts/approved";
             }
         }
         return "redirect:/posts?error=notfound";
@@ -187,7 +187,7 @@ public class PostController {
             } else {
                 redirectAttributes.addFlashAttribute("message", "Xóa bài đăng thành công!");
                 redirectAttributes.addFlashAttribute("alertClass", "alert-success");
-                return "redirect:/posts?message=deleted";
+                return "redirect:/posts/approved?message=deleted";
             }
         }
         redirectAttributes.addFlashAttribute("message", "Xóa bài đăng không thành công!");

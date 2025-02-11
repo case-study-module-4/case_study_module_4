@@ -81,7 +81,7 @@ public class TransactionController {
 
                 postService.save(post);
             }
-            return "redirect:/home";
+            return "redirect:/posts/approved";
         } else {
             model.addAttribute("error", "Số dư trong tài khoản không đủ để thanh toán.");
             model.addAttribute("user", user);

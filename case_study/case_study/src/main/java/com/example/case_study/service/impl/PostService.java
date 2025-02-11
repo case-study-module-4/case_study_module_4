@@ -264,7 +264,7 @@ public class PostService implements IPostService {
 
     @Override
     public List<Post> getApprovedPostsByUserId(Integer userId) {
-        return postRepository.findByUserIdAndStatus(userId, "Approved");
+        return postRepository.findByUserIdAndStatus(userId, "yes");
     }
 
 

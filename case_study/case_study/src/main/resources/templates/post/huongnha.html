@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chọn Hướng Nhà</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .direction-chart-container {
+            width: 300px;
+            margin: auto;
+            position: relative;
+        }
+        .direction-chart-container canvas {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="direction-chart-container">
+    <canvas id="directionChart"></canvas>
+</div>
+
+<script>
+    const ctx = document.getElementById('directionChart').getContext('2d');
+    const directions = ["Bắc", "Đông Bắc", "Đông", "Đông Nam", "Nam", "Tây Nam", "Tây", "Tây Bắc"];
+    let selectedDirection = null;
+
+    const data = {
+        labels: directions,
+        datasets: [{
+            data: Array(8).fill(1),
+            backgroundColor: Array(8).fill("rgba(200, 200, 200, 0.5)"),
+            hoverBackgroundColor: "#888"
+        }]
+    };
+
+    const config = {
+        type: 'pie',
+        data: data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            onClick: (event, elements) => {
+                if (elements.length > 0) {
+                    let index = elements[0].index;
+                    data.datasets[0].backgroundColor = Array(8).fill("rgba(200, 200, 200, 0.5)");
+                    data.datasets[0].backgroundColor[index] = "#555";
+                    selectedDirection = directions[index];
+                    directionChart.update();
+                }
+            }
+        }
+    };
+
+    const directionChart = new Chart(ctx, config);
+</script>
+</body>
+</html>

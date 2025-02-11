@@ -29,6 +29,27 @@
         .to-delete {
             opacity: 0.4;
         }
+        /* CSS cho gợi ý giá */
+        #price-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .price-suggestion {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            background-color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .price-suggestion:hover {
+            background-color: #ff6666;
+            color: white;
+            border-color: #ff6666;
+        }
     </style>
 </head>
 <body class="bg-light">
@@ -112,18 +133,20 @@
                 <div th:if="${#fields.hasErrors('area')}" th:errors="*{area}" class="text-danger"></div>
             </div>
 
-            <!-- Hướng -->
+            <!-- Hướng (sử dụng canvas và input ẩn như create-post) -->
             <div class="mb-3">
-                <label for="direction" class="form-label fw-bold">Hướng</label>
-                <input type="text" class="form-control" id="direction" th:field="*{direction}" required>
-                <div th:if="${#fields.hasErrors('direction')}" th:errors="*{direction}" class="text-danger"></div>
+                <label class="form-label fw-bold">Hướng nhà</label>
+                <canvas id="directionChart" width="300" height="300"></canvas>
+                <input type="hidden" id="direction" th:field="*{direction}">
             </div>
 
-            <!-- Giá -->
+            <!-- Giá (có tích hợp gợi ý giá) -->
             <div class="mb-3">
                 <label for="price" class="form-label fw-bold">Giá</label>
                 <input type="number" step="0.01" class="form-control" id="price" th:field="*{price}" required>
                 <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger"></div>
+                <!-- Gợi ý giá (như bên create-post) -->
+                <div id="price-suggestions" class="d-flex flex-wrap gap-2 mt-2" style="display: none;"></div>
             </div>
 
             <!-- Hiển thị danh sách ảnh bài viết hiện có -->
@@ -175,7 +198,7 @@
     </div>
 </div>
 
-<!-- Chèn fragment modal -->
+<!-- Chèn fragment modal (để xem ảnh) -->
 <div th:insert="~{fragments/image-modal :: imageModal}"></div>
 
 <!-- Bootstrap JS Bundle -->
@@ -184,9 +207,45 @@
 <script src="/js/image-modal.js"></script>
 <!-- Chèn file JS xử lý preview ảnh -->
 <script src="/js/image-preview.js"></script>
+<!-- Chèn file JS xử lý gợi ý giá -->
+<script src="/js/suggestions.js"></script>
+<!-- Chèn file JS kiểm tra ảnh (nếu cần) -->
+<script src="/js/checkimage.js"></script>
+<!-- Chèn file JS xử lý canvas (hướng) -->
+<script src="/js/chart.js"></script>
 <script>
-    // Khởi tạo preview ảnh cho trang "Thêm bài viết"
+    // Khởi tạo preview ảnh cho phần "ảnh mới" trong trang Chỉnh sửa bài viết
     initImagePreview('#newImageFiles', '#newImagePreview');
+
+    // Khởi tạo bảng chọn hướng (nếu bạn đã có hàm tương ứng, ví dụ initDirectionChart)
+    // initDirectionChart(); // Ví dụ: hàm này được định nghĩa trong chart.js
+
+    // Khởi tạo gợi ý giá cho ô nhập giá:
+    document.addEventListener("DOMContentLoaded", () => {
+        const priceInput = document.getElementById("price");
+        const suggestions = document.getElementById("price-suggestions");
+
+        priceInput.addEventListener("input", () => {
+            const value = parseFloat(priceInput.value);
+            suggestions.innerHTML = ""; // Xóa gợi ý cũ
+            if (!isNaN(value)) {
+                const suggestionValues = generateSuggestions(value);
+                suggestionValues.forEach((sugg) => {
+                    const div = document.createElement("div");
+                    div.textContent = sugg;
+                    div.classList.add("price-suggestion");
+                    div.addEventListener("click", () => {
+                        priceInput.value = sugg.replace(/[^\d.]/g, "").replace(",", ".");
+                        suggestions.style.display = "none"; // Ẩn gợi ý sau khi chọn
+                    });
+                    suggestions.appendChild(div);
+                });
+                suggestions.style.display = "flex"; // Hiện gợi ý
+            } else {
+                suggestions.style.display = "none"; // Ẩn nếu không có giá trị
+            }
+        });
+    });
 </script>
 </body>
 </html>

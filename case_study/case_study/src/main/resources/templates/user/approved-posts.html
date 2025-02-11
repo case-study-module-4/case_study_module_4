@@ -1,28 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="/style/user-dashboard.css">
+    <th:block th:insert="~{/layout/layout::library}"></th:block>
+    <link rel="stylesheet" href="/style/header.css">
+    <style>
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        .content-wrapper {
+            width: 90%; /* Tăng chiều rộng khung nội dung */
+            max-width: 1200px; /* Giới hạn tối đa chiều rộng */
+            background-color: #fff;  /* Màu nền trắng cho khung nội dung */
+            border-radius: 10px; /* Bo góc mềm mại */
+            box-shadow: 0 6px 12px rgb(200, 166, 166); /* Hiệu ứng đổ bóng */
+            padding: 20px; /* Khoảng cách bên trong */
+        }
+        h2 {
+            text-align: center; /* Căn giữa tiêu đề */
+            color: #dc3545; /* Màu đỏ chủ đạo */
+            margin-bottom: 20px;
+        }
+        table {
+            margin-top: 20px;
+        }
+        .alert {
+            text-align: center; /* Căn giữa thông báo */
+        }
+    </style>
+</head>
+<body>
+<div th:insert="~{/layout/layout::header}"></div>
+<div class="container-fluid">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="user-info">
+            <div class="avatar">U</div>
+            <div class="full-name" th:text="${user.fullName}">Tên người dùng</div>
+            <div class="account-balance">
+                <p>Số dư tài khoản</p>
+                <div>
+                    <span>TK Chính:</span>
+                    <span th:text="${user.balance}">0</span>
+                </div>
+                <button class="deposit-button">
+                    <a href="#" class="submenu-link" data-url="/deposit">Nạp tiền</a>
+                </button>
+            </div>
+        </div>
+        <hr>
+        <!-- Menu chính -->
+        <ul class="menu">
+            <li>
+                <a href="#" class="menu-link">Quản lý tin đăng</a>
+                <ul class="submenu">
+                    <li><a href="/posts/create" class="submenu-link">Đăng tin mới</a></li>
+                    <li><a href="/posts/approved" class="submenu-link">Danh sách tin</a></li>
+                    <li><a href="/posts/drafts" class="submenu-link">Tin nháp</a></li>
+                </ul>
+            </li>
+            <hr>
+            <li><a href="#" class="menu-link" data-url="/user/customers">Quản lý khách hàng</a></li>
+            <hr>
+            <li>
+                <a href="#" class="menu-link">Quản lý tài khoản</a>
+                <ul class="submenu">
+                    <li><a href="#" class="submenu-link" data-url="/profile/edit">Chỉnh sửa thông tin</a></li>
+                    <li><a href="/accounts/form-password" class="submenu-link">Cài đặt tài khoản</a></li>
+                    <!--                    <li><a href="#" class="submenu-link" data-url="/accounts/update-password">Cài đặt tài khoản</a></li>-->
+                </ul>
+            </li>
+        </ul>
+    </aside>
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        <div id="default-content" class="content-wrapper">
+            <h2>Danh sách tin</h2>
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>STT</th>
+                    <th>Tiêu đề</th>
+                    <th>Nội dung</th>
+                    <th>Ngày đăng</th>
+                    <th colspan="3">Chức năng</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Trường hợp không có bài viết -->
+                <tr th:if="${posts.isEmpty()}">
+                    <td colspan="7" class="text-center text-muted">Chưa có bài viết nào. Hãy thêm bài viết mới!</td>
+                </tr>
+                <!-- Duyệt qua danh sách bài viết -->
+                <tr th:each="post, stat : ${posts}">
+                    <td th:text="${stat.index + 1}"></td>
+                    <td th:text="${post.title}"></td>
+                    <td th:text="${post.content}"></td>
+                    <td th:text="${#temporals.format(post.publishDate, 'dd/MM/yyyy')}"></td>
+                    <td><a class="btn btn-info btn-sm" th:href="@{/posts/{id}(id=${post.id})}">Xem chi tiết</a></td>
+                    <td><a class="btn btn-warning btn-sm" th:href="@{/posts/{id}/edit(id=${post.id})}">Sửa</a></td>
+                    <td>
+                        <form th:action="@{/posts/{id}/delete(id=${post.id})}" method="post"
+                              onsubmit="return confirm('Bạn có chắc chắn muốn xóa bài viết này không?');">
+                            <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                        </form>
+                    </td>
 
-<h1 class="text-center my-4">Danh sách bài đăng</h1>
-
-<div class="container">
-    <table class="table table-bordered table-striped table-hover">
-        <thead class="thead-dark">
-        <tr>
-            <th>STT</th>
-            <th>Tiêu đề</th>
-            <th>Nội dung</th>
-            <th>Ngày đăng</th>
-            <th colspan="3">Chức năng</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="post, stat : ${posts}">
-            <td th:text="${stat.index + 1}"></td>
-            <td th:text="${post.title}"></td>
-            <td th:text="${post.content}"></td>
-            <td th:text="${post.publishDate}"></td>
-            <td>Xem chi tiết</td>
-            <td>Sửa</td>
-            <td>Xóa</td>
-        </tr>
-        </tbody>
-    </table>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
 </div>
+</body>
+</html>

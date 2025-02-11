@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Trang Dashboard - Người Dùng</title>
+    <link rel="stylesheet" href="/style/user-dashboard.css">
     <th:block th:insert="~{/layout/layout::library}"></th:block>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="/style/header.css">
-    <link rel="stylesheet" href="/style/user-dashboard.css">
+
 </head>
 <body>
 <div th:insert="~{/layout/layout::header}"></div>
@@ -55,8 +56,12 @@
     <!-- Main Content -->
     <main class="main-content" id="main-content">
         <div id="default-content">
-            <h2>Chào mừng bạn đến với trang cá nhân</h2>
+            <h2>Chào mừng, <span th:text="${user.fullName}">Tên người dùng</span>!</h2>
             <p>Chọn một mục từ menu để xem thông tin.</p>
+        </div>
+        <!-- Hiển thị thông báo thành công -->
+        <div th:if="${success}" class="alert alert-success" role="alert">
+            <span th:text="${success}"></span>
         </div>
     </main>
 </div>

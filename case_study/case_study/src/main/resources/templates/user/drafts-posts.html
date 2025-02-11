@@ -69,12 +69,7 @@
             <li><a href="#" class="menu-link" data-url="/user/customers">Quản lý khách hàng</a></li>
             <hr>
             <li>
-                <a href="#" class="menu-link">Quản lý tài khoản</a>
-                <ul class="submenu">
-                    <li><a href="#" class="submenu-link" data-url="/profile/edit">Chỉnh sửa thông tin</a></li>
-                    <li><a href="/accounts/form-password" class="submenu-link">Cài đặt tài khoản</a></li>
-                    <!--                    <li><a href="#" class="submenu-link" data-url="/accounts/update-password">Cài đặt tài khoản</a></li>-->
-                </ul>
+                <a href="/dashboard" class="menu-link">Quản lý tài khoản</a>
             </li>
         </ul>
     </aside>
@@ -121,5 +116,6 @@
         </div>
     </main>
 </div>
+<div th:insert="~{/layout/layout::footer}"></div>
 </body>
 </html>

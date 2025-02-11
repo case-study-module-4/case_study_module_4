@@ -42,6 +42,10 @@
 
     <form th:action="@{/account/update-password}" method="post">
       <div class="mb-3">
+        <label for="oldPassword" class="form-label">Nhập mật khẩu cũ:</label>
+        <input type="password" class="form-control" id="oldPassword" name="oldPassword" required>
+      </div>
+      <div class="mb-3">
         <label for="newPassword" class="form-label">Nhập mật khẩu mới:</label>
         <input type="password" class="form-control" id="newPassword" name="newPassword" required>
       </div>

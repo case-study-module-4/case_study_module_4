@@ -27,4 +27,5 @@ public interface IAccountService {
     Account findByUsername(String name);
 
     void updatePassword(Account account, String newPassword);
+
 }

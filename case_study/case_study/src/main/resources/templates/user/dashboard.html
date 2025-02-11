@@ -59,6 +59,10 @@
             <h2>Chào mừng, <span th:text="${user.fullName}">Tên người dùng</span>!</h2>
             <p>Chọn một mục từ menu để xem thông tin.</p>
         </div>
+        <!-- Hiển thị thông báo thành công -->
+        <div th:if="${success}" class="alert alert-success" role="alert">
+            <span th:text="${success}"></span>
+        </div>
     </main>
 </div>
 

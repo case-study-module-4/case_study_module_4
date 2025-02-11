@@ -97,5 +97,7 @@ public class UserController {
             return "redirect:/posts?error=userNotFound";
         }
     }
+
+
 }
 

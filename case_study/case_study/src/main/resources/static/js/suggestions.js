@@ -13,7 +13,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 div.textContent = sugg;
                 div.classList.add("price-suggestion");
                 div.addEventListener("click", () => {
-                    priceInput.value = sugg.replace(/[^\d.]/g, "").replace(",", ".");
+                    let numberValue;
+                    // Kiểm tra đơn vị của chuỗi gợi ý và chuyển đổi tương ứng
+                    if (sugg.includes("tỷ")) {
+                        // Loại bỏ chữ "tỷ" và chuyển đổi sang số (với dấu phẩy thành dấu chấm nếu cần)
+                        const num = parseFloat(sugg.replace("tỷ", "").trim().replace(",", "."));
+                        numberValue = num * 1000000000; // 1 tỷ = 1e9
+                    } else if (sugg.includes("triệu")) {
+                        const num = parseFloat(sugg.replace("triệu", "").trim().replace(",", "."));
+                        numberValue = num * 1000000; // 1 triệu = 1e6
+                    }
+                    priceInput.value = numberValue;
                     suggestions.style.display = "none"; // Ẩn gợi ý sau khi chọn
                 });
                 suggestions.appendChild(div);

@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cập nhật mật khẩu</title>
-  <!-- Bootstrap CSS -->
   <th:block th:replace="~{layout/layout::library}"></th:block>
   <style>
     body {
@@ -26,19 +25,29 @@
   </style>
 </head>
 <body>
-<!--<div th:insert="_header :: header"></div>-->
 
 <div class="container">
   <div class="form-container">
     <h2 class="form-title">Cập nhật mật khẩu</h2>
-    <form action="/accounts/update-password" method="post">
+
+    <!-- Hiển thị thông báo lỗi -->
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+      <span th:text="${error}"></span>
+    </div>
+
+    <!-- Hiển thị thông báo thành công -->
+    <div th:if="${success}" class="alert alert-success" role="alert">
+      <span th:text="${success}"></span>
+    </div>
+
+    <form th:action="@{/account/update-password}" method="post">
       <div class="mb-3">
         <label for="newPassword" class="form-label">Nhập mật khẩu mới:</label>
         <input type="password" class="form-control" id="newPassword" name="newPassword" required>
       </div>
       <div class="mb-3">
-        <label for="authentic" class="form-label">Xác nhận mật khẩu mới:</label>
-        <input type="password" class="form-control" id="authentic" name="authentic" required>
+        <label for="confirmPassword" class="form-label">Xác nhận mật khẩu mới:</label>
+        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
       </div>
       <div class="d-grid">
         <button type="submit" class="btn btn-primary">Cập nhật</button>
@@ -47,7 +56,5 @@
   </div>
 </div>
 
-
-<!--<th:block th:replace="_footer :: footer"></th:block>-->
 </body>
 </html>

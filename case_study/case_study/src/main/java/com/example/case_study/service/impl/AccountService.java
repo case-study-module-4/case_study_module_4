@@ -10,6 +10,7 @@ import com.example.case_study.repository.RoleRepository;
 import com.example.case_study.repository.UserRepository;
 import com.example.case_study.service.IAccountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,21 +28,6 @@ public class AccountService implements IAccountService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    @Override
-    public void register(Account account) {
-        if (existsByUsername(account.getUsername())) {
-            throw new RuntimeException("Tên đăng nhập đã tồn tại!");
-        }
-
-        if (existsByEmail(account.getUser().getEmail())) {
-            throw new RuntimeException("Email đã được sử dụng!");
-        }
-
-        account.setRole(getDefaultRole());
-
-        accountRepository.save(account);
-    }
 
     @Override
     public boolean existsByUsername(String username) {
@@ -116,4 +102,17 @@ public class AccountService implements IAccountService {
             accountRepository.updateAccountStatus(id, newStatus);
         }
     }
+
+    @Override
+    public Account findByUsername(String name) {
+        return accountRepository.findByUsername(name).orElse(null);
+
+    }
+
+    @Transactional
+    public void updatePassword(Account account, String newPassword) {
+        account.setPassword(encodePassword(newPassword));
+        accountRepository.save(account);
+    }
+
 }

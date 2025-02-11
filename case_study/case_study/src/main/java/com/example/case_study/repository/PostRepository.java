@@ -30,7 +30,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             ")) AND " +
             "(:area = '' OR ( " +
             "   (:area = '0' AND p.realEstate.area < 50) OR " +
-            "   (:area = '1' AND p.realEstate.area BETWEEN 50 AND 100) " +
+            "   (:area = '1' AND p.realEstate.area BETWEEN 50 AND 100) OR " +
+            "   (:area = '2' AND p.realEstate.area > 100) " +
             "))")
     List<Post> searchPosts(
             @Param("location") String location,

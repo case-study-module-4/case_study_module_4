@@ -1,10 +1,13 @@
 package com.example.case_study.controller;
 
+import com.example.case_study.model.Deposit;
 import com.example.case_study.model.User;
+import com.example.case_study.service.IDepositService;
 import com.example.case_study.service.IPayService;
 import com.example.case_study.service.impl.UserService;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Map;
 
 @Controller
@@ -25,7 +29,12 @@ public class PaypalController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private IDepositService depositService;
+
     private static final String EXCHANGE_RATE_API = "https://open.er-api.com/v6/latest/USD";
+    private static final String SUCCESS_URL = "http://localhost:8080/success";
+    private static final String CANCEL_URL = "http://localhost:8080/cancel";
 
     @GetMapping("/deposit")
     public String showDepositForm(Model model, Principal principal){
@@ -35,11 +44,8 @@ public class PaypalController {
         String username = principal.getName();
         User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
-        return "user/deposit"; // Hiển thị trang nạp tiền
+        return "user/deposit";
     }
-
-    private static final String SUCCESS_URL = "http://localhost:8080/success";
-    private static final String CANCEL_URL = "http://localhost:8080/cancel";
 
     @PostMapping("/paypal")
     public String pay(@RequestParam double amount) {
@@ -49,19 +55,21 @@ public class PaypalController {
             String response = restTemplate.getForObject(EXCHANGE_RATE_API, String.class);
 
             JSONObject jsonResponse = new JSONObject(response);
-            BigDecimal exchangeRate = BigDecimal.ONE; // Mặc định = 1 nếu lỗi
+            BigDecimal exchangeRate = BigDecimal.ONE;  // Mặc định là 1
 
-            if (jsonResponse.has("rates") && jsonResponse.getJSONObject("rates").has("VND")) {
-                exchangeRate = BigDecimal.valueOf(jsonResponse.getJSONObject("rates").getDouble("VND"));
+            try {
+                if (jsonResponse.has("rates") && jsonResponse.getJSONObject("rates").has("VND")) {
+                    exchangeRate = BigDecimal.valueOf(jsonResponse.getJSONObject("rates").getDouble("VND"));
+                }
+            } catch (JSONException e) {
+                System.err.println("Lỗi khi lấy tỷ giá từ JSON: " + e.getMessage());
             }
-
             if (exchangeRate.compareTo(BigDecimal.ZERO) <= 0) {
                 return "redirect:/deposit?error=exchange_rate_invalid";
             }
 
             // Chuyển đổi số tiền từ VND -> USD
             BigDecimal amountUSD = new BigDecimal(amount).divide(exchangeRate, 2, RoundingMode.HALF_UP);
-
             if (amountUSD.compareTo(new BigDecimal("0.01")) < 0) {
                 return "redirect:/deposit?error=amount_too_small";
             }
@@ -101,13 +109,11 @@ public class PaypalController {
 
                 // Gọi API lấy tỷ giá
                 RestTemplate restTemplate = new RestTemplate();
-                String response = restTemplate.getForObject("https://open.er-api.com/v6/latest/USD", String.class);
-
-                // Kiểm tra và xử lý JSON
+                String response = restTemplate.getForObject(EXCHANGE_RATE_API, String.class);
                 JSONObject jsonResponse = new JSONObject(response);
+
                 if (jsonResponse.has("rates") && jsonResponse.getJSONObject("rates").has("VND")) {
                     double exchangeRate = jsonResponse.getJSONObject("rates").getDouble("VND");
-
                     // Chuyển đổi từ USD -> VND
                     BigDecimal amountVND = amountUSD.multiply(BigDecimal.valueOf(exchangeRate))
                             .setScale(0, RoundingMode.HALF_UP);
@@ -117,6 +123,16 @@ public class PaypalController {
                     User user = userService.findUserByUsername(username);
                     userService.updateUserBalance(user.getId(), amountVND);
 
+                    // Lưu giao dịch vào bảng deposit
+                    Deposit deposit = new Deposit();
+                    deposit.setUser(user);
+                    deposit.setAmount(amountVND);
+                    deposit.setPaymentDate(LocalDate.now());
+                    deposit.setPaymentMethod("Thanh toan bang PayPal");
+                    deposit.setStatus("Completed");
+                    deposit.setTransactionId(payment.getId()); // Lưu transaction ID từ PayPal
+                    deposit.setPayerEmail(payment.getPayer().getPayerInfo().getEmail());
+                    depositService.saveDeposit(deposit); // Lưu vào database
                     return "user/success";
                 } else {
                     throw new RuntimeException("Không tìm thấy tỷ giá VND từ API.");

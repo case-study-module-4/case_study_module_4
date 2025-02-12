@@ -2,6 +2,7 @@ package com.example.case_study.controller;
 
 import com.example.case_study.dto.AccountDTO;
 import com.example.case_study.service.impl.AccountService;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ public class AdminController {
     @Autowired
     private AccountService accountService;
 
+
     @GetMapping
     public String getAllAccounts(Model model) {
         List<AccountDTO> accounts = accountService.getAllAccounts();
@@ -26,9 +28,9 @@ public class AdminController {
         return "admin/account-list";
     }
 
-    @PostMapping("/toggle-status/{id}")
+    @PostMapping("/{id}/toggle-status")
     public String toggleAccountStatus(@PathVariable Integer id) {
         accountService.toggleAccountStatus(id);
-        return "redirect:/admin/account/list";
+        return "redirect:/admin/account";
     }
 }

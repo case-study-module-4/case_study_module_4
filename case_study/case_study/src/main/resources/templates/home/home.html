@@ -15,16 +15,28 @@
     <link rel="stylesheet" href="/style/header.css">
 
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        th, td {
-            border: 1px solid black;
-            padding: 10px;
-            text-align: left;
+        .card:hover {
+            transform: translateY(-7px); /* Di chuyển nhẹ lên trên */
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng bóng */
+            cursor: pointer; /* Hiển thị con trỏ chuột */
         }
+
+        h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+            margin: 20px 0;
+            border-bottom: 2px solid black;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+
     </style>
 </head>
 <body>
@@ -142,7 +154,7 @@
     <div class="main-layout3">
         <div class="container">
             <div class="row">
-                <h2>Bất động sản dành cho bạn</h2>
+                <h2>Bất động sản mới nhất dành cho bạn</h2>
             </div>
 
             <!--            <div class="row">-->
@@ -157,10 +169,10 @@
             <!--                </div>-->
             <!--            </div>-->
 
-            <div class="container" style="margin-top: 30px">
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            <div class="container" style="margin-top: 20px">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-5">
                     <div th:each="post : ${posts}" class="col">
-                        <div class="card h-100" th:attr="onclick='viewPost(' + ${post.id} + ')'">
+                        <div class="card h-100 shadow-lg" th:attr="onclick='viewPost(' + ${post.id} + ')'">
                             <img th:src="${post.image}" class="card-img-top" alt="Hình ảnh bài đăng"
                                  onerror="this.onerror=null;this.src='https://via.placeholder.com/300'"
                                  style="height: 200px; object-fit: cover;">
@@ -176,7 +188,8 @@
         <span th:case="'Hotel'">Khách sạn</span>
         <span th:case="'Building'">Tòa nhà</span>
                                 </span></p>
-                                <p class="card-text"><strong>Giá:</strong> <span th:text="${post.price}" class="price"></span> </p>
+                                <p class="card-text"><strong>Giá:</strong> <span th:text="${post.price}"
+                                                                                 class="price"></span></p>
                                 <p class="card-text"><strong>Diện tích:</strong> <span th:text="${post.area}"></span> m²
                                 </p>
                             </div>
@@ -195,7 +208,9 @@
         </div>
     </div>
 </div>
-
+<div style="margin-top: 25px">
+    <hr>
+</div>
 <div class="container-fluid">
     <div class="main-layout4">
         <div class="container">
@@ -264,6 +279,36 @@
     </div>
 </div>
 
+<!-- Modal Điều Khoản -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="termsModalLabel">Điều Khoản & Quy Định</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body">
+                <h2>1. Đăng tin bất động sản</h2>
+                <p>- Nội dung tin đăng phải chính xác, không vi phạm pháp luật.</p>
+                <p>- Hình ảnh phải phản ánh đúng thực tế.</p>
+
+                <h2>2. Quy định giao dịch</h2>
+                <p>- Chúng tôi chỉ cung cấp nền tảng, không chịu trách nhiệm pháp lý về giao dịch.</p>
+                <p>- Người mua và người bán cần tự kiểm tra thông tin trước khi giao dịch.</p>
+
+                <h2>3. Chính sách bảo mật</h2>
+                <p>- Chúng tôi cam kết bảo vệ thông tin cá nhân của bạn.</p>
+
+                <p>Để biết thêm chi tiết, vui lòng liên hệ: <strong>0905053672</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Script để hiển thị modal khi có thông báo -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -282,10 +327,10 @@
     }
 
     // Giá(Dũng)
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         let priceElements = document.querySelectorAll(".price"); // Lấy tất cả các thẻ có class "price"
 
-        priceElements.forEach(function(priceElement) {
+        priceElements.forEach(function (priceElement) {
             let price = parseFloat(priceElement.innerText.replace(/,/g, '')); // Chuyển về số thực
 
             if (!isNaN(price)) {

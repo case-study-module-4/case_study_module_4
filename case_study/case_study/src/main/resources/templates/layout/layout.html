@@ -72,7 +72,7 @@
                                     <a class="dropdown-item" href="/admin/account">Quản lý người dùng</a>
                                 </li>
                                 <li><a class="dropdown-item" href="/dashboard">Hồ sơ của tôi</a></li>
-                                <li><a class="dropdown-item" href="/transaction-history">Lịch sử giao dịch</a></li>
+                                <li><a class="dropdown-item" href="transaction/transaction-history">Lịch sử giao dịch</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                             </ul>
@@ -350,6 +350,35 @@
             </div>
         </div>
     </footer>
+    <!-- Modal Điều Khoản -->
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">Điều Khoản & Quy Định</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <h2>1. Đăng tin bất động sản</h2>
+                    <p>- Nội dung tin đăng phải chính xác, không vi phạm pháp luật.</p>
+                    <p>- Hình ảnh phải phản ánh đúng thực tế.</p>
+
+                    <h2>2. Quy định giao dịch</h2>
+                    <p>- Chúng tôi chỉ cung cấp nền tảng, không chịu trách nhiệm pháp lý về giao dịch.</p>
+                    <p>- Người mua và người bán cần tự kiểm tra thông tin trước khi giao dịch.</p>
+
+                    <h2>3. Chính sách bảo mật</h2>
+                    <p>- Chúng tôi cam kết bảo vệ thông tin cá nhân của bạn.</p>
+
+                    <p>Để biết thêm chi tiết, vui lòng liên hệ: <strong>0905053672</strong></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </th:block>
 </body>
 </html>

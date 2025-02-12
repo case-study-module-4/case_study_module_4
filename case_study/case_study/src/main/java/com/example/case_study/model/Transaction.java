@@ -20,7 +20,6 @@ public class Transaction {
 
     private Integer id;
 
-
     @NotNull(message = "Post ID must not be null")
     @ManyToOne
     @JoinColumn(name = "post_id", referencedColumnName = "id")

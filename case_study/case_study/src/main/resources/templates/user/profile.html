@@ -8,18 +8,17 @@
 <body>
 <div th:insert="~{/layout/layout::header}"></div>
 <div class="container mt-5">
-  <h2 class="text-center">User Profile</h2>
+  <h2 class="text-center"></h2>
   <div class="card mb-4">
     <div class="card-body">
       <h5 class="card-title" th:text="${user.fullName}"></h5>
       <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
-      <p><strong>Phone:</strong> <span th:text="${user.phone}"></span></p>
-      <!-- Có thể hiển thị thêm các thông tin khác nếu cần -->
-      <a href="/posts" class="btn btn-secondary">Back to Posts</a>
+      <p><strong>Điện thoại:</strong> <span th:text="${user.phone}"></span></p>
+
     </div>
   </div>
 
-  <h3>User Posts</h3>
+  <h3>Bài đăng </h3>
   <!-- Hiển thị tổng số bài đăng -->
   <div th:if="${posts != null}">
     <p><strong>Tổng số bài đăng:</strong> <span th:text="${#lists.size(posts)}"></span></p>
@@ -29,9 +28,9 @@
     <table class="table table-bordered">
       <thead>
       <tr>
-        <th>Title</th>
-        <th>Status</th>
-        <th>Published Date</th>
+        <th>Tiêu đề</th>
+        <th>Tình trạng</th>
+        <th>Ngày Đăng</th>
       </tr>
       </thead>
       <tbody>
@@ -39,7 +38,7 @@
         <td>
           <a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}"></a>
         </td>
-        <td th:text="${post.status}"></td>
+        <td><span th:text="${post.status == 'Available' ? 'Chưa giao dịch' : (post.status == 'rented' ? 'Đã cho thuê' : (post.status == 'Sold' ? 'Đã bán' : post.status))}"></span></td>
         <td th:text="${#temporals.format(post.publishDate, 'dd/MM/yyyy')}"></td>
       </tr>
       </tbody>

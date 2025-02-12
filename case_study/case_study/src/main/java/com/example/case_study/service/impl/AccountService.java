@@ -132,9 +132,7 @@ public class AccountService implements IAccountService {
         if (account == null) {
             throw new EntityNotFoundException("Tài khoản không tồn tại");
         }
-        // Đảo ngược trạng thái isDelete (nếu 1 -> 0, nếu 0 -> 1)
-//        boolean newIsDelete = !Boolean.TRUE.equals(account.getIsDelete());
-//        account.setIsDelete(newIsDelete);
+
         System.out.println(account);
         if (account.getStatus().equals("active")) {
             account.setStatus("inactive");
@@ -142,13 +140,7 @@ public class AccountService implements IAccountService {
             account.setStatus("active");
         }
         accountRepository.save(account);
-        // Trạng thái status sẽ được cập nhật dựa trên isDelete
-//        String newStatus = newIsDelete ? "inactive" : "active";
-
-        // Cập nhật trạng thái trong database
-//        accountRepository.updateAccountStatus(id, newStatus);
     }
-
 
     @Override
     public Account findByUsername(String name) {
@@ -158,7 +150,8 @@ public class AccountService implements IAccountService {
 
     @Transactional
     public void updatePassword(Account account, String newPassword) {
-        account.setPassword(encodePassword(newPassword));
+        account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
     }
+
 }

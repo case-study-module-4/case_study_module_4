@@ -120,9 +120,7 @@ public class PostController {
             postDTO.setArea(post.getRealEstate().getArea());
             postDTO.setDirection(post.getRealEstate().getDirection());
             postDTO.setPrice(post.getRealEstate().getPrice());
-            // Gán ảnh chính
             postDTO.setImage(post.getImage());
-            // Gán danh sách ảnh phụ (nếu có)
             postDTO.setImages(post.getImages());
             postDTO.setPayable(post.getPayable());
 
@@ -197,14 +195,25 @@ public class PostController {
 
     @GetMapping("/approved")
     public String getApprovedPostsForUser(Model model, Principal principal) {
+        // Lấy username từ Principal
         String username = principal.getName();
+        // Lấy đối tượng User dựa theo username
         User user = userService.findUserByUsername(username);
-        List<Post> approvedPosts = postService.findAll();
+
+        // Lấy toàn bộ bài đăng đã duyệt (theo cách hiện tại)
+        List<Post> allApprovedPosts = postService.findAll();
+
+        // Lọc chỉ những bài đăng thuộc về user hiện tại
+        List<Post> approvedPosts = allApprovedPosts.stream()
+                .filter(post -> post.getUser() != null && post.getUser().getId().equals(user.getId()))
+                .collect(Collectors.toList());
+
         model.addAttribute("user", user);
         model.addAttribute("posts", approvedPosts);
 
         return "user/approved-posts";
     }
+
 
     @GetMapping("/drafts")
     public String getDraftPostsForUser(Model model, Principal principal) {

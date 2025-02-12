@@ -27,4 +27,5 @@ public interface IAccountService {
     void updatePassword(Account account, String newPassword);
 
     void toggleAccountStatus(Integer id);
+
 }

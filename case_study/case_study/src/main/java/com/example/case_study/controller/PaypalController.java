@@ -132,7 +132,7 @@ public class PaypalController {
                     deposit.setStatus("Completed");
                     deposit.setTransactionId(payment.getId()); // Lưu transaction ID từ PayPal
                     deposit.setPayerEmail(payment.getPayer().getPayerInfo().getEmail());
-                    depositService.saveDeposit(deposit); // Lưu vào database
+                    depositService.saveDeposit(deposit);
                     return "user/success";
                 } else {
                     throw new RuntimeException("Không tìm thấy tỷ giá VND từ API.");
@@ -145,7 +145,6 @@ public class PaypalController {
 
         return "redirect:/deposit?error=payment_failed";
     }
-
 
     @GetMapping("/cancel")
     public String cancelPay() {

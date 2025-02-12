@@ -1,0 +1,155 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">-->
+<!--    <script>-->
+<!--        function showTable() {-->
+<!--            let selectedValue = document.getElementById("transactionType").value;-->
+<!--            document.getElementById("depositTable").style.display = (selectedValue === "deposit") ? "block" : "none";-->
+<!--            document.getElementById("paymentTable").style.display = (selectedValue === "payment") ? "block" : "none";-->
+<!--        }-->
+<!--    </script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container mt-4">-->
+<!--    <h2 class="text-center">Quản Lý Giao Dịch</h2>-->
+
+<!--    &lt;!&ndash; Chọn loại giao dịch &ndash;&gt;-->
+<!--    <div class="mb-3">-->
+<!--        <label for="transactionType" class="form-label">Chọn loại giao dịch:</label>-->
+<!--        <select id="transactionType" class="form-select" onchange="showTable()">-->
+<!--            <option value="deposit">Lịch sử Nạp Tiền</option>-->
+<!--            <option value="payment">Lịch sử Thanh Toán</option>-->
+<!--        </select>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Lịch sử Nạp Tiền &ndash;&gt;-->
+<!--    <div id="depositTable" class="mt-3">-->
+<!--        <h3 class="text-primary">Lịch sử Nạp Tiền</h3>-->
+<!--        <table class="table table-bordered table-hover">-->
+<!--            <thead class="table-primary">-->
+<!--            <tr>-->
+<!--                <th>Id</th>-->
+<!--                <th>Số Tiền</th>-->
+<!--                <th>phương thức giao dịch</th>-->
+<!--                <th>Ngày giờ Giao Dịch</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:each="">-->
+<!--                <td th:text=""></td>-->
+<!--                <td th:text=""></td>-->
+<!--                <td th:text=""></td>-->
+<!--                <td th:text=""></td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Lịch sử Thanh Toán &ndash;&gt;-->
+<!--    <div id="paymentTable" class="mt-3" style="display: none;">-->
+<!--        <h3 class="text-success">Lịch sử Thanh Toán</h3>-->
+<!--        <table class="table table-bordered table-hover">-->
+<!--            <thead class="table-success">-->
+<!--            <tr>-->
+<!--                <th>Id</th>-->
+<!--                <th>Số Tiền</th>-->
+<!--                <th>Phương thức giao dịch</th>-->
+<!--                <th>Ngày giờ Giao Dịch</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:each="">-->
+<!--                <td th:text=""></td>-->
+<!--                <td th:text=""></td>-->
+<!--                <td th:text=""></td>-->
+<!--                <td th:text=""></td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+
+<!--</div>-->
+
+
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Giao Dịch</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script>
+        function showTable() {
+            let selectedValue = document.getElementById("transactionType").value;
+            document.getElementById("depositTable").style.display = (selectedValue === "deposit") ? "block" : "none";
+            document.getElementById("paymentTable").style.display = (selectedValue === "payment") ? "block" : "none";
+        }
+    </script>
+</head>
+<body>
+<div class="container mt-4">
+    <h2 class="text-center">Lịch sử Giao Dịch</h2>
+
+    <!-- Chọn loại giao dịch -->
+    <div class="mb-3">
+        <label for="transactionType" class="form-label">Chọn loại giao dịch:</label>
+        <select id="transactionType" class="form-select" onchange="showTable()">
+            <option value="deposit">Lịch sử Nạp Tiền</option>
+            <option value="payment">Lịch sử Thanh Toán</option>
+        </select>
+    </div>
+
+    <!-- Lịch sử Nạp Tiền -->
+    <div id="depositTable" class="mt-3">
+        <h3 class="text-primary">Lịch sử Nạp Tiền</h3>
+        <table class="table table-bordered table-hover">
+            <thead class="table-primary">
+            <tr>
+                <th>STT</th>
+                <th>Số Tiền</th>
+                <th>Phương thức giao dịch</th>
+                <th>Ngày Giao Dịch</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="deposit, status : ${deposits}">
+                <td th:text="${status.count}"></td>
+                <td th:text="${deposit.amount} + ' VND'"></td>
+                <td th:text="${deposit.paymentMethod}"></td>
+                <td th:text="${#temporals.format(deposit.paymentDate, 'dd/MM/yyyy')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Lịch sử Thanh Toán -->
+    <div id="paymentTable" class="mt-3" style="display: none;">
+        <h3 class="text-success">Lịch sử Thanh Toán</h3>
+        <table class="table table-bordered table-hover">
+            <thead class="table-success">
+            <tr>
+                <th>STT</th>
+                <th>Số Tiền</th>
+                <th>Ngày Giao Dịch</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="transaction, status : ${payments}">
+                <td th:text="${status.count}"></td>
+                <td th:text="${transaction.price} + ' VND'"></td>
+                <td th:text="${transaction.publishDate}"></td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>
+

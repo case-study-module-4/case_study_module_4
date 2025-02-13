@@ -302,4 +302,8 @@ public class PostService implements IPostService {
         return postRepository.countByUserId(userId);
     }
 
+    @Override
+    public List<Post> getAllDraftPosts() {
+        return postRepository.findByPayable("no");
+    }
 }

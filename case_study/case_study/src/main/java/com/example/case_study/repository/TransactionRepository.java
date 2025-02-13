@@ -21,5 +21,4 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
  List<TransactionHistoryDto> getAllTransactionHistoryAllUser();
 
 
-
 }

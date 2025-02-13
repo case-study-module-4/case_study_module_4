@@ -11,4 +11,7 @@ public interface ITransactionService {
 
     List<TransactionHistoryDto> getAllTransactionHistory();
 
+    List<TransactionHistoryDto> getAllTransactionHistoryAllUser();
+
+
 }

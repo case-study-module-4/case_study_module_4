@@ -3,6 +3,7 @@ package com.example.case_study.controller;
 import com.example.case_study.dto.AccountDTO;
 import com.example.case_study.dto.DepositHistoryDto;
 import com.example.case_study.dto.TransactionHistoryDto;
+import com.example.case_study.model.Post;
 import com.example.case_study.model.User;
 import com.example.case_study.repository.PostTypeRepository;
 import com.example.case_study.service.IDepositService;
@@ -22,6 +23,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin/account")
@@ -39,10 +42,8 @@ public class AdminController {
     private PostService postService;
 
     @Autowired
-    private PostTypeRepository postTypeRepository;
-
-    @Autowired
     private IDepositService depositService;
+
     @GetMapping
     public String getAllAccounts(Model model, Principal principal) {
         String username = principal.getName();
@@ -66,13 +67,65 @@ public class AdminController {
 
     @GetMapping("/transaction-history")
     public String getTransactionHistoryAllUser(Model model) {
-        List<DepositHistoryDto> deposits = depositService.getAllDepositHistory();
-        List<TransactionHistoryDto> payments = transactionService.getAllTransactionHistory();
-
+        List<DepositHistoryDto> deposits = depositService.getAllDepositHistoryAllUser();
+        List<TransactionHistoryDto> payments = transactionService.getAllTransactionHistoryAllUser();
 
         model.addAttribute("deposits", deposits);
         model.addAttribute("payments", payments);
 
-        return "transaction/transaction-history";
+        return "admin/transaction-history";
+    }
+
+    @GetMapping("/drafts")
+    public String getDraftPosts(Model model,Principal principal) {
+        String username = principal.getName();
+        User user = userService.findUserByUsername(username);
+        if (user == null) {
+            return "redirect:/error";
+        }
+        List<Post> draftPosts = postService.getAllDraftPosts();
+        model.addAttribute("userId", user.getId());
+        model.addAttribute("user", user);
+        model.addAttribute("posts", draftPosts);
+        return "admin/drafts-posts";
+    }
+
+    @GetMapping("/approved")
+    public String getApprovedPosts(Model model, Principal principal) {
+        String username = principal.getName();
+        User user = userService.findUserByUsername(username);
+        if (user == null) {
+            return "redirect:/error";
+        }
+        List<Post> approvedPosts = postService.findAll();
+        model.addAttribute("userId", user.getId());
+        model.addAttribute("user", user);
+        model.addAttribute("posts", approvedPosts);
+        return "admin/approved-posts";
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deletePost(@PathVariable Integer id, Principal principal, RedirectAttributes redirectAttributes) {
+        Optional<Post> postOptional = postService.findById(id);
+        if (postOptional.isPresent()) {
+            Post post = postOptional.get();
+            User user = userService.findUserByUsername(principal.getName());
+            if (post.getUser() == null || !post.getUser().equals(user)) {
+                return "redirect:/403";
+            }
+            postService.deleteById(id);
+            if ("no".equalsIgnoreCase(post.getPayable())) {
+                redirectAttributes.addFlashAttribute("message", "Xóa bài đăng thành công!");
+                redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+                return "redirect:/posts/drafts?message=deleted";
+            } else {
+                redirectAttributes.addFlashAttribute("message", "Xóa bài đăng thành công!");
+                redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+                return "redirect:/posts/approved?message=deleted";
+            }
+        }
+        redirectAttributes.addFlashAttribute("message", "Xóa bài đăng không thành công!");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+        return "redirect:/posts?error=notfound";
     }
 }

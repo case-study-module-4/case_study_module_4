@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang Dashboard - Người Dùng</title>
+    <th:block th:insert="~{/layout/layout::library}"></th:block>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/style/header.css">
+    <link rel="stylesheet" href="/style/user-dashboard.css">
+</head>
+<body>
+<div th:insert="~{/layout/layout::header}"></div>
+<div class="container-fluid">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="user-info">
+            <div class="avatar">U</div>
+            <div class="full-name" th:text="${user.fullName}">Tên người dùng</div>
+            <div sec:authorize="hasRole('ROLE_USER')" class="account-balance">
+                <p>Số dư tài khoản</p>
+                <div>
+                    <span>TK Chính:</span>
+                    <span th:text="${user.balance}">0</span>
+                </div>
+                <button class="btn btn-danger text-white">
+                    <a href="" class="submenu-link" data-url="/deposit" style="color: white; text-decoration: none;">Nạp tiền</a>
+                </button>
+            </div>
+        </div>
+        <hr>
+        <!-- Menu chính -->
+        <ul class="menu">
+            <li sec:authorize="hasRole('ROLE_ADMIN')">
+                <a class="menu-link" href="/admin/account">Quản lý người dùng</a>
+            </li>
+            <hr>
+            <li sec:authorize="hasRole('ROLE_USER')">
+                <a href="#" class="menu-link">Quản lý tin đăng</a>
+                <ul class="submenu">
+                    <li><a href="/posts/create" class="submenu-link">Đăng tin mới</a></li>
+                    <li><a href="/posts/approved" class="submenu-link">Danh sách tin</a></li>
+                    <li><a href="/posts/drafts" class="submenu-link">Tin nháp</a></li>
+                </ul>
+            </li>
+            <li sec:authorize="hasRole('ROLE_ADMIN')">
+                <a href="#" class="menu-link">Quản lý tin đăng</a>
+                <ul class="submenu">
+                    <li><a href="/admin/account/approved" class="submenu-link">Danh sách tin</a></li>
+                    <li><a href="/admin/account/drafts" class="submenu-link">Tin nháp</a></li>
+                </ul>
+            </li>
+            <hr sec:authorize="!hasRole('ROLE_ADMIN')">
+            <li sec:authorize="!hasRole('ROLE_ADMIN')"><a th:href="@{/user/interests(userId=${userId})}"
+                                                          style="color: black; text-decoration: none; font-weight: bold;"
+                                                          onmouseover="this.style.color='red'"
+                                                          onmouseout="this.style.color='black'"
+                                                          onclick="this.style.color='red'">Danh sách khách hàng</a>
+            </li>
+            <hr>
+            <li>
+                <a href="#" class="menu-link">Quản lý tài khoản</a>
+                <ul class="submenu">
+                    <li><a href="#" class="submenu-link" data-url="/profile/edit">Chỉnh sửa thông tin</a></li>
+                    <li><a href="/account/update-password" class="submenu-link">Cài đặt tài khoản</a></li>
+                    <!--                    <li><a href="#" class="submenu-link" data-url="/accounts/update-password">Cài đặt tài khoản</a></li>-->
+                </ul>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        <div id="default-content" class="content-wrapper">
+            <h2>Danh sách tin đã duyệt</h2>
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+            <div class="row">
+                <div th:each="post : ${posts}" class="col-12 mb-4">
+                    <div class="card" style="cursor: pointer;">
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                <img th:src="${post.image}" class="card-img"
+                                     style="height: 150px; object-fit: cover;" alt="Bất động sản">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title" th:text="${post.title}">Post Title</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p class="card-text">
+                                                <small class="text-muted">
+                                                    Mã tin: <span th:text="${post.id}"></span>
+                                                </small><br>
+                                                <small class="text-muted">
+                                                    Ngày đăng: <span th:text="${#temporals.format(post.publishDate, 'dd/MM/yyyy')}"></span>
+                                                </small>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="card-text">
+                                                <small class="text-muted">
+                                                    Giá:
+                                                    <span th:text="${post.realEstate != null ?
+                        (post.realEstate.price < 1000000 ?
+                          (#numbers.formatDecimal(post.realEstate.price, 0, 'COMMA', 2, 'POINT') + ' VND') :
+                          (post.realEstate.price < 1000000000 ?
+                            (#numbers.formatDecimal(post.realEstate.price / 1000000, 0, 'COMMA', 2, 'POINT') + ' triệu') :
+                            (#numbers.formatDecimal(post.realEstate.price / 1000000000, 0, 'COMMA', 2, 'POINT') + ' tỷ')
+                          )
+                        ) : 'N/A'}"></span>
+                                                </small><br>
+                                                <small class="text-muted">
+                                                    Địa chỉ: <span th:text="${post.realEstate.location}"></span>
+                                                </small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- Container nút hành động -->
+                                    <div class="mt-auto d-flex justify-content-end">
+                                        <!-- Nút Detail luôn hiển thị -->
+                                        <a class="btn btn-info btn-sm me-2"
+                                           th:href="@{/posts/{id}(id=${post.id})}">Detail</a>
+                                        <!-- Nút Edit: hiển thị nếu user hiện hành là người đăng bài (nếu cần) -->
+                                        <a class="btn btn-warning btn-sm me-2"
+                                           th:if="${#authentication.name == post.user.account.username}"
+                                           th:href="@{/posts/{id}/edit(id=${post.id})}">
+                                            Edit
+                                        </a>
+                                        <!-- Nút Delete: hiển thị nếu user hiện hành là người đăng bài (hoặc tùy chỉnh theo quyền của admin) -->
+                                        <button type="button" class="btn btn-danger btn-sm"
+                                                th:if="${#authentication.name == post.user.account.username}"
+                                                th:attr="data-post-id=${post.id}"
+                                                onclick="openDeleteModal(this)">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.menu-link, .submenu-link').on('click', function (e) {
+            const url = $(this).data('url'); // Lấy URL từ data-url
+            if (url) {
+                e.preventDefault();
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        $('#main-content').html(data); // Đổ nội dung vào main-content
+                        initEditProfileScript(); // Gọi lại script liên quan
+                    },
+                    error: function () {
+                        alert('Không thể tải nội dung.');
+                    }
+                });
+            }
+        });
+
+        function initEditProfileScript() {
+            // Gắn sự kiện click cho nút Lưu
+            $('#save-profile-btn').on('click', function () {
+                const formData = {
+                    fullName: $('#fullName').val(),
+                    phone: $('#phone').val()
+                };
+
+                $.ajax({
+                    url: '/profile/update',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        $('#success-message').text(response.message).show();
+                        setTimeout(() => $('#success-message').fadeOut(), 3000);
+                    },
+                    error: function (xhr) {
+                        const errors = xhr.responseJSON.errors || {};
+                        $('#fullName-error').text(errors.fullName || '');
+                        $('#phone-error').text(errors.phone || '');
+                    }
+                });
+            });
+        }
+    });
+
+    function openDeleteModal(button) {
+        var postId = button.getAttribute("data-post-id");
+        if (confirm("Bạn có chắc chắn muốn xóa bài đăng này?")) {
+            // Tạo form ẩn để gửi yêu cầu POST xóa bài đăng
+            var form = document.createElement("form");
+            form.method = "POST";
+            // Đường dẫn xóa của admin: ví dụ /admin/{id}/delete
+            form.action = "/admin/" + postId + "/delete";
+
+            // Nếu bạn đang sử dụng CSRF, bạn cần thêm token vào form.
+            // Ví dụ:
+            // var csrfInput = document.createElement("input");
+            // csrfInput.type = "hidden";
+            // csrfInput.name = "_csrf";
+            // csrfInput.value = /* lấy token từ meta tag hoặc biến JS */;
+            // form.appendChild(csrfInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
+<div style="margin-top:200px" th:insert="~{/layout/layout::footer}"></div>
+
+</body>
+</html>

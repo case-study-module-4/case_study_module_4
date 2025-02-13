@@ -8,5 +8,5 @@ import java.util.List;
 public interface IDepositService {
     void saveDeposit(Deposit deposit);
     List<DepositHistoryDto> getAllDepositHistory();
-    List<DepositHistoryDto> getAllDepositHistoryAdmin();
+    List<DepositHistoryDto> getAllDepositHistoryAllUser();
 }

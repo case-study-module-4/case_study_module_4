@@ -40,6 +40,7 @@ public class UserController {
             return "redirect:/error";
         }
         model.addAttribute("user", user);
+//        model.addAttribute("success", success);
         return "user/dashboard";
     }
 

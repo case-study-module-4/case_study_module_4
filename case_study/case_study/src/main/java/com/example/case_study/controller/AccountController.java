@@ -25,7 +25,7 @@ public class AccountController {
 
     @GetMapping("/update-password")
     public String showUpdatePasswordForm() {
-        return "account/updateForm"; // Đảm bảo file nằm trong templates/account/
+        return "account/updateForm";
     }
 
     @PostMapping("/update-password")

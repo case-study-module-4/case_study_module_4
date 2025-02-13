@@ -46,6 +46,7 @@ public class UserController {
         }
         model.addAttribute("userId", user.getId());
         model.addAttribute("user", user);
+//        model.addAttribute("success", success);
         return "user/dashboard";
     }
 

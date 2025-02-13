@@ -19,14 +19,14 @@ import java.time.LocalDate;
 public class DepositHistoryDto {
     private Integer id;
 
-    @NotNull(message = "Số tiền không được để trống")
-    @DecimalMin(value = "0.01", message = "Số tiền phải lớn hơn 0")
+    @NotNull(message = "Amount cannot be empty")
+    @DecimalMin(value = "0.01", message = "Amount must be greater than 0")
     private BigDecimal amount;
 
-    @NotNull(message = "Ngày giao dịch không được để trống")
+    @NotNull(message = "Transaction date cannot be empty")
     private LocalDate paymentDate;
 
-    @NotBlank(message = "Phương thức thanh toán không được để trống")
-    @Size(max = 50, message = "Phương thức thanh toán không được vượt quá 50 ký tự")
+    @NotBlank(message = "Payment method cannot be empty")
+    @Size(max = 50, message = "Payment method must not exceed 50 characters")
     private String paymentMethod;
 }

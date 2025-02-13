@@ -145,35 +145,42 @@ public class PostController {
                              BindingResult result,
                              Model model,
                              @RequestParam(value = "deleteImages", required = false) List<Integer> deleteImageIds,
-                             @RequestParam(value = "action", required = false, defaultValue = "update") String action) {  // nhận thêm tham số "action"
+                             @RequestParam(value = "action", required = false, defaultValue = "update") String action) {
+        // Nếu có lỗi validate, trả về trang chỉnh sửa
         if (result.hasErrors()) {
             model.addAttribute("purposes", purposeService.findAll());
             model.addAttribute("realEstates", realEstateService.findAll());
             return "post/edit";
         }
+
         Optional<Post> postOptional = postService.findById(id);
         if (postOptional.isPresent()) {
             Post post = postOptional.get();
             User user = userService.findUserByUsername(principal.getName());
-            // Kiểm tra quyền sở hữu bài đăng (nếu cần)
+            // Kiểm tra quyền sở hữu bài đăng
             if (post.getUser() == null || !post.getUser().equals(user)) {
                 return "redirect:/403";
             }
 
-            // Gọi phương thức updatePost để cập nhật đầy đủ các trường (lưu ý: không thay đổi trạng thái payable)
+            // Nếu trường giá không được nhập (null) thì giữ nguyên giá hiện có của bài đăng
+            if (postDTO.getPrice() == null) {
+                postDTO.setPrice(post.getRealEstate().getPrice());
+            }
+
+            // Gọi service để cập nhật bài đăng (lưu ý: không thay đổi trạng thái payable)
             postService.updatePost(post, postDTO, deleteImageIds);
 
-            // Nếu bài post có payable = "no" và người dùng bấm nút "Tiếp tục" thì điều hướng tới trang giao dịch
+            // Nếu hành động là "continue" (với payable = "no") chuyển hướng tới trang giao dịch,
+            // ngược lại chuyển về trang danh sách bài viết đã duyệt
             if ("continue".equalsIgnoreCase(action)) {
-                // Điều hướng tới trang giao dịch, truyền postId cần thanh toán (transaction.html)
                 return "redirect:/transaction/transaction?postId=" + post.getId();
             } else {
-                // Ngược lại (payable = yes hoặc hành động là cập nhật) thì về trang danh sách bài viết
                 return "redirect:/posts/approved";
             }
         }
         return "redirect:/posts?error=notfound";
     }
+
 
     @PostMapping("/{id}/delete")
     public String deletePost(@PathVariable Integer id, Principal principal, RedirectAttributes redirectAttributes) {

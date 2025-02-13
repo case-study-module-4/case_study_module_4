@@ -92,6 +92,6 @@ public class TransactionService implements ITransactionService {
 
     @Override
     public List<TransactionHistoryDto> getAllTransactionHistory() {
-        return transactionRepository.getAllTransactionHistory();
+        return transactionRepository.getAllTransactionHistoryAllUser();
     }
 }

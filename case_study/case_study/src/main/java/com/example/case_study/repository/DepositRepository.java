@@ -15,5 +15,5 @@ public interface DepositRepository extends JpaRepository<Deposit, Integer> {
             "JOIN d.user u " +
             "WHERE u.isDelete = false " +
             "ORDER BY d.paymentDate DESC")
-    List<DepositHistoryDto> getAllDepositHistory();
+    List<DepositHistoryDto> getAllDepositHistoryAllUser();
 }

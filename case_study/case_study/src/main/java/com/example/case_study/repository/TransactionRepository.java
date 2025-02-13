@@ -18,7 +18,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
          "FROM transaction t " +
          "LEFT JOIN t.post p " +
          "ORDER BY p.publishDate DESC")
- List<TransactionHistoryDto> getAllTransactionHistory();
+ List<TransactionHistoryDto> getAllTransactionHistoryAllUser();
 
 
 

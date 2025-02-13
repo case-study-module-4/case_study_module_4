@@ -22,6 +22,11 @@ public class DepositService implements IDepositService {
 
     @Override
     public List<DepositHistoryDto> getAllDepositHistory() {
-        return depositRepository.getAllDepositHistory();
+        return List.of();
+    }
+
+    @Override
+    public List<DepositHistoryDto> getAllDepositHistoryAdmin() {
+        return depositRepository.getAllDepositHistoryAllUser();
     }
 }

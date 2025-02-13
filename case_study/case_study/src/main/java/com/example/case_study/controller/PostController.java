@@ -2,15 +2,18 @@ package com.example.case_study.controller;
 
 
 import com.example.case_study.dto.PostDTO;
+import com.example.case_study.model.Account;
 import com.example.case_study.model.Post;
 import com.example.case_study.model.User;
 import com.example.case_study.repository.ImageRepository;
 import com.example.case_study.service.*;
+import com.example.case_study.service.impl.AccountService;
 import com.example.case_study.service.impl.PostService;
 import com.example.case_study.service.impl.PurposeService;
 import com.example.case_study.service.impl.RealEstateService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,9 +42,15 @@ public class PostController {
     @Autowired
     private ImageRepository imageRepository;
 
-
     @Autowired
     private IUserService userService;
+
+
+
+    @Autowired
+    private IAccountService accountService;
+    @Autowired
+    private IPostInterestService postInterestService;
 
 
     @GetMapping
@@ -97,8 +106,6 @@ public class PostController {
         // Mặc định (nếu không có action phù hợp) chuyển về trang chủ hoặc danh sách bài viết
         return "redirect:/posts";
     }
-
-
 
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable Integer id, Model model) {
@@ -227,11 +234,18 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public String viewPostDetail(@PathVariable Integer id, Model model) {
+    public String viewPostDetail(@PathVariable Integer id, Model model, Principal principal) {
         Optional<Post> postOptional = postService.findById(id);
         if (postOptional.isPresent()) {
             Post post = postOptional.get();
             model.addAttribute("post", post);
+            // Ghi nhận sự quan tâm nếu người dùng đã đăng nhập
+            if (principal != null) {
+                String username = principal.getName();
+                Account account = accountService.findByUsername(username);
+                postInterestService.logPostClick(id, account); // Ghi nhận quan tâm vào database
+            }
+
             String imageBase64 = post.getImage();
             if (imageBase64 != null) {
                 String imageDataUrl = "data:image/jpeg;base64," + imageBase64;

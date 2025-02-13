@@ -10,7 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 import java.time.LocalDate;
@@ -54,7 +57,8 @@ public class PostDTO {
     private String direction;
 
     @NotNull(message = "Giá không được để trống")
-    private Double price;
+    @NumberFormat(pattern = "#,###.##")
+    private BigDecimal price;
 
     private List<MultipartFile> imageFiles;
 

@@ -41,8 +41,8 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Các endpoint thao tác cần đăng nhập
                         .requestMatchers("/posts/create", "/posts/*/edit", "/posts/*/delete").authenticated()
+                        // Các endpoint thao tác công khai
                         .requestMatchers("/home", "/login", "/register", "/403", "/style/**", "/uploads/**", "/images/**", "/js/**","/posts", "/posts/*").permitAll()
-
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         .anyRequest().authenticated()
@@ -55,7 +55,7 @@ public class WebSecurityConfig {
 
 
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/login-success", true)
+                        .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )
                 .logout(logout -> logout

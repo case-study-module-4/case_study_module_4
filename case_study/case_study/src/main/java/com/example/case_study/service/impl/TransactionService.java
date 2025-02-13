@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,7 +92,7 @@ public class TransactionService implements ITransactionService {
     }
 
     @Override
-    public List<TransactionHistoryDto> getAllTransactionHistory() {
-        return transactionRepository.getAllTransactionHistory();
+    public List<TransactionHistoryDto> getAllTransactionHistory(String userName) {
+        return transactionRepository.getAllTransactionHistory(userName);
     }
 }

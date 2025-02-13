@@ -142,6 +142,28 @@
             color: white;
             border-color: #ff6666;
         }
+        .btn-red-border {
+            border: 2px solid red !important;
+            color: red !important;
+        }
+        .btn-red-border:hover {
+            background-color: red !important;
+            color: white !important;
+        }
+        /* Định nghĩa hiệu ứng rung (shake) ngang */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(5px); }
+            50% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* Áp dụng cho nút xóa */
+        .shake-btn:hover {
+            animation: shake 0.3s;
+        }
+
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
@@ -268,7 +290,7 @@
                         </div>
                         <!-- Nút Xóa hình đã chọn -->
                         <div class="mt-2">
-                            <button type="button" class="btn custom-btn w-100" onclick="deleteSelectedImages()">Xóa hình đã
+                            <button type="button" class="btn custom-btn btn-red-border price-suggestion shake-btn w-100" onclick="deleteSelectedImages()"><i class="bi bi-trash-fill me-2"></i>Xóa hình đã
                                 chọn
                             </button>
                         </div>

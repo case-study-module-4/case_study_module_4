@@ -29,6 +29,20 @@
             <div id="phone-error" class="text-danger small"></div>
         </div>
 
+        <div class="mb-3">
+            <label for="image" class="form-label" style="font-size: 14px;">Ảnh</label>
+            <input
+                    type="file"
+                    id="image"
+                    name="image"
+                    class="form-control form-control-sm"
+                    th:value="${user.image}"
+                    placeholder="Ảnh"
+            >
+            <div id="image-error" class="text-danger small"></div>
+        </div>
+
+
         <div class="text-center">
             <button type="button" id="save-profile-btn" class="btn btn-sm btn-secondary px-3" style="font-size: 14px;">Lưu</button>
         </div>

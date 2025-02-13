@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.NumberFormat;
+
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -31,7 +34,8 @@ public class RealEstate {
 
     @NotNull(message = "Price must not be null")
     @Column(name = "price", columnDefinition = "DECIMAL(15,2)")
-    private Double price;
+    @NumberFormat(pattern = "#,###.##")
+    private BigDecimal price;
 
     @NotNull(message = "Area must not be null")
     @Column(name = "area", columnDefinition = "DECIMAL(15,2)")

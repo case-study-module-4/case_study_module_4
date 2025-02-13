@@ -47,12 +47,19 @@
             <hr th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
             <li sec:authorize="hasRole('ROLE_USER')"><a href="#" class="menu-link" data-url="/user/customers">Quản lý người quan tâm</a></li>
             <hr>
+            <li><a th:href="@{/user/interests(userId=${userId})}"
+                   style="color: black; text-decoration: none; font-weight: bold;"
+                   onmouseover="this.style.color='red'"
+                   onmouseout="this.style.color='black'"
+                   onclick="this.style.color='red'">Danh sách khách hàng</a>
+            </li>
+            <hr>
             <li>
                 <a href="#" class="menu-link">Quản lý tài khoản</a>
                 <ul class="submenu">
                     <li><a href="#" class="submenu-link" data-url="/profile/edit">Chỉnh sửa thông tin</a></li>
                     <li><a href="/account/update-password" class="submenu-link">Cài đặt tài khoản</a></li>
-                    <!--                    <li><a href="#" class="submenu-link" data-url="/accounts/update-password">Cài đặt tài khoản</a></li>-->
+<!--                    <li><a href="#" class="submenu-link" data-url="/accounts/update-password">Cài đặt tài khoản</a></li>-->
                 </ul>
             </li>
         </ul>
@@ -94,16 +101,20 @@
         function initEditProfileScript() {
             // Gắn sự kiện click cho nút Lưu
             $('#save-profile-btn').on('click', function () {
-                const formData = {
-                    fullName: $('#fullName').val(),
-                    phone: $('#phone').val()
-                };
+                const formData = new FormData();
+                formData.append('fullName', $('#fullName').val());
+                formData.append('phone', $('#phone').val());
+                const imageFile = $('#image')[0].files[0];
+                if (imageFile) {
+                    formData.append('image', imageFile);
+                }
 
                 $.ajax({
                     url: '/profile/update',
                     type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(formData),
+                    processData: false,
+                    contentType: false,
+                    data: formData,
                     success: function (response) {
                         $('#success-message').text(response.message).show();
                         setTimeout(() => $('#success-message').fadeOut(), 3000);

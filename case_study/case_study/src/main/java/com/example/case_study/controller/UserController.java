@@ -4,6 +4,7 @@ import com.example.case_study.model.Post;
 import com.example.case_study.model.User;
 import com.example.case_study.service.IUserService;
 
+import com.example.case_study.service.impl.FileStorageService;
 import com.example.case_study.service.impl.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,8 @@ public class UserController {
     @Autowired
     private PostService postService;
 
-//    @Autowired
-//    private FileStorageService fileStorageService;
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @GetMapping("/dashboard")
     public String showDashboard(Model model, Principal principal) {
@@ -83,15 +84,15 @@ public class UserController {
 
         existingUser.setFullName(user.getFullName());
         existingUser.setPhone(user.getPhone());
-//        if (image != null && !image.isEmpty()) {
-//            try {
-//                String imagePath = fileStorageService.storeFile(image); // Lưu ảnh và trả về đường dẫn
-//                existingUser.setImage(imagePath);
-//            } catch (Exception e) {
-//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                        .body("Lỗi khi lưu ảnh: " + e.getMessage());
-//            }
-//        }
+        if (image != null && !image.isEmpty()) {
+            try {
+                String imagePath = fileStorageService.storeFile(image); // Lưu ảnh và trả về đường dẫn
+                existingUser.setImage(imagePath);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Lỗi khi lưu ảnh: " + e.getMessage());
+            }
+        }
         userService.updateUser(existingUser);
 
         return ResponseEntity.ok("Cập nhật thông tin thành công!");

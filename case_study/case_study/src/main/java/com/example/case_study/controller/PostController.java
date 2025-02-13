@@ -216,7 +216,7 @@ public class PostController {
         List<Post> approvedPosts = allApprovedPosts.stream()
                 .filter(post -> post.getUser() != null && post.getUser().getId().equals(user.getId()))
                 .collect(Collectors.toList());
-
+        model.addAttribute("userId", user.getId());
         model.addAttribute("user", user);
         model.addAttribute("posts", approvedPosts);
 
@@ -230,6 +230,7 @@ public class PostController {
         User user = userService.findUserByUsername(username);
         // Lấy các bài viết của user có payable = "no"
         List<Post> draftPosts = postService.getDraftPostsByUserId(user.getId());
+        model.addAttribute("userId", user.getId());
         model.addAttribute("user", user);
         model.addAttribute("posts", draftPosts);
         return "user/drafts-posts"; // Giao diện hiển thị bài viết nháp

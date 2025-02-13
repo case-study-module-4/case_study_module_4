@@ -22,10 +22,10 @@ public interface IAccountService {
 
     List<AccountDTO> getAllAccounts();
 
-    boolean softDeleteAccount(Integer id);
-
     Account findByUsername(String name);
 
     void updatePassword(Account account, String newPassword);
+
+    void toggleAccountStatus(Integer id);
 
 }

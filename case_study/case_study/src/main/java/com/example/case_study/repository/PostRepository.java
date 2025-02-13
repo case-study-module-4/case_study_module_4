@@ -17,7 +17,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     List<Post> findByUserIdAndPayable(Integer userId, String no);
 
-
+    long countByUserId(int userId);
 
     @Query("SELECT p FROM post p " +
             "WHERE (p.payable IS NOT NULL AND p.payable = 'YES') AND  " +

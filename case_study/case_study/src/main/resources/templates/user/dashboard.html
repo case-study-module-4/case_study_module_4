@@ -15,25 +15,26 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="user-info">
-            <div class="avatar">
-            </div>
+            <div class="avatar">U</div>
             <div class="full-name" th:text="${user.fullName}">Tên người dùng</div>
-            <div class="account-balance">
+            <div sec:authorize="hasRole('ROLE_USER')" class="account-balance">
                 <p>Số dư tài khoản</p>
                 <div>
                     <span>TK Chính:</span>
                     <span th:text="${user.balance}">0</span>
                 </div>
                 <button class="btn btn-danger text-white">
-                    <a href="" class="submenu-link" data-url="/deposit" style="color: white; text-decoration: none;">Nạp
-                        tiền</a>
+                    <a href="" class="submenu-link" data-url="/deposit" style="color: white; text-decoration: none;">Nạp tiền</a>
                 </button>
             </div>
         </div>
         <hr>
         <!-- Menu chính -->
         <ul class="menu">
-            <li>
+            <li sec:authorize="hasRole('ROLE_ADMIN')">
+                <a class="menu-link" href="/admin/account">Quản lý người dùng</a>
+            </li>
+            <li sec:authorize="hasRole('ROLE_USER')">
                 <a href="#" class="menu-link">Quản lý tin đăng</a>
                 <ul class="submenu">
                     <li><a href="/posts/create" class="submenu-link">Đăng tin mới</a></li>
@@ -54,7 +55,7 @@
                 <ul class="submenu">
                     <li><a href="#" class="submenu-link" data-url="/profile/edit">Chỉnh sửa thông tin</a></li>
                     <li><a href="/account/update-password" class="submenu-link">Cài đặt tài khoản</a></li>
-                    <!--                    <li><a href="#" class="submenu-link" data-url="/accounts/update-password">Cài đặt tài khoản</a></li>-->
+<!--                    <li><a href="#" class="submenu-link" data-url="/accounts/update-password">Cài đặt tài khoản</a></li>-->
                 </ul>
             </li>
         </ul>
@@ -124,7 +125,6 @@
         }
     });
 </script>
-
 <div th:insert="~{/layout/layout::footer}"></div>
 
 </body>

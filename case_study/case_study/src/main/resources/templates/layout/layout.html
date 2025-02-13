@@ -73,9 +73,6 @@
                                 <span th:text="${#authentication != null ? #authentication.name : 'Guest'}"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li sec:authorize="hasRole('ROLE_ADMIN')">
-                                    <a class="dropdown-item" href="/admin/account">Quản lý người dùng</a>
-                                </li>
                                 <li><a class="dropdown-item" href="/dashboard">Hồ sơ của tôi</a></li>
                                 <li><a class="dropdown-item" href="transaction/transaction-history">Lịch sử giao dịch</a></li>
                                 <li><hr class="dropdown-divider"></li>
@@ -93,7 +90,7 @@
                         </li>
 
 
-                        <li class="nav-item">
+                        <li class="nav-item" sec:authorize="!hasRole('ROLE_ADMIN')">
                             <a class="btn btn-danger text-white" href="/posts/create">Đăng tin</a>
                         </li>
                     </ul>

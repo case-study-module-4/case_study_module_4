@@ -296,4 +296,10 @@ public class PostService implements IPostService {
             return dto;
         }).toList();
     }
+
+    @Override
+    public Long countByUserId(int userId) {
+        return postRepository.countByUserId(userId);
+    }
+
 }

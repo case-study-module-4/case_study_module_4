@@ -1,5 +1,6 @@
 package com.example.case_study.service.impl;
 
+import com.example.case_study.controller.AccountController;
 import com.example.case_study.dto.AccountDTO;
 import com.example.case_study.dto.AccountRegisterDTO;
 import com.example.case_study.model.Account;
@@ -9,7 +10,12 @@ import com.example.case_study.repository.AccountRepository;
 import com.example.case_study.repository.RoleRepository;
 import com.example.case_study.repository.UserRepository;
 import com.example.case_study.service.IAccountService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.IllegalSelectQueryException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,17 +23,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
 
 @Service
 @RequiredArgsConstructor
 public class AccountService implements IAccountService {
 
+    @Autowired
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PostService postService;
 
     @Override
     public boolean existsByUsername(String username) {
@@ -89,18 +100,45 @@ public class AccountService implements IAccountService {
 
     @Override
     public List<AccountDTO> getAllAccounts() {
-        return accountRepository.findAllAccountDetails();
-    }
-    @Override
-    public boolean softDeleteAccount(Integer id) {
-        Optional<Account> optionalAccount = accountRepository.findById(id);
-        if (optionalAccount.isPresent()) {
-            Account account = optionalAccount.get();
-            account.setIsDelete(true);
-            accountRepository.save(account); // Cập nhật vào database
-            return true;
+//        return accountRepository.findAllAccountDetails();
+        List<Account> accounts = accountRepository.findAll();
+        List<AccountDTO> result = new ArrayList<>();
+        for (Account account : accounts) {
+            AccountDTO accountDTO = new AccountDTO();
+            accountDTO.setId(account.getId());
+            accountDTO.setFullName(account.getUser().getFullName());
+            accountDTO.setPhone(account.getUser().getPhone());
+            accountDTO.setEmail(account.getUser().getEmail());
+            accountDTO.setBalance(account.getUser().getBalance());
+            accountDTO.setImage(account.getUser().getImage());
+            accountDTO.setIsDelete(account.getIsDelete());
+            accountDTO.setStatus(account.getStatus());
+
+
+            long postCount = postService.countByUserId(account.getUser().getId());
+            accountDTO.setPostCount(postCount);
+
+
+            result.add(accountDTO);
         }
-        return false;
+
+        return result;
+    }
+
+    @Transactional
+    public void toggleAccountStatus(Integer id) {
+        Account account = accountRepository.findById(id).orElse(null);
+        if (account == null) {
+            throw new EntityNotFoundException("Tài khoản không tồn tại");
+        }
+
+        System.out.println(account);
+        if (account.getStatus().equals("active")) {
+            account.setStatus("inactive");
+        } else {
+            account.setStatus("active");
+        }
+        accountRepository.save(account);
     }
 
     @Override
@@ -114,6 +152,5 @@ public class AccountService implements IAccountService {
         account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
     }
-
 
 }

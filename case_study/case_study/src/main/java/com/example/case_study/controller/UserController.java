@@ -4,7 +4,6 @@ import com.example.case_study.model.Post;
 import com.example.case_study.model.User;
 import com.example.case_study.service.IUserService;
 
-import com.example.case_study.service.impl.FileStorageService;
 import com.example.case_study.service.impl.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -31,9 +31,6 @@ public class UserController {
 
     @Autowired
     private PostService postService;
-
-    @Autowired
-    private FileStorageService fileStorageService;
 
     @GetMapping("/dashboard")
     public String showDashboard(Model model, Principal principal) {
@@ -58,45 +55,36 @@ public class UserController {
         }
         String username = principal.getName();
         User user = userService.findUserByUsername(username);
+        model.addAttribute("userId", user.getId());
         model.addAttribute("user", user);
         return "user/edit-profile";
     }
 
     @PostMapping("/profile/update")
-    @ResponseBody
-    public ResponseEntity<?> updateProfile(@Valid @RequestBody User user,
-                                           BindingResult bindingResult,
-                                           @RequestParam(value = "image", required = false) MultipartFile image,
-                                           Principal principal) {
+    public String updateProfile(@Valid @ModelAttribute("user") User user, Model model,
+                                BindingResult bindingResult,
+                                Principal principal,
+                                RedirectAttributes redirectAttributes) {
         if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bạn cần đăng nhập để thực hiện thao tác này.");
+            redirectAttributes.addFlashAttribute("error", "Bạn cần đăng nhập để thực hiện thao tác này.");
+            return "redirect:/login";
         }
-
         if (bindingResult.hasErrors()) {
-            // Trả về lỗi dưới dạng JSON
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(Map.of("errors", errors));
+            model.addAttribute("user", user);
+            model.addAttribute("errors", bindingResult.getFieldErrors());
+            return "user/edit-profile"; // Trả về đúng trang chỉnh sửa
         }
 
         String username = principal.getName();
         User existingUser = userService.findUserByUsername(username);
-
         existingUser.setFullName(user.getFullName());
         existingUser.setPhone(user.getPhone());
-        if (image != null && !image.isEmpty()) {
-            try {
-                String imagePath = fileStorageService.storeFile(image); // Lưu ảnh và trả về đường dẫn
-                existingUser.setImage(imagePath);
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("Lỗi khi lưu ảnh: " + e.getMessage());
-            }
-        }
         userService.updateUser(existingUser);
-
-        return ResponseEntity.ok("Cập nhật thông tin thành công!");
+        redirectAttributes.addFlashAttribute("success", "Cập nhật thông tin thành công!");
+        return "redirect:/dashboard";
     }
+
+
     @GetMapping("/user/{id}")
     public String viewUserProfile(@PathVariable("id") Integer id, Model model) {
         Optional<User> userOptional = userService.findById(id);

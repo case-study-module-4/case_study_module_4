@@ -102,10 +102,16 @@ public class TransactionController {
 
     @GetMapping("/transaction-history")
     public String getTransactionHistory(Model model, Principal piPrincipal) {
+        String username = piPrincipal.getName();
+        User user = userService.findUserByUsername(username);
+        if (user == null) {
+            return "redirect:/error";
+        }
         List<DepositHistoryDto> deposits = depositService.getAllDepositHistory(piPrincipal.getName());
         List<TransactionHistoryDto> payments = transactionService.getAllTransactionHistory(piPrincipal.getName());
 
-
+        model.addAttribute("userId", user.getId());
+        model.addAttribute("user", user);
         model.addAttribute("deposits", deposits);
         model.addAttribute("payments", payments);
 

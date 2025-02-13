@@ -1,41 +1,225 @@
-<!--<div class="container mt-4">-->
-<!--    <h2 class="text-center mb-4">Danh sách tài khoản</h2>-->
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+<!--&lt;!&ndash;<html xmlns:th="http://www.thymeleaf.org">&ndash;&gt;-->
+<!--&lt;!&ndash;<head>&ndash;&gt;-->
+<!--&lt;!&ndash;    <meta charset="UTF-8">&ndash;&gt;-->
+<!--&lt;!&ndash;    <title>Title</title>&ndash;&gt;-->
+<!--&lt;!&ndash;    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">&ndash;&gt;-->
+<!--&lt;!&ndash;    <script>&ndash;&gt;-->
+<!--&lt;!&ndash;        function showTable() {&ndash;&gt;-->
+<!--&lt;!&ndash;            let selectedValue = document.getElementById("transactionType").value;&ndash;&gt;-->
+<!--&lt;!&ndash;            document.getElementById("depositTable").style.display = (selectedValue === "deposit") ? "block" : "none";&ndash;&gt;-->
+<!--&lt;!&ndash;            document.getElementById("paymentTable").style.display = (selectedValue === "payment") ? "block" : "none";&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;    </script>&ndash;&gt;-->
+<!--&lt;!&ndash;</head>&ndash;&gt;-->
+<!--&lt;!&ndash;<body>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="container mt-4">&ndash;&gt;-->
+<!--&lt;!&ndash;    <h2 class="text-center">Quản Lý Giao Dịch</h2>&ndash;&gt;-->
 
-<!--    <table class="table table-striped table-bordered">-->
-<!--        <thead class="table-dark text-center">-->
-<!--        <tr>-->
-<!--            <th>Id</th>-->
-<!--            <th>Họ và tên</th>-->
-<!--            <th>Số điện thoại</th>-->
-<!--            <th>Email</th>-->
-<!--            <th>Số dư</th>-->
-<!--            <th>Trạng thái</th>-->
-<!--            <th>Số bài đăng</th>-->
-<!--            <th>Thao tác</th>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <tr th:each="account : ${accounts}">-->
-<!--            <td th:text="${account.id}"></td>-->
-<!--            <td th:text="${account.fullName}"></td>-->
-<!--            <td th:text="${account.phone}"></td>-->
-<!--            <td th:text="${account.email}"></td>-->
-<!--            <td th:text="${account.balance}"></td>-->
-<!--            <td class="text-center">-->
-<!--                <span th:classappend="${account.status == 'active' ? 'badge bg-success' : 'badge bg-danger'}"-->
-<!--                      th:text="${account.status == 'active' ? 'Hoạt động' : 'Bị khóa'}">-->
-<!--                </span>-->
-<!--            </td>-->
-<!--            <td th:text="${account.postCount}"></td>-->
-<!--            <td class="text-center">-->
-<!--                <form th:action="@{/admin/account/{id}/toggle-status(id=${account.id})}" method="post">-->
-<!--                    <button type="submit"-->
-<!--                            th:classappend="${account.status == 'active' ? 'btn btn-warning btn-sm' : 'btn btn-success btn-sm'}"-->
-<!--                            th:text="${account.status == 'active' ? 'Khóa' : 'Mở khóa'}">-->
-<!--                    </button>-->
-<!--                </form>-->
-<!--            </td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
+<!--&lt;!&ndash;    &lt;!&ndash; Chọn loại giao dịch &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <div class="mb-3">&ndash;&gt;-->
+<!--&lt;!&ndash;        <label for="transactionType" class="form-label">Chọn loại giao dịch:</label>&ndash;&gt;-->
+<!--&lt;!&ndash;        <select id="transactionType" class="form-select" onchange="showTable()">&ndash;&gt;-->
+<!--&lt;!&ndash;            <option value="deposit">Lịch sử Nạp Tiền</option>&ndash;&gt;-->
+<!--&lt;!&ndash;            <option value="payment">Lịch sử Thanh Toán</option>&ndash;&gt;-->
+<!--&lt;!&ndash;        </select>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; Lịch sử Nạp Tiền &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <div id="depositTable" class="mt-3">&ndash;&gt;-->
+<!--&lt;!&ndash;        <h3 class="text-primary">Lịch sử Nạp Tiền</h3>&ndash;&gt;-->
+<!--&lt;!&ndash;        <table class="table table-bordered table-hover">&ndash;&gt;-->
+<!--&lt;!&ndash;            <thead class="table-primary">&ndash;&gt;-->
+<!--&lt;!&ndash;            <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                <th>Id</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                <th>Số Tiền</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                <th>phương thức giao dịch</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                <th>Ngày giờ Giao Dịch</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;            </thead>&ndash;&gt;-->
+<!--&lt;!&ndash;            <tbody>&ndash;&gt;-->
+<!--&lt;!&ndash;            <tr th:each="">&ndash;&gt;-->
+<!--&lt;!&ndash;                <td th:text=""></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td th:text=""></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td th:text=""></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td th:text=""></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;            </tbody>&ndash;&gt;-->
+<!--&lt;!&ndash;        </table>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; Lịch sử Thanh Toán &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <div id="paymentTable" class="mt-3" style="display: none;">&ndash;&gt;-->
+<!--&lt;!&ndash;        <h3 class="text-success">Lịch sử Thanh Toán</h3>&ndash;&gt;-->
+<!--&lt;!&ndash;        <table class="table table-bordered table-hover">&ndash;&gt;-->
+<!--&lt;!&ndash;            <thead class="table-success">&ndash;&gt;-->
+<!--&lt;!&ndash;            <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                <th>Id</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                <th>Số Tiền</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                <th>Phương thức giao dịch</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                <th>Ngày giờ Giao Dịch</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;            </thead>&ndash;&gt;-->
+<!--&lt;!&ndash;            <tbody>&ndash;&gt;-->
+<!--&lt;!&ndash;            <tr th:each="">&ndash;&gt;-->
+<!--&lt;!&ndash;                <td th:text=""></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td th:text=""></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td th:text=""></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td th:text=""></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;            </tbody>&ndash;&gt;-->
+<!--&lt;!&ndash;        </table>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;</body>&ndash;&gt;-->
+<!--&lt;!&ndash;</html>&ndash;&gt;-->
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Quản Lý Giao Dịch</title>-->
+<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">-->
+<!--    <script>-->
+<!--        function showTable() {-->
+<!--            let selectedValue = document.getElementById("transactionType").value;-->
+<!--            document.getElementById("depositTable").style.display = (selectedValue === "deposit") ? "block" : "none";-->
+<!--            document.getElementById("paymentTable").style.display = (selectedValue === "payment") ? "block" : "none";-->
+<!--        }-->
+<!--    </script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div th:insert="~{/layout/layout::header}"></div>-->
+<!--<div class="container-fluid">-->
+<!--    &lt;!&ndash; Sidebar &ndash;&gt;-->
+<!--    <aside class="sidebar">-->
+<!--        <div class="user-info">-->
+<!--            <div class="avatar">U</div>-->
+<!--            <div class="full-name" th:text="${user.fullName}">Tên người dùng</div>-->
+<!--            <div sec:authorize="hasRole('ROLE_USER')" class="account-balance">-->
+<!--                <p>Số dư tài khoản</p>-->
+<!--                <div>-->
+<!--                    <span>TK Chính:</span>-->
+<!--                    <span th:text="${#numbers.formatDecimal(user.balance, 0, 'COMMA', 0, 'POINT')} + ' VND'"></span>-->
+<!--                </div>-->
+<!--                <button class="btn btn-danger text-white">-->
+<!--                    <a href="" class="submenu-link" data-url="/deposit" style="color: white; text-decoration: none;">Nạp tiền</a>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <hr>-->
+<!--        &lt;!&ndash; Menu chính &ndash;&gt;-->
+<!--        <ul class="menu">-->
+<!--            <li sec:authorize="hasRole('ROLE_ADMIN')">-->
+<!--                <a class="menu-link" href="/admin/account">Quản lý người dùng</a>-->
+<!--            </li>-->
+<!--            <hr sec:authorize="hasRole('ROLE_ADMIN')">-->
+<!--            <li sec:authorize="hasRole('ROLE_USER')">-->
+<!--                <a href="" class="menu-link">Quản lý tin đăng</a>-->
+<!--                <ul class="submenu">-->
+<!--                    <li><a href="/posts/create" class="submenu-link">Đăng tin mới</a></li>-->
+<!--                    <li><a href="/posts/approved" class="submenu-link">Danh sách tin</a></li>-->
+<!--                    <li><a href="/posts/drafts" class="submenu-link">Tin nháp</a></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+<!--            <li sec:authorize="hasRole('ROLE_ADMIN')">-->
+<!--                <a href="#" class="menu-link">Quản lý tin đăng</a>-->
+<!--                <ul class="submenu">-->
+<!--                    <li><a href="/admin/account/approved" class="submenu-link">Danh sách tin</a></li>-->
+<!--                    <li><a href="/admin/account/drafts" class="submenu-link">Tin nháp</a></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+<!--            <hr sec:authorize="hasRole('ROLE_USER')">-->
+<!--            <li sec:authorize="hasRole('ROLE_USER')">-->
+<!--                <a class="menu-link" href="/transaction/transaction-history">Lịch sử giao dịch</a></li>-->
+<!--            <hr sec:authorize="hasRole('ROLE_ADMIN')">-->
+<!--            <li sec:authorize="hasRole('ROLE_ADMIN')">-->
+<!--                <a class="menu-link" href="/admin/account/transaction-history">Lịch sử giao dịch</a></li>-->
+<!--            <hr>-->
+<!--            <li sec:authorize="hasRole('ROLE_USER')">-->
+<!--                <a th:href="@{/user/interests(userId=${userId})}"-->
+<!--                   style="color: black; text-decoration: none; font-weight: bold;"-->
+<!--                   onmouseover="this.style.color='red'"-->
+<!--                   onmouseout="this.style.color='black'"-->
+<!--                   onclick="this.style.color='red'">Danh sách khách hàng</a>-->
+<!--            </li>-->
+<!--            <hr sec:authorize="hasRole('ROLE_USER')">-->
+<!--            <li>-->
+<!--                <a href="#" class="menu-link">Quản lý tài khoản</a>-->
+<!--                <ul class="submenu">-->
+<!--                    <li><a href="/profile/edit" class="submenu-link">Chỉnh sửa thông tin</a></li>-->
+<!--                    <li><a href="/account/update-password" class="submenu-link">Cài đặt tài khoản</a></li>-->
+<!--                </ul>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </aside>-->
+
+<!--    <h2 class="text-center">Lịch sử Giao Dịch</h2>-->
+
+<!--    &lt;!&ndash; Chọn loại giao dịch &ndash;&gt;-->
+<!--    <div class="mb-3 ">-->
+<!--        <h6><label for="transactionType" class="form-label">Chọn loại giao dịch:</label></h6>-->
+<!--        <select id="transactionType" class="form-select" onchange="showTable()">-->
+<!--            <option value="deposit">Lịch sử Nạp Tiền</option>-->
+<!--            <option value="payment">Lịch sử Thanh Toán</option>-->
+<!--        </select>-->
+<!--        <a th:href="@{/dashboard}" class="btn btn-secondary" style="margin-top: 20px">Quay lại Hồ sơ</a>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Lịch sử Nạp Tiền &ndash;&gt;-->
+<!--    <div id="depositTable" class="mt-3">-->
+<!--        <h3 class="text-primary">Lịch sử Nạp Tiền</h3>-->
+<!--        <table class="table table-bordered table-hover">-->
+<!--            <thead class="table-primary">-->
+<!--            <tr>-->
+<!--                <th>STT</th>-->
+<!--                <th>Số Tiền</th>-->
+<!--                <th>Phương thức giao dịch</th>-->
+<!--                <th>Ngày Giao Dịch</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:each="deposit, status : ${deposits}">-->
+<!--                <td th:text="${status.count}"></td>-->
+<!--                <td th:text="${#numbers.formatDecimal(deposit.amount, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>-->
+<!--                <td th:text="${deposit.paymentMethod}"></td>-->
+<!--                <td th:text="${#temporals.format(deposit.paymentDate, 'dd/MM/yyyy')}"></td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Lịch sử Thanh Toán &ndash;&gt;-->
+<!--    <div id="paymentTable" class="mt-3" style="display: none;">-->
+<!--        <h3 class="text-success">Lịch sử Thanh Toán</h3>-->
+<!--        <table class="table table-bordered table-hover">-->
+<!--            <thead class="table-success">-->
+<!--            <tr>-->
+<!--                <th>STT</th>-->
+<!--                <th>Mã tin đăng</th>-->
+<!--                <th>Tin đăng đã thanh toán</th>-->
+<!--                <th>Số Tiền</th>-->
+<!--                <th>Ngày Giao Dịch</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:each="transaction, status : ${payments}">-->
+<!--                <td th:text="${status.count}"></td>-->
+<!--                <td th:text="${transaction.formattedId}"></td>-->
+<!--                <td th:text="${transaction.title}"></td>-->
+<!--                <td th:text="${#numbers.formatDecimal(transaction.price, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>-->
+<!--                <td th:text="${transaction.publishDate}"></td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+
 <!--</div>-->
+
+<!--<div style="margin-top: 250px" th:insert="~{/layout/layout::footer}"></div>-->
+<!--</body>-->
+<!--</html>-->
+

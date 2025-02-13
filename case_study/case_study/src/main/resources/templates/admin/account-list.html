@@ -11,8 +11,7 @@
 <body>
 <div th:insert="~{/layout/layout::header}"></div>
 <div class="container-fluid">
-        <!-- Sidebar -->
-    <!-- Sidebar -->
+    <!--  Sidebar -->
     <aside class="sidebar">
         <div class="user-info">
             <div class="avatar">U</div>
@@ -46,8 +45,8 @@
             <li sec:authorize="hasRole('ROLE_ADMIN')">
                 <a href="#" class="menu-link">Quản lý tin đăng</a>
                 <ul class="submenu">
-                    <li><a href="/posts/approved" class="submenu-link">Danh sách tin</a></li>
-                    <li><a href="/posts/drafts" class="submenu-link">Tin nháp</a></li>
+                    <li><a href="/admin/account/approved" class="submenu-link">Danh sách tin</a></li>
+                    <li><a href="/admin/account/drafts" class="submenu-link">Tin nháp</a></li>
                 </ul>
             </li>
             <hr sec:authorize="!hasRole('ROLE_ADMIN')">
@@ -61,7 +60,7 @@
             <li>
                 <a href="#" class="menu-link">Quản lý tài khoản</a>
                 <ul class="submenu">
-                    <li><a href="#" class="submenu-link" data-url="/profile/edit">Chỉnh sửa thông tin</a></li>
+                    <li><a class="submenu-link" href="/profile/edit">Chỉnh sửa thông tin</a></li>
                     <li><a href="/account/update-password" class="submenu-link">Cài đặt tài khoản</a></li>
                     <!--                    <li><a href="#" class="submenu-link" data-url="/accounts/update-password">Cài đặt tài khoản</a></li>-->
                 </ul>

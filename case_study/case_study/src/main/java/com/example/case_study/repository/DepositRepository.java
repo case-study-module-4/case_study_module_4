@@ -17,7 +17,7 @@ public interface DepositRepository extends JpaRepository<Deposit, Integer> {
             "JOIN u.account a " +
             "WHERE u.isDelete = false AND a.username =:userName " +
             "ORDER BY d.paymentDate DESC")
-    List<DepositHistoryDto> getAllDepositHistory();
+    List<DepositHistoryDto> getAllDepositHistory(String userName);
 
     @Query("SELECT new com.example.case_study.dto.DepositHistoryDto( " +
             "d.id, d.amount,  d.paymentDate, d.paymentMethod) " +

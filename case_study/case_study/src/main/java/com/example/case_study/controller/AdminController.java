@@ -104,28 +104,30 @@ public class AdminController {
         return "admin/approved-posts";
     }
 
-    @PostMapping("/{id}/delete")
-    public String deletePost(@PathVariable Integer id, Principal principal, RedirectAttributes redirectAttributes) {
-        Optional<Post> postOptional = postService.findById(id);
-        if (postOptional.isPresent()) {
-            Post post = postOptional.get();
-            User user = userService.findUserByUsername(principal.getName());
-            if (post.getUser() == null || !post.getUser().equals(user)) {
-                return "redirect:/403";
-            }
-            postService.deleteById(id);
-            if ("no".equalsIgnoreCase(post.getPayable())) {
-                redirectAttributes.addFlashAttribute("message", "Xóa bài đăng thành công!");
-                redirectAttributes.addFlashAttribute("alertClass", "alert-success");
-                return "redirect:/posts/drafts?message=deleted";
-            } else {
-                redirectAttributes.addFlashAttribute("message", "Xóa bài đăng thành công!");
-                redirectAttributes.addFlashAttribute("alertClass", "alert-success");
-                return "redirect:/posts/approved?message=deleted";
-            }
-        }
-        redirectAttributes.addFlashAttribute("message", "Xóa bài đăng không thành công!");
-        redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
-        return "redirect:/posts?error=notfound";
-    }
+//    @PostMapping("/{id}/delete")
+//    public String deletePost(@PathVariable Integer id, Principal principal, RedirectAttributes redirectAttributes) {
+//        Optional<Post> postOptional = postService.findById(id);
+//        if (postOptional.isPresent()) {
+//            Post post = postOptional.get();
+//            User user = userService.findUserByUsername(principal.getName());
+//            // Kiểm tra quyền: Nếu user không phải admin và cũng không phải là chủ sở hữu bài đăng thì không được xóa
+//            if (!user.getAccount().getRole().getName().equalsIgnoreCase("ROLE_ADMIN")
+//                    && (post.getUser() == null || !post.getUser().equals(user))) {
+//                return "redirect:/403";
+//            }
+//            postService.deleteById(id);
+//            if ("no".equalsIgnoreCase(post.getPayable())) {
+//                redirectAttributes.addFlashAttribute("message", "Xóa bài đăng thành công!");
+//                redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+//                return "redirect:/admin/account/drafts?message=deleted";
+//            } else {
+//                redirectAttributes.addFlashAttribute("message", "Xóa bài đăng thành công!");
+//                redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+//                return "redirect:/admin/account/approved?message=deleted";
+//            }
+//        }
+//        redirectAttributes.addFlashAttribute("message", "Xóa bài đăng không thành công!");
+//        redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+//        return "redirect:/posts?error=notfound";
+//    }
 }

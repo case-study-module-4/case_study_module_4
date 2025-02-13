@@ -11,7 +11,7 @@
 <body>
 <div th:insert="~{/layout/layout::header}"></div>
 <div class="container-fluid">
-    <!-- Sidebar -->
+    <!--  Sidebar -->
     <aside class="sidebar">
         <div class="user-info">
             <div class="avatar">U</div>
@@ -76,7 +76,8 @@
             <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
             <div class="row">
                 <div th:each="post : ${posts}" class="col-12 mb-4">
-                    <div class="card" style="cursor: pointer;">
+                    <div class="card" style="cursor: pointer;"
+                         th:onclick="|window.location.href='@{/posts/{id}(id=${post.id})}'|">
                         <div class="row no-gutters">
                             <div class="col-md-4">
                                 <img th:src="${post.image}" class="card-img"
@@ -101,13 +102,13 @@
                                                 <small class="text-muted">
                                                     Giá:
                                                     <span th:text="${post.realEstate != null ?
-                        (post.realEstate.price < 1000000 ?
-                          (#numbers.formatDecimal(post.realEstate.price, 0, 'COMMA', 2, 'POINT') + ' VND') :
-                          (post.realEstate.price < 1000000000 ?
-                            (#numbers.formatDecimal(post.realEstate.price / 1000000, 0, 'COMMA', 2, 'POINT') + ' triệu') :
-                            (#numbers.formatDecimal(post.realEstate.price / 1000000000, 0, 'COMMA', 2, 'POINT') + ' tỷ')
-                          )
-                        ) : 'N/A'}"></span>
+                                                    (post.realEstate.price < 1000000 ?
+                                                        (#numbers.formatDecimal(post.realEstate.price, 0, 'COMMA', 2, 'POINT') + ' VND') :
+                                                        (post.realEstate.price < 1000000000 ?
+                                                            (#numbers.formatDecimal(post.realEstate.price / 1000000, 0, 'COMMA', 2, 'POINT') + ' triệu') :
+                                                            (#numbers.formatDecimal(post.realEstate.price / 1000000000, 0, 'COMMA', 2, 'POINT') + ' tỷ')
+                                                        )
+                                                    ) : 'N/A'}"></span>
                                                 </small><br>
                                                 <small class="text-muted">
                                                     Địa chỉ: <span th:text="${post.realEstate.location}"></span>
@@ -115,25 +116,7 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <!-- Container nút hành động -->
-                                    <div class="mt-auto d-flex justify-content-end">
-                                        <!-- Nút Detail luôn hiển thị -->
-                                        <a class="btn btn-info btn-sm me-2"
-                                           th:href="@{/posts/{id}(id=${post.id})}">Detail</a>
-                                        <!-- Nút Edit: hiển thị nếu user hiện hành là người đăng bài (nếu cần) -->
-                                        <a class="btn btn-warning btn-sm me-2"
-                                           th:if="${#authentication.name == post.user.account.username}"
-                                           th:href="@{/posts/{id}/edit(id=${post.id})}">
-                                            Edit
-                                        </a>
-                                        <!-- Nút Delete: hiển thị nếu user hiện hành là người đăng bài (hoặc tùy chỉnh theo quyền của admin) -->
-                                        <button type="button" class="btn btn-danger btn-sm"
-                                                th:if="${#authentication.name == post.user.account.username}"
-                                                th:attr="data-post-id=${post.id}"
-                                                onclick="openDeleteModal(this)">
-                                            Delete
-                                        </button>
-                                    </div>
+                                    <!-- Bạn có thể thêm các nút hành động tùy ý nếu cần -->
                                 </div>
                             </div>
                         </div>
@@ -191,27 +174,6 @@
         }
     });
 
-    function openDeleteModal(button) {
-        var postId = button.getAttribute("data-post-id");
-        if (confirm("Bạn có chắc chắn muốn xóa bài đăng này?")) {
-            // Tạo form ẩn để gửi yêu cầu POST xóa bài đăng
-            var form = document.createElement("form");
-            form.method = "POST";
-            // Đường dẫn xóa của admin: ví dụ /admin/{id}/delete
-            form.action = "/admin/" + postId + "/delete";
-
-            // Nếu bạn đang sử dụng CSRF, bạn cần thêm token vào form.
-            // Ví dụ:
-            // var csrfInput = document.createElement("input");
-            // csrfInput.type = "hidden";
-            // csrfInput.name = "_csrf";
-            // csrfInput.value = /* lấy token từ meta tag hoặc biến JS */;
-            // form.appendChild(csrfInput);
-
-            document.body.appendChild(form);
-            form.submit();
-        }
-    }
 </script>
 <div style="margin-top:200px" th:insert="~{/layout/layout::footer}"></div>
 

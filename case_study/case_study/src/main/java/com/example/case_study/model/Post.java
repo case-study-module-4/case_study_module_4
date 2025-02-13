@@ -69,4 +69,8 @@ public class Post {
 
     @Column(name = "payment_expiry_date")
     private LocalDate paymentExpiryDate;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<PostInterest> postInterests;
+
 }

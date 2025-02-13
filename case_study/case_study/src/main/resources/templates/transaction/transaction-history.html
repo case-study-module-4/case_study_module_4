@@ -92,17 +92,18 @@
     </script>
 </head>
 <body>
+<div th:insert="~{/layout/layout::header}"></div>
 <div class="container mt-4">
     <h2 class="text-center">Lịch sử Giao Dịch</h2>
 
     <!-- Chọn loại giao dịch -->
     <div class="mb-3 ">
-        <label for="transactionType" class="form-label">Chọn loại giao dịch:</label>
+        <h6><label for="transactionType" class="form-label">Chọn loại giao dịch:</label></h6>
         <select id="transactionType" class="form-select" onchange="showTable()">
             <option value="deposit">Lịch sử Nạp Tiền</option>
             <option value="payment">Lịch sử Thanh Toán</option>
         </select>
-        <a th:href="@{/home}" class="btn btn-secondary" style="margin-top: 20px">Quay lại Trang Chủ</a>
+        <a th:href="@{/dashboard}" class="btn btn-secondary" style="margin-top: 20px">Quay lại Hồ sơ</a>
     </div>
 
     <!-- Lịch sử Nạp Tiền -->
@@ -154,6 +155,8 @@
     </div>
 
 </div>
+
+<div style="margin-top: 250px" th:insert="~{/layout/layout::footer}"></div>
 </body>
 </html>
 

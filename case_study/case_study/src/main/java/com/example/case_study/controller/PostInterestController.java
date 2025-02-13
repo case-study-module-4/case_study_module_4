@@ -37,6 +37,7 @@ public class PostInterestController {
         }
         List<PostInterest> interests = postInterestService.getPostInterestsByOwnerId(userId);
         model.addAttribute("interests", interests);
+        model.addAttribute("user", loggedInUser);
         return "user/interests";
     }
 }

@@ -73,20 +73,20 @@
                                 <span th:text="${#authentication != null ? #authentication.name : 'Guest'}"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/dashboard">Hồ sơ của tôi</a></li>
+                                <li><a class="dropdown-item" href="/posts/approved">Hồ sơ của tôi</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-bell"></i>
-                                <span id="notification-count" class="badge bg-danger hidden">0</span>
-                            </a>
-                            <ul id="notification-list" class="dropdown-menu dropdown-menu-end">
-                                <!-- Thông báo sẽ được thêm ở đây -->
-                            </ul>
-                        </li>
+<!--                        <li class="nav-item dropdown">-->
+<!--                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                                <i class="bi bi-bell"></i>-->
+<!--                                <span id="notification-count" class="badge bg-danger hidden">0</span>-->
+<!--                            </a>-->
+<!--                            <ul id="notification-list" class="dropdown-menu dropdown-menu-end">-->
+<!--                                &lt;!&ndash; Thông báo sẽ được thêm ở đây &ndash;&gt;-->
+<!--                            </ul>-->
+<!--                        </li>-->
 
 
                         <li class="nav-item" sec:authorize="!hasRole('ROLE_ADMIN')">

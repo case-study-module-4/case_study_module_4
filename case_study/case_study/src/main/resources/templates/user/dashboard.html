@@ -15,7 +15,8 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="user-info">
-            <div class="avatar">U</div>
+            <div class="avatar">
+            </div>
             <div class="full-name" th:text="${user.fullName}">Tên người dùng</div>
             <div class="account-balance">
                 <p>Số dư tài khoản</p>
@@ -95,16 +96,20 @@
         function initEditProfileScript() {
             // Gắn sự kiện click cho nút Lưu
             $('#save-profile-btn').on('click', function () {
-                const formData = {
-                    fullName: $('#fullName').val(),
-                    phone: $('#phone').val()
-                };
+                const formData = new FormData();
+                formData.append('fullName', $('#fullName').val());
+                formData.append('phone', $('#phone').val());
+                const imageFile = $('#image')[0].files[0];
+                if (imageFile) {
+                    formData.append('image', imageFile);
+                }
 
                 $.ajax({
                     url: '/profile/update',
                     type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(formData),
+                    processData: false,
+                    contentType: false,
+                    data: formData,
                     success: function (response) {
                         $('#success-message').text(response.message).show();
                         setTimeout(() => $('#success-message').fadeOut(), 3000);

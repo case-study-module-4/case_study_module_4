@@ -42,6 +42,8 @@
                     <li><a href="/posts/drafts" class="submenu-link">Tin nháp</a></li>
                 </ul>
             </li>
+            <hr>
+            <li><a class="menu-link" href="/transaction/transaction-history">Lịch sử giao dịch</a></li>
             <hr th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
             <li sec:authorize="hasRole('ROLE_USER')"><a href="#" class="menu-link" data-url="/user/customers">Quản lý người quan tâm</a></li>
             <hr>

@@ -2,6 +2,7 @@ package com.example.case_study.controller;
 
 import com.example.case_study.dto.AccountDTO;
 import com.example.case_study.service.impl.AccountService;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ public class AdminController {
     @Autowired
     private AccountService accountService;
 
+
     @GetMapping
     public String getAllAccounts(Model model) {
         List<AccountDTO> accounts = accountService.getAllAccounts();
@@ -26,14 +28,9 @@ public class AdminController {
         return "admin/account-list";
     }
 
-    @PostMapping("/account/delete/{id}")
-    public String deleteAccount(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
-        boolean deleted = accountService.softDeleteAccount(id);
-        if (!deleted) {
-            redirectAttributes.addFlashAttribute("error", "Không tìm thấy tài khoản");
-        } else {
-            redirectAttributes.addFlashAttribute("success", "Xóa tài khoản thành công");
-        }
-        return "redirect:/admin";
+    @PostMapping("/{id}/toggle-status")
+    public String toggleAccountStatus(@PathVariable Integer id) {
+        accountService.toggleAccountStatus(id);
+        return "redirect:/admin/account";
     }
 }

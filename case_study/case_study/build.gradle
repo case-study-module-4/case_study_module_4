@@ -33,7 +33,7 @@ dependencies {
     implementation 'org.apache.poi:poi-ooxml:5.2.3'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+//    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -46,6 +46,7 @@ dependencies {
     implementation group: 'com.cloudinary', name: 'cloudinary-http44', version: '1.39.0'
 //  Temporary explicit version to fix Thymeleaf bug
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
 }
 
 tasks.named('test') {

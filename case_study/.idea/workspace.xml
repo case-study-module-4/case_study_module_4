@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="096f6cd6-8127-42b9-95db-8b5856dce813" name="Changes" comment="" />
+    <list default="true" id="096f6cd6-8127-42b9-95db-8b5856dce813" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/case_study/src/main/java/com/example/case_study/config/VNPayConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/case_study/src/main/java/com/example/case_study/controller/VNPayController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case_study/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/case_study/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case_study/src/main/java/com/example/case_study/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/case_study/src/main/java/com/example/case_study/controller/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case_study/src/main/java/com/example/case_study/repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/case_study/src/main/java/com/example/case_study/repository/AccountRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case_study/src/main/java/com/example/case_study/service/IAccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/case_study/src/main/java/com/example/case_study/service/IAccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case_study/src/main/java/com/example/case_study/service/impl/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/case_study/src/main/java/com/example/case_study/service/impl/AccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case_study/src/main/java/com/example/case_study/service/impl/VNPayService.java" beforeDir="false" afterPath="$PROJECT_DIR$/case_study/src/main/java/com/example/case_study/service/impl/VNPayService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case_study/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/case_study/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case_study/src/main/resources/templates/admin/account-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/case_study/src/main/resources/templates/admin/account-list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case_study/src/main/resources/templates/user/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/case_study/src/main/resources/templates/user/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case_study/src/main/resources/templates/user/deposit.html" beforeDir="false" afterPath="$PROJECT_DIR$/case_study/src/main/resources/templates/user/deposit.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,9 +27,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2seshPRLdMHaQKvlmAgPCjH6Qkg" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -20,21 +37,30 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Gradle.D:/codegym/bat_dong_san/case_study_module_4/case_study/case_study/build.gradle.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.Unnamed.executor": "Run",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/case09/case_study_module_4/case_study/case_study",
+    "last_opened_file_path": "D:/codegym/bat_dong_san/case_study_module_4/case_study/case_study",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.145" />
-        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.145" />
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
       </set>
     </attachedChunks>
   </component>
@@ -47,10 +73,26 @@
       <option name="presentableId" value="Default" />
       <updated>1738827493872</updated>
       <workItem from="1738827495090" duration="251000" />
+      <workItem from="1739240982936" duration="109000" />
+      <workItem from="1739241106637" duration="73000" />
+      <workItem from="1739241296283" duration="231000" />
+      <workItem from="1739241578696" duration="43000" />
+      <workItem from="1739241673779" duration="492000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/case_study/src/main/java/com/example/case_study/CaseStudyApplication.java</url>
+          <line>9</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

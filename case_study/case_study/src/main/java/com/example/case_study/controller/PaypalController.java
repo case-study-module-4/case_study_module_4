@@ -44,7 +44,7 @@ public class PaypalController {
         String username = principal.getName();
         User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
-        return "user/deposit"; // Hiển thị trang nạp tiền
+        return "user/deposit";
     }
 
     @PostMapping("/paypal")
@@ -128,11 +128,11 @@ public class PaypalController {
                     deposit.setUser(user);
                     deposit.setAmount(amountVND);
                     deposit.setPaymentDate(LocalDate.now());
-                    deposit.setPaymentMethod("PayPal");
+                    deposit.setPaymentMethod("Thanh toan bang PayPal");
                     deposit.setStatus("Completed");
                     deposit.setTransactionId(payment.getId()); // Lưu transaction ID từ PayPal
                     deposit.setPayerEmail(payment.getPayer().getPayerInfo().getEmail());
-                    depositService.saveDeposit(deposit); // Lưu vào database
+                    depositService.saveDeposit(deposit);
                     return "user/success";
                 } else {
                     throw new RuntimeException("Không tìm thấy tỷ giá VND từ API.");
@@ -145,7 +145,6 @@ public class PaypalController {
 
         return "redirect:/deposit?error=payment_failed";
     }
-
 
     @GetMapping("/cancel")
     public String cancelPay() {

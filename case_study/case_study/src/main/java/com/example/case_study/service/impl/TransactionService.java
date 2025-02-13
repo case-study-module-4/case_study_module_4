@@ -1,5 +1,6 @@
 package com.example.case_study.service.impl;
 
+import com.example.case_study.dto.TransactionHistoryDto;
 import com.example.case_study.model.Post;
 import com.example.case_study.model.Transaction;
 import com.example.case_study.model.User;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -86,5 +88,10 @@ public class TransactionService implements ITransactionService {
 
         // Lưu lại giao dịch vào CSDL
         return transactionRepository.save(transaction);
+    }
+
+    @Override
+    public List<TransactionHistoryDto> getAllTransactionHistory() {
+        return transactionRepository.getAllTransactionHistory();
     }
 }

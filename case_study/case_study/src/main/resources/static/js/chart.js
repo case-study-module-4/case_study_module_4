@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }]
         },
         options: {
-            responsive: true,
+            responsive: false,
             // Điều chỉnh góc quay của hình tròn ở đây:
             rotation: -Math.PI / 5, // Ví dụ: quay sao cho phần đầu tiên nằm ở vị trí 12 giờ.
             cutout: "50%", // Tạo rỗng ở giữa
@@ -74,5 +74,4 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }]
     });
-    initDirectionChart();
 });

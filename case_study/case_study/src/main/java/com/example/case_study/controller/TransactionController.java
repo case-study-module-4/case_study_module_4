@@ -1,10 +1,13 @@
 package com.example.case_study.controller;
 
+import com.example.case_study.dto.DepositHistoryDto;
+import com.example.case_study.dto.TransactionHistoryDto;
 import com.example.case_study.model.Post;
 import com.example.case_study.model.PostType;
 import com.example.case_study.model.Transaction;
 import com.example.case_study.model.User;
 import com.example.case_study.repository.PostTypeRepository;
+import com.example.case_study.service.IDepositService;
 import com.example.case_study.service.ITransactionService;
 import com.example.case_study.service.IUserService;
 import com.example.case_study.service.impl.PostService;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -32,6 +36,9 @@ public class TransactionController {
 
     @Autowired
     private PostTypeRepository postTypeRepository;
+
+    @Autowired
+    private IDepositService depositService;
 
 
     @GetMapping("/transaction")
@@ -88,6 +95,19 @@ public class TransactionController {
             model.addAttribute("postId", postId);
             return "transaction/transaction";
         }
+    }
+
+
+    @GetMapping("/transaction-history")
+    public String getTransactionHistory(Model model) {
+        List<DepositHistoryDto> deposits = depositService.getAllDepositHistory();
+        List<TransactionHistoryDto> payments = transactionService.getAllTransactionHistory();
+
+
+        model.addAttribute("deposits", deposits);
+        model.addAttribute("payments", payments);
+
+        return "transaction/transaction-history";
     }
 }
 

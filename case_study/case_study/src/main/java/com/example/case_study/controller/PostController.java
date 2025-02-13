@@ -129,9 +129,7 @@ public class PostController {
             postDTO.setArea(post.getRealEstate().getArea());
             postDTO.setDirection(post.getRealEstate().getDirection());
             postDTO.setPrice(post.getRealEstate().getPrice());
-            // Gán ảnh chính
             postDTO.setImage(post.getImage());
-            // Gán danh sách ảnh phụ (nếu có)
             postDTO.setImages(post.getImages());
             postDTO.setPayable(post.getPayable());
 

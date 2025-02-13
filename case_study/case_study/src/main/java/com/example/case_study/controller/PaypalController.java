@@ -128,7 +128,7 @@ public class PaypalController {
                     deposit.setUser(user);
                     deposit.setAmount(amountVND);
                     deposit.setPaymentDate(LocalDate.now());
-                    deposit.setPaymentMethod("Thanh toan bang PayPal");
+                    deposit.setPaymentMethod("Thanh toán bằng PayPal");
                     deposit.setStatus("Completed");
                     deposit.setTransactionId(payment.getId()); // Lưu transaction ID từ PayPal
                     deposit.setPayerEmail(payment.getPayer().getPayerInfo().getEmail());

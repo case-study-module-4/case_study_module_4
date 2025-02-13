@@ -21,7 +21,7 @@
                 <p>Số dư tài khoản</p>
                 <div>
                     <span>TK Chính:</span>
-                    <span th:text="${user.balance}">0</span>
+                    <span th:text="${#numbers.formatDecimal(user.balance, 0, 'COMMA', 0, 'POINT')} + ' VND'"></span>
                 </div>
                 <button class="btn btn-danger text-white">
                     <a href="" class="submenu-link" data-url="/deposit" style="color: white; text-decoration: none;">Nạp tiền</a>
@@ -35,7 +35,7 @@
                 <a class="menu-link" href="/admin/account">Quản lý người dùng</a>
             </li>
             <li sec:authorize="hasRole('ROLE_USER')">
-                <a href="#" class="menu-link">Quản lý tin đăng</a>
+                <a href="" class="menu-link">Quản lý tin đăng</a>
                 <ul class="submenu">
                     <li><a href="/posts/create" class="submenu-link">Đăng tin mới</a></li>
                     <li><a href="/posts/approved" class="submenu-link">Danh sách tin</a></li>
@@ -57,7 +57,7 @@
             <li>
                 <a href="#" class="menu-link">Quản lý tài khoản</a>
                 <ul class="submenu">
-                    <li><a href="#" class="submenu-link" data-url="/profile/edit">Chỉnh sửa thông tin</a></li>
+                    <li><a href="/profile/edit" class="submenu-link">Chỉnh sửa thông tin</a></li>
                     <li><a href="/account/update-password" class="submenu-link">Cài đặt tài khoản</a></li>
                 </ul>
             </li>
@@ -94,7 +94,6 @@
                     type: 'GET',
                     success: function (data) {
                         $('#main-content').html(data); // Đổ nội dung vào main-content
-                        initEditProfileScript(); // Gọi lại script liên quan
                     },
                     error: function () {
                         alert('Không thể tải nội dung.');
@@ -102,36 +101,6 @@
                 });
             }
         });
-
-        function initEditProfileScript() {
-            // Gắn sự kiện click cho nút Lưu
-            $('#save-profile-btn').on('click', function () {
-                const formData = new FormData();
-                formData.append('fullName', $('#fullName').val());
-                formData.append('phone', $('#phone').val());
-                const imageFile = $('#image')[0].files[0];
-                if (imageFile) {
-                    formData.append('image', imageFile);
-                }
-
-                $.ajax({
-                    url: '/profile/update',
-                    type: 'POST',
-                    processData: false,
-                    contentType: false,
-                    data: formData,
-                    success: function (response) {
-                        $('#success-message').text(response.message).show();
-                        setTimeout(() => $('#success-message').fadeOut(), 3000);
-                    },
-                    error: function (xhr) {
-                        const errors = xhr.responseJSON.errors || {};
-                        $('#fullName-error').text(errors.fullName || '');
-                        $('#phone-error').text(errors.phone || '');
-                    }
-                });
-            });
-        }
     });
 </script>
 <div th:insert="~{/layout/layout::footer}"></div>

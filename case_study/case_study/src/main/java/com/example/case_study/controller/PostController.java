@@ -107,8 +107,6 @@ public class PostController {
         return "redirect:/posts";
     }
 
-
-
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable Integer id, Model model) {
         Optional<Post> postOptional = postService.findById(id);

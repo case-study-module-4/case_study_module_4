@@ -1,0 +1,40 @@
+
+<div>
+  <!-- Thanh tìm kiếm -->
+  <div class="search-container">
+    <input type="text" id="search" placeholder="Nhập địa điểm...">
+    <select id="city">
+      <option>Đà Nẵng</option>
+      <option>Hà Nội</option>
+      <option>TP. HCM</option>
+    </select>
+    <button onclick="search()">Tìm kiếm</button>
+  </div>
+
+  <!-- Bộ lọc -->
+  <div class="filter-container">
+    <button>Lọc</button>
+    <select>
+      <option>Loại nhà đất</option>
+    </select>
+    <select>
+      <option>Mức giá</option>
+    </select>
+    <div class="toggle-btn">
+      <input type="checkbox" id="verified">
+      <label for="verified">Tin xác thực</label>
+    </div>
+    <div class="toggle-btn">
+      <input type="checkbox" id="pro-agent">
+      <label for="pro-agent">Môi giới chuyên nghiệp</label>
+    </div>
+  </div>
+</div>
+
+<script>
+  function search() {
+    let query = document.getElementById("search").value;
+    let city = document.getElementById("city").value;
+    alert(`Tìm kiếm: ${query} tại ${city}`);
+  }
+</script>

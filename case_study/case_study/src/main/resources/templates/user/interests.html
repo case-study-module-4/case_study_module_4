@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Danh sách người quan tâm</title>
+    <th:block th:insert="~{/layout/layout::library}"></th:block>
+    <link rel="stylesheet" href="/style/header.css">
+    <style>
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        .content-wrapper {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgb(200, 166, 166);
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse; /* Kết hợp viền giữa các ô */
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd; /* Viền cho các ô */
+            padding: 10px; /* Thêm khoảng cách giữa nội dung và viền */
+            text-align: left;
+        }
+        th {
+            background-color: #f8f9fa; /* Màu nền cho tiêu đề bảng */
+            color: #333; /* Màu chữ */
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* Màu nền xen kẽ cho hàng chẵn */
+        }
+        tr:hover {
+            background-color: #f1f1f1; /* Hiệu ứng hover cho hàng */
+        }
+    </style>
+</head>
+<body>
+<div th:insert="~{/layout/layout::header}"></div>
+<main class="main-content" id="main-content">
+    <div id="default-content" class="content-wrapper">
+        <h2>Danh sách người đã quan tâm bài viết của bạn</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Tiêu đề bài viết</th>
+            <th>Tên người quan tâm</th>
+            <th>Số điện thoại</th>
+            <th>Thời gian quan tâm</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(interests)}">
+            Danh sách trống.
+        </tr>
+        <tr th:each="interest : ${interests}">
+            <td>
+                <a th:href="@{/posts/{id}(id=${interest.post.id})}"
+                   th:text="${interest.post.title}"></a>
+            </td>
+            <td th:text="${interest.account.user.fullName}"></td>
+            <td th:text="${interest.account.user.phone}"></td>
+            <td th:text="${#temporals.format(interest.interestTime, 'dd/MM/YYYY')}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</main>
+
+</body>
+</html>

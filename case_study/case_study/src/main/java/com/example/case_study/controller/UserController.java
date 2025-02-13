@@ -3,6 +3,7 @@ package com.example.case_study.controller;
 import com.example.case_study.model.Post;
 import com.example.case_study.model.User;
 import com.example.case_study.service.IUserService;
+
 import com.example.case_study.service.impl.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -29,6 +31,9 @@ public class UserController {
     @Autowired
     private PostService postService;
 
+//    @Autowired
+//    private FileStorageService fileStorageService;
+
     @GetMapping("/dashboard")
     public String showDashboard(Model model, Principal principal) {
         if (principal == null) {
@@ -39,6 +44,7 @@ public class UserController {
         if (user == null) {
             return "redirect:/error";
         }
+        model.addAttribute("userId", user.getId());
         model.addAttribute("user", user);
         return "user/dashboard";
     }
@@ -58,6 +64,7 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<?> updateProfile(@Valid @RequestBody User user,
                                            BindingResult bindingResult,
+                                           @RequestParam(value = "image", required = false) MultipartFile image,
                                            Principal principal) {
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bạn cần đăng nhập để thực hiện thao tác này.");
@@ -75,6 +82,15 @@ public class UserController {
 
         existingUser.setFullName(user.getFullName());
         existingUser.setPhone(user.getPhone());
+//        if (image != null && !image.isEmpty()) {
+//            try {
+//                String imagePath = fileStorageService.storeFile(image); // Lưu ảnh và trả về đường dẫn
+//                existingUser.setImage(imagePath);
+//            } catch (Exception e) {
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                        .body("Lỗi khi lưu ảnh: " + e.getMessage());
+//            }
+//        }
         userService.updateUser(existingUser);
 
         return ResponseEntity.ok("Cập nhật thông tin thành công!");

@@ -11,7 +11,9 @@ import com.example.case_study.service.IDepositService;
 import com.example.case_study.service.ITransactionService;
 import com.example.case_study.service.IUserService;
 import com.example.case_study.service.impl.PostService;
+import com.example.case_study.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -99,9 +101,9 @@ public class TransactionController {
 
 
     @GetMapping("/transaction-history")
-    public String getTransactionHistory(Model model) {
-        List<DepositHistoryDto> deposits = depositService.getAllDepositHistory();
-        List<TransactionHistoryDto> payments = transactionService.getAllTransactionHistory();
+    public String getTransactionHistory(Model model, Principal piPrincipal) {
+        List<DepositHistoryDto> deposits = depositService.getAllDepositHistory(piPrincipal.getName());
+        List<TransactionHistoryDto> payments = transactionService.getAllTransactionHistory(piPrincipal.getName());
 
 
         model.addAttribute("deposits", deposits);

@@ -69,7 +69,12 @@
                 </ul>
             </li>
             <hr>
-            <li><a href="#" class="menu-link" data-url="/user/customers">Quản lý khách hàng</a></li>
+            <li><a th:href="@{/user/interests(userId=${userId})}"
+                   style="color: black; text-decoration: none; font-weight: bold;"
+                   onmouseover="this.style.color='red'"
+                   onmouseout="this.style.color='black'"
+                   onclick="this.style.color='red'">Danh sách khách hàng</a>
+            </li>
             <hr>
             <li>
                 <a href="/dashboard" class="menu-link">Quản lý tài khoản</a>

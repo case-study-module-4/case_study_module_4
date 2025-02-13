@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/register")
@@ -26,15 +27,16 @@ public class RegisterController {
     public String processRegister(@Valid @ModelAttribute("accountDTO") AccountRegisterDTO accountDTO,
                                   BindingResult result,
                                   @RequestParam String confirmPassword,
-                                  Model model) {
+                                  Model model,
+                                  RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "login/register";
         }
 
         String responseMessage = accountService.registerAccount(accountDTO, confirmPassword);
         if (responseMessage.equals("Đăng ký thành công! Hãy đăng nhập.")) {
-            model.addAttribute("message", responseMessage);
-            return "login/login";
+            redirectAttributes.addFlashAttribute("message", responseMessage);
+            return "redirect:/login";
         } else {
             model.addAttribute("error", responseMessage);
             return "login/register";

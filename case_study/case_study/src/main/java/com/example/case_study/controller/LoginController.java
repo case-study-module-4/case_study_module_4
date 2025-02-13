@@ -49,7 +49,7 @@
             if (roles.contains("ROLE_ADMIN")) {
                 return "redirect:/home";
             } else if (roles.contains("ROLE_USER")) {
-                return "redirect:/user/home";
+                return "redirect:/home";
             }
 
             return "redirect:/home";

@@ -193,3 +193,7 @@
     background-color: #d9392e; /* Màu đỏ đậm */
     color: white; /* Chữ màu trắng để dễ nhìn */
 }
+
+.dropdown-menu {
+    transform: translateX(-50px);
+}

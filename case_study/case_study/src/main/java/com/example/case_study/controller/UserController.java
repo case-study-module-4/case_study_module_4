@@ -39,6 +39,7 @@ public class UserController {
         if (user == null) {
             return "redirect:/error";
         }
+        model.addAttribute("userId", user.getId());
         model.addAttribute("user", user);
         return "user/dashboard";
     }
@@ -75,6 +76,7 @@ public class UserController {
 
         existingUser.setFullName(user.getFullName());
         existingUser.setPhone(user.getPhone());
+        existingUser.setImage(user.getImage());
         userService.updateUser(existingUser);
 
         return ResponseEntity.ok("Cập nhật thông tin thành công!");

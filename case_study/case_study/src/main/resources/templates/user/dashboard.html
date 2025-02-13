@@ -24,7 +24,8 @@
                     <span th:text="${user.balance}">0</span>
                 </div>
                 <button class="btn btn-danger text-white">
-                    <a href="" class="submenu-link" data-url="/deposit" style="color: white; text-decoration: none;">Nạp tiền</a>
+                    <a href="" class="submenu-link" data-url="/deposit" style="color: white; text-decoration: none;">Nạp
+                        tiền</a>
                 </button>
             </div>
         </div>
@@ -40,14 +41,19 @@
                 </ul>
             </li>
             <hr>
-            <li><a href="#" class="menu-link" data-url="/user/customers">Quản lý khách hàng</a></li>
+            <li><a th:href="@{/user/interests(userId=${userId})}"
+                   style="color: black; text-decoration: none; font-weight: bold;"
+                   onmouseover="this.style.color='red'"
+                   onmouseout="this.style.color='black'"
+                   onclick="this.style.color='red'">Danh sách khách hàng</a>
+            </li>
             <hr>
             <li>
                 <a href="#" class="menu-link">Quản lý tài khoản</a>
                 <ul class="submenu">
                     <li><a href="#" class="submenu-link" data-url="/profile/edit">Chỉnh sửa thông tin</a></li>
                     <li><a href="/account/update-password" class="submenu-link">Cài đặt tài khoản</a></li>
-<!--                    <li><a href="#" class="submenu-link" data-url="/accounts/update-password">Cài đặt tài khoản</a></li>-->
+                    <!--                    <li><a href="#" class="submenu-link" data-url="/accounts/update-password">Cài đặt tài khoản</a></li>-->
                 </ul>
             </li>
         </ul>
@@ -113,6 +119,7 @@
         }
     });
 </script>
+
 <div th:insert="~{/layout/layout::footer}"></div>
 
 </body>

@@ -43,7 +43,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query("SELECT p FROM post p ORDER BY p.publishDate DESC ")
     List<Post> findLatestPosts(Pageable pageable);
 
-
 }
 
 

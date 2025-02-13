@@ -44,6 +44,7 @@ dependencies {
     implementation 'org.json:json:20210307'
 //  Temporary explicit version to fix Thymeleaf bug
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {

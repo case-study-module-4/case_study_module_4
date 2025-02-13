@@ -39,7 +39,7 @@ public class WebSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/home", "/login", "/register", "/403", "/style/**", "/uploads/**", "/images/**", "/js/**","/posts", "/posts/*").permitAll()
+                        .requestMatchers("/home", "/login", "/register", "/403", "/style/**", "/uploads/**", "/images/**", "/js/**","/posts", "/posts/*", "/ws/**").permitAll()
                         // Các endpoint thao tác cần đăng nhập
                         .requestMatchers("/posts/create", "/posts/*/edit", "/posts/*/delete").authenticated()
 

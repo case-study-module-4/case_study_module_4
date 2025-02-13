@@ -75,7 +75,7 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item" sec:authorize="hasRole('ROLE_USER')">
                             <a class="btn btn-danger text-white" href="/posts/create">Đăng tin</a>
                         </li>
                     </ul>

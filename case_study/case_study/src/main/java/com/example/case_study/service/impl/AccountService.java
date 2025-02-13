@@ -127,7 +127,6 @@ public class AccountService implements IAccountService {
 
     @Transactional
     public void toggleAccountStatus(Integer id) {
-        System.out.println("--------------------------------------------------------------------------");
         Account account = accountRepository.findById(id).orElse(null);
         if (account == null) {
             throw new EntityNotFoundException("Tài khoản không tồn tại");

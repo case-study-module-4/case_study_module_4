@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài khoản bị khóa</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div class="container">
+    <h2>Tài khoản của bạn đã bị khóa</h2>
+    <p>Vui lòng liên hệ với Admin để mở khóa tài khoản của bạn.</p>
+
+    <p>Email hỗ trợ: <a href="mailto:phuong@100998@gmail.com">phuong100998@gmail.com</a></p>
+
+    <!-- Gửi yêu cầu mở khóa -->
+    <form action="/auth/unlock-request" method="POST">
+        <input type="hidden" name="username" value="${username}">
+        <button type="submit">Yêu cầu mở khóa</button>
+    </form>
+
+    <a href="/login">Quay lại trang đăng nhập</a>
+</div>
+</body>
+</html>

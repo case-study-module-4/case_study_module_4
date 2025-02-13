@@ -96,12 +96,13 @@
     <h2 class="text-center">Lịch sử Giao Dịch</h2>
 
     <!-- Chọn loại giao dịch -->
-    <div class="mb-3">
+    <div class="mb-3 ">
         <label for="transactionType" class="form-label">Chọn loại giao dịch:</label>
         <select id="transactionType" class="form-select" onchange="showTable()">
             <option value="deposit">Lịch sử Nạp Tiền</option>
             <option value="payment">Lịch sử Thanh Toán</option>
         </select>
+        <a th:href="@{/home}" class="btn btn-secondary" style="margin-top: 20px">Quay lại Trang Chủ</a>
     </div>
 
     <!-- Lịch sử Nạp Tiền -->
@@ -119,7 +120,7 @@
             <tbody>
             <tr th:each="deposit, status : ${deposits}">
                 <td th:text="${status.count}"></td>
-                <td th:text="${deposit.amount} + ' VND'"></td>
+                <td th:text="${#numbers.formatDecimal(deposit.amount, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
                 <td th:text="${deposit.paymentMethod}"></td>
                 <td th:text="${#temporals.format(deposit.paymentDate, 'dd/MM/yyyy')}"></td>
             </tr>
@@ -134,6 +135,8 @@
             <thead class="table-success">
             <tr>
                 <th>STT</th>
+                <th>Mã tin đăng</th>
+                <th>Tin đăng đã thanh toán</th>
                 <th>Số Tiền</th>
                 <th>Ngày Giao Dịch</th>
             </tr>
@@ -141,7 +144,9 @@
             <tbody>
             <tr th:each="transaction, status : ${payments}">
                 <td th:text="${status.count}"></td>
-                <td th:text="${transaction.price} + ' VND'"></td>
+                <td th:text="${transaction.formattedId}"></td>
+                <td th:text="${transaction.title}"></td>
+                <td th:text="${#numbers.formatDecimal(transaction.price, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
                 <td th:text="${transaction.publishDate}"></td>
 
             </tr>

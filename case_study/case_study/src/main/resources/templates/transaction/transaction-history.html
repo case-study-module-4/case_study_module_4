@@ -97,7 +97,7 @@
 
     <!-- Chọn loại giao dịch -->
     <div class="mb-3 ">
-        <label for="transactionType" class="form-label">Chọn loại giao dịch:</label>
+        <h6><label for="transactionType" class="form-label">Chọn loại giao dịch:</label></h6>
         <select id="transactionType" class="form-select" onchange="showTable()">
             <option value="deposit">Lịch sử Nạp Tiền</option>
             <option value="payment">Lịch sử Thanh Toán</option>
@@ -148,7 +148,6 @@
                 <td th:text="${transaction.title}"></td>
                 <td th:text="${#numbers.formatDecimal(transaction.price, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
                 <td th:text="${transaction.publishDate}"></td>
-
             </tr>
             </tbody>
         </table>

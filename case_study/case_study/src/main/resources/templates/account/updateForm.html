@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cập nhật mật khẩu</title>
   <th:block th:replace="~{layout/layout::library}"></th:block>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
   <style>
     body {
       background-color: #f8f9fa;
@@ -30,14 +32,28 @@
   <div class="form-container">
     <h2 class="form-title">Cập nhật mật khẩu</h2>
 
-    <!-- Hiển thị thông báo lỗi -->
-    <div th:if="${error}" class="alert alert-danger" role="alert">
-      <span th:text="${error}"></span>
-    </div>
+    <!-- Toast Container -->
+    <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
 
-    <!-- Hiển thị thông báo thành công -->
-    <div th:if="${success}" class="alert alert-success" role="alert">
-      <span th:text="${success}"></span>
+      <!-- Toast lỗi -->
+      <div th:if="${error}" id="errorToast" class="toast align-items-center text-bg-danger border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            <span th:text="${error}"></span>
+          </div>
+          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+
+      <!-- Toast thành công -->
+      <div th:if="${success}" id="successToast" class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            <span th:text="${success}"></span>
+          </div>
+          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
     </div>
 
     <form th:action="@{/account/update-password}" method="post">
@@ -59,6 +75,23 @@
     </form>
   </div>
 </div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Kích hoạt Toast tự động khi trang tải xong
+  document.addEventListener("DOMContentLoaded", function() {
+    const errorToast = document.getElementById("errorToast");
+    const successToast = document.getElementById("successToast");
+
+    if (errorToast) {
+      new bootstrap.Toast(errorToast).show();
+    }
+    if (successToast) {
+      new bootstrap.Toast(successToast).show();
+    }
+  });
+</script>
 
 </body>
 </html>

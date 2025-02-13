@@ -20,19 +20,17 @@ public class ImageController {
     @Autowired
     private PostService postService;
 
-    @DeleteMapping("/{id}")
+    /*@DeleteMapping("/{id}")
     public ResponseEntity<?> deleteImage(@PathVariable Integer id) {
         Optional<Image> imageOpt = imageRepository.findById(id);
         if (imageOpt.isPresent()) {
             Image image = imageOpt.get();
-            // Xóa file ảnh khỏi hệ thống file
             postService.deleteImageFile(image.getImage());
-            // Xóa record trong DB
             imageRepository.delete(image);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ảnh không tồn tại");
         }
-    }
+    }*/
 }
 

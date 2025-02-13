@@ -1,7 +1,14 @@
 package com.example.case_study.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import com.example.case_study.config.CloudinaryConfig;
 import com.example.case_study.dto.PostDTO;
-import com.example.case_study.model.*;
+import com.example.case_study.model.Image;
+import com.example.case_study.model.Post;
+import com.example.case_study.model.Purpose;
+import com.example.case_study.model.RealEstate;
+import com.example.case_study.model.User;
 import com.example.case_study.repository.ImageRepository;
 import com.example.case_study.repository.PostRepository;
 import com.example.case_study.repository.PurposeRepository;
@@ -10,22 +17,15 @@ import com.example.case_study.service.IPostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.UUID;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
+import java.util.UUID;
 
 @Service
 public class PostService implements IPostService {
@@ -41,6 +41,9 @@ public class PostService implements IPostService {
 
     @Autowired
     private ImageRepository imageRepository;
+
+    private Cloudinary cloudinary = CloudinaryConfig.getCloudinary();
+
 
     @Override
     public List<Post> findAll() {
@@ -62,11 +65,10 @@ public class PostService implements IPostService {
         postRepository.deleteById(id);
     }
 
-
     @Override
     public Post createPost(@Valid PostDTO postDTO, User user) {
         try {
-            // Tạo đối tượng RealEstate từ PostDTO
+            // 1. Tạo đối tượng RealEstate từ PostDTO
             RealEstate realEstate = new RealEstate();
             realEstate.setType(postDTO.getType());
             realEstate.setLocation(postDTO.getLocation());
@@ -75,12 +77,12 @@ public class PostService implements IPostService {
             realEstate.setPrice(postDTO.getPrice());
             realEstateRepository.save(realEstate);
 
-            // Tạo đối tượng Purpose từ DTO
+            // 2. Tạo đối tượng Purpose từ DTO
             Purpose purpose = new Purpose();
             purpose.setPurpose(postDTO.getPurpose());
             purposeRepository.save(purpose);
 
-            // Tạo đối tượng Post
+            // 3. Tạo đối tượng Post
             Post post = new Post();
             post.setTitle(postDTO.getTitle());
             post.setContent(postDTO.getContent());
@@ -91,42 +93,29 @@ public class PostService implements IPostService {
             post.setUser(user);
             post.setPayable("no");
 
-            // Xử lý lưu ảnh (như đã code)
+            // 4. Xử lý upload ảnh qua Cloudinary
             List<MultipartFile> files = postDTO.getImageFiles();
-            String uploadDir = "uploads";
             if (files != null && !files.isEmpty() && !files.get(0).isEmpty()) {
-                // Lưu ảnh đầu tiên làm ảnh chính
+                // 4.1 Upload ảnh đầu tiên làm ảnh chính
                 MultipartFile mainFile = files.get(0);
-                // Tạo tên file duy nhất để tránh trùng lặp
-                String fileName = UUID.randomUUID().toString() + "_" + mainFile.getOriginalFilename();
-                Path uploadPath = Paths.get(uploadDir);
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
-                Path filePath = uploadPath.resolve(fileName);
-                Files.copy(mainFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-                post.setImage("/uploads/" + fileName);
+                Map<?, ?> uploadResult = cloudinary.uploader().upload(mainFile.getBytes(), ObjectUtils.emptyMap());
+                String imageUrl = uploadResult.get("secure_url").toString();
+                post.setImage(imageUrl);
             }
-            post.setRealEstate(realEstate);
-            // Lưu Post để có id nếu cần dùng cho Image sau này
+
+            // 5. Lưu Post để có id nếu cần dùng cho các bản ghi ảnh sau này
             Post savedPost = postRepository.save(post);
 
-
-            // Xử lý lưu các ảnh khác (nếu có)
-            if (files != null && !files.isEmpty()) {
-                for (MultipartFile file : files) {
+            // 6. Upload và lưu các ảnh phụ (bỏ qua ảnh chính để tránh upload 2 lần)
+            if (files != null && files.size() > 1) {
+                for (int i = 1; i < files.size(); i++) {
+                    MultipartFile file = files.get(i);
                     if (!file.isEmpty()) {
-                        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-                        Path uploadPath = Paths.get(uploadDir);
-                        if (!Files.exists(uploadPath)) {
-                            Files.createDirectories(uploadPath);
-                        }
-                        Path filePath = uploadPath.resolve(fileName);
-                        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
+                        Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+                        String imageUrl = uploadResult.get("secure_url").toString();
                         Image image = new Image();
                         image.setPost(post); // liên kết ảnh với bài đăng
-                        image.setImage("/uploads/" + fileName); // lưu đường dẫn ảnh
+                        image.setImage(imageUrl); // lưu URL ảnh trả về từ Cloudinary
                         imageRepository.save(image);
                     }
                 }
@@ -134,12 +123,10 @@ public class PostService implements IPostService {
             return savedPost;
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Lỗi khi xử lý file ảnh: " + e.getMessage());
+            throw new RuntimeException("Lỗi khi upload ảnh lên Cloudinary: " + e.getMessage());
         }
     }
 
-
-    // Trong PostService.java
     @Override
     public void updatePost(Post post, @Valid PostDTO postDTO, List<Integer> deleteImageIds) {
         try {
@@ -147,7 +134,9 @@ public class PostService implements IPostService {
             post.setTitle(postDTO.getTitle());
             post.setContent(postDTO.getContent());
             post.setStatus(postDTO.getStatus());
-            post.setPublishDate(postDTO.getPublishDate());
+            if ("no".equalsIgnoreCase(post.getPayable())) {
+                post.setPublishDate(postDTO.getPublishDate());
+            }
 
             // 2. Cập nhật thông tin RealEstate
             RealEstate realEstate = post.getRealEstate();
@@ -171,86 +160,76 @@ public class PostService implements IPostService {
             purposeRepository.save(purpose);
             post.setPurpose(purpose);
 
-            // 4. Xử lý file hình ảnh mới được upload (nếu có)
+            // 4. Xử lý upload ảnh mới (nếu có) qua Cloudinary
             List<MultipartFile> files = postDTO.getImageFiles();
-            String uploadDir = "uploads";  // thư mục chứa file ảnh
             if (files != null && !files.isEmpty()) {
-                // Nếu file đầu tiên (ảnh chính) có nội dung
+                // Nếu ảnh chính mới có nội dung
                 if (!files.get(0).isEmpty()) {
-                    // Xóa ảnh chính cũ nếu có
-                    if (post.getImage() != null) {
-                        deleteImageFile(post.getImage());
-                    }
+                    // (Nếu cần) Xoá ảnh chính cũ khỏi Cloudinary
+                    // TODO: Thực hiện xoá ảnh cũ từ Cloudinary nếu bạn lưu public_id hoặc có cách truy xuất được
+                    // Ví dụ: deleteImageFromCloudinary(post.getImage());
+
                     MultipartFile mainFile = files.get(0);
-                    String fileName = UUID.randomUUID().toString() + "_" + mainFile.getOriginalFilename();
-                    Path uploadPath = Paths.get(uploadDir);
-                    if (!Files.exists(uploadPath)) {
-                        Files.createDirectories(uploadPath);
-                    }
-                    Path filePath = uploadPath.resolve(fileName);
-                    Files.copy(mainFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-                    post.setImage("/uploads/" + fileName);
+                    Map<?, ?> uploadResult = cloudinary.uploader().upload(mainFile.getBytes(), ObjectUtils.emptyMap());
+                    String imageUrl = uploadResult.get("secure_url").toString();
+                    post.setImage(imageUrl);
 
                     // (Tùy chọn) Lưu record của ảnh chính vào bảng Image
                     Image mainImage = new Image();
                     mainImage.setPost(post);
-                    mainImage.setImage("/uploads/" + fileName);
+                    mainImage.setImage(imageUrl);
                     imageRepository.save(mainImage);
                 }
-                // Xử lý các ảnh phụ (nếu có)
-                for (int i = 1; i < files.size(); i++) {
-                    MultipartFile file = files.get(i);
-                    if (!file.isEmpty()) {
-                        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-                        Path uploadPath = Paths.get(uploadDir);
-                        if (!Files.exists(uploadPath)) {
-                            Files.createDirectories(uploadPath);
+                // Xử lý upload các ảnh phụ (bắt đầu từ index 1)
+                if (files.size() > 1) {
+                    for (int i = 1; i < files.size(); i++) {
+                        MultipartFile file = files.get(i);
+                        if (!file.isEmpty()) {
+                            Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+                            String imageUrl = uploadResult.get("secure_url").toString();
+                            Image image = new Image();
+                            image.setPost(post);
+                            image.setImage(imageUrl);
+                            imageRepository.save(image);
                         }
-                        Path filePath = uploadPath.resolve(fileName);
-                        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-                        Image image = new Image();
-                        image.setPost(post);
-                        image.setImage("/uploads/" + fileName);
-                        imageRepository.save(image);
                     }
                 }
             }
 
-            // 5. Xử lý xóa các ảnh được chọn (deleteImageIds truyền từ form)
+            // 5. Xử lý xoá các ảnh được chọn (deleteImageIds truyền từ form)
+            // Nếu bạn muốn xoá ảnh khỏi Cloudinary, bạn cần triển khai thêm logic xoá trên Cloudinary.
             if (deleteImageIds != null && !deleteImageIds.isEmpty()) {
                 for (Integer imageId : deleteImageIds) {
                     Optional<Image> imageOpt = imageRepository.findById(imageId);
                     if (imageOpt.isPresent()) {
                         Image image = imageOpt.get();
-                        deleteImageFile(image.getImage());
+                        // TODO: Thực hiện xoá ảnh khỏi Cloudinary nếu cần
+                        // Ví dụ: deleteImageFromCloudinary(image.getImage());
                         imageRepository.delete(image);
                     }
                 }
             }
-
-            // 6. Lưu lại thông tin Post đã cập nhật
             postRepository.save(post);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Lỗi khi xử lý file ảnh: " + e.getMessage());
+            throw new RuntimeException("Lỗi khi upload ảnh lên Cloudinary: " + e.getMessage());
         }
     }
 
-
-
-    public void deleteImageFile(String imagePath) {
-        // Đường dẫn thư mục lưu file (nếu được cấu hình khác, bạn có thể sử dụng @Value để inject giá trị)
-        String uploadDir = "uploads";
-        // Lấy tên file từ đường dẫn
-        Path filePath = Paths.get(uploadDir).resolve(Paths.get(imagePath).getFileName());
+    // Nếu cần hỗ trợ xoá ảnh trên Cloudinary, bạn có thể triển khai phương thức này.
+    // Ví dụ: Sử dụng public_id đã lưu (nếu có) để gọi cloudinary.uploader().destroy(...)
+    /*
+    public void deleteImageFromCloudinary(String imageUrl) {
         try {
-            Files.deleteIfExists(filePath);
-        } catch (IOException e) {
+            // Lấy public_id từ URL (cách lấy public_id phụ thuộc vào cấu trúc URL và cách bạn lưu trữ ảnh)
+            String publicId = ...;
+            cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Lỗi khi xóa file ảnh: " + e.getMessage());
+            throw new RuntimeException("Lỗi khi xoá ảnh trên Cloudinary: " + e.getMessage());
         }
     }
+    */
 
     @Override
     public List<Post> getApprovedPosts() {
@@ -267,19 +246,14 @@ public class PostService implements IPostService {
         return postRepository.findByUserIdAndStatus(userId, "yes");
     }
 
-
     @Override
     public List<Post> getDraftPostsByUserId(Integer userId) {
-        // Trả về các bài viết của user có payable = "no"
         return postRepository.findByUserIdAndPayable(userId, "no");
     }
-
-
 
     @Override
     public List<PostDTO> searchPosts(String location, String type, String price, String area) {
         List<Post> posts = postRepository.searchPosts(location, type, price, area);
-
         return posts.stream().map(post -> {
             PostDTO dto = new PostDTO();
             dto.setId(post.getId());
@@ -303,8 +277,6 @@ public class PostService implements IPostService {
     @Override
     public List<PostDTO> getListDefault() {
         List<Post> posts = postRepository.findLatestPosts(PageRequest.of(0, 8));
-
-
         return posts.stream().map(post -> {
             PostDTO dto = new PostDTO();
             dto.setId(post.getId());
@@ -325,5 +297,9 @@ public class PostService implements IPostService {
         }).toList();
     }
 
+    @Override
+    public Long countByUserId(int userId) {
+        return postRepository.countByUserId(userId);
+    }
 
 }

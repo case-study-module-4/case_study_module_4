@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -19,7 +21,6 @@ public class Transaction {
     @Column(name = "id", columnDefinition = "INT")
 
     private Integer id;
-
 
     @NotNull(message = "Post ID must not be null")
     @ManyToOne

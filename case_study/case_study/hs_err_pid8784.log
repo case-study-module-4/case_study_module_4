@@ -1,0 +1,36 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffaf89d7554, pid=8784, tid=9312
+#
+# JRE version: OpenJDK Runtime Environment Corretto-21.0.4.7.1 (21.0.4+7) (build 21.0.4+7-LTS)
+# Java VM: OpenJDK 64-Bit Server VM Corretto-21.0.4.7.1 (21.0.4+7-LTS, mixed mode, emulated-client, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, windows-amd64)
+# Problematic frame:
+# V  [jvm.dll+0x3e7554]
+#
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   https://github.com/corretto/corretto-21/issues/
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -XX:TieredStopAtLevel=1 -Dspring.output.ansi.enabled=always -Dcom.sun.management.jmxremote -Dspring.jmx.enabled=true -Dspring.liveBeansView.mbeanDomain -Dspring.application.admin.enabled=true -Dmanagement.endpoints.jmx.exposure.include=* -javaagent:D:\Java\IntelliJ IDEA 2024.1.4\lib\idea_rt.jar=56009:D:\Java\IntelliJ IDEA 2024.1.4\bin -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 com.example.case_study.CaseStudyApplication
+
+Host: Intel(R) Core(TM) i5-7300HQ CPU @ 2.50GHz, 4 cores, 7G,  Windows 10 , 64 bit Build 19041 (10.0.19041.2546)
+Time: Wed Feb 12 08:21:03 2025 SE Asia Standard Time elapsed time: 55522.823821 seconds (0d 15h 25m 22s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000017490b358c0):  JavaThread "File Watcher" daemon [_thread_in_vm, id=9312, stack(0x000000090a400000,0x000000090a500000) (1024K)]
+
+Stack: [0x000000090a400000,0x000000090a500000],  sp=0x000000090a4ff400,  free space=1021k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x3e7554]
+V  [jvm.dll+0x6d82f2]
+V  [jvm.dll+0x3e8206]
+V  [jvm.dll+0x3e8497]
+V  [jvm.dll+0x47b475]
+V  [jvm.dll+0x3f9936]
+V  [jvm.dll+0x85c768]

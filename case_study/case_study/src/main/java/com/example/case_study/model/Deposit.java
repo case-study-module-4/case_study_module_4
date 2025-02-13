@@ -45,4 +45,11 @@ public class Deposit {
     @NotNull(message = "Status must not be null")
     @Column(name = "status", columnDefinition = "ENUM('Pending', 'Completed', 'Cancelled')", nullable = false)
     private String status;
+
+    @Column(name = "transaction_id", unique = true, length = 50, nullable = false)
+    private String transactionId;
+
+    // Email của người thanh toán, giúp hỗ trợ kiểm tra nếu có vấn đề
+    @Column(name = "payer_email", length = 100)
+    private String payerEmail;
 }

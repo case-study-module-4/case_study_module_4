@@ -5,6 +5,23 @@
     <link rel="stylesheet" href="/style/user-deposit.css">
 </head>
 <body>
+<!--<div class="deposit-container">-->
+<!--    <button onclick="payWithVNPay()">Thanh toán bằng VNPay</button>-->
+<!--    <h2>Nhập số tiền bạn muốn nạp (đ) *</h2>-->
+<!--    <div class="input-container">-->
+<!--        <input type="number" id="customAmount" min="10000" step="10000"-->
+<!--               placeholder="Nhập số tiền muốn nạp vào đây">-->
+<!--    </div>-->
+
+<!--    <div class="quick-options">-->
+<!--        <div class="option" onclick="payWithVNPay(500000)">500.000 đ</div>-->
+<!--        <div class="option" onclick="payWithVNPay(1000000)">1.000.000 đ</div>-->
+<!--        <div class="option" onclick="payWithVNPay(2000000)">2.000.000 đ</div>-->
+<!--        <div class="option" onclick="payWithVNPay(3000000)">3.000.000 đ</div>-->
+<!--        <div class="option" onclick="payWithVNPay(5000000)">5.000.000 đ</div>-->
+<!--        <div class="option" onclick="payWithVNPay(10000000)">10.000.000 đ</div>-->
+<!--    </div>-->
+<!--</div>-->
 <div class="deposit-container">
     <h2>Nhập số tiền bạn muốn nạp (đ) *</h2>
     <div class="input-container">
@@ -45,6 +62,36 @@
             alert("Số tiền tối thiểu là 10.000 VND");
         }
     }
+
+    // function payWithVNPay(amount) {
+    //     let inputAmount = document.getElementById("customAmount").value;
+    //     if (!amount && inputAmount) {
+    //         amount = parseFloat(inputAmount);
+    //     }
+    //
+    //     if (amount >= 10000) {
+    //         fetch(`/api/payment/vnpay?amount=${amount}`, { method: "GET" })
+    //             .then(response => {
+    //                 if (!response.ok) {
+    //                     throw new Error("HTTP error " + response.status);
+    //                 }
+    //                 return response.json();
+    //             })
+    //             .then(data => {
+    //                 if (data.paymentUrl) {
+    //                     window.location.href = data.paymentUrl; // Chuyển hướng đến trang thanh toán VNPay
+    //                 } else {
+    //                     alert("Lỗi khi tạo URL thanh toán");
+    //                 }
+    //             })
+    //             .catch(error => {
+    //                 console.error("Lỗi thanh toán VNPay:", error);
+    //                 alert("Không thể kết nối với VNPay. Vui lòng thử lại.");
+    //             });
+    //     } else {
+    //         alert("Số tiền tối thiểu là 10.000 VND");
+    //     }
+    // }
 </script>
 </body>
 </html>

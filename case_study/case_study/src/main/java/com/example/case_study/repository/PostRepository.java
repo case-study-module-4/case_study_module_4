@@ -17,10 +17,10 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     List<Post> findByUserIdAndPayable(Integer userId, String no);
 
-
+    long countByUserId(int userId);
 
     @Query("SELECT p FROM post p " +
-            "WHERE " +
+            "WHERE (p.payable IS NOT NULL AND p.payable = 'YES') AND  " +
             "(:location = '' OR p.realEstate.location ILIKE %:location%) AND " +
             "(:type = '' OR p.realEstate.type = :type ) AND "+
             "(:price = '' OR ( " +
@@ -40,10 +40,9 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             @Param("area") String area
     );
 
-    @Query("SELECT p FROM post p ORDER BY p.publishDate DESC ")
+
+    @Query("SELECT p FROM post p WHERE (p.payable IS NOT NULL AND p.payable = 'YES') ORDER BY p.publishDate DESC ")
     List<Post> findLatestPosts(Pageable pageable);
-
-
 }
 
 

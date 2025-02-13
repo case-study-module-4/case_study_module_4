@@ -1,0 +1,41 @@
+<!--<div class="container mt-4">-->
+<!--    <h2 class="text-center mb-4">Danh sách tài khoản</h2>-->
+
+<!--    <table class="table table-striped table-bordered">-->
+<!--        <thead class="table-dark text-center">-->
+<!--        <tr>-->
+<!--            <th>Id</th>-->
+<!--            <th>Họ và tên</th>-->
+<!--            <th>Số điện thoại</th>-->
+<!--            <th>Email</th>-->
+<!--            <th>Số dư</th>-->
+<!--            <th>Trạng thái</th>-->
+<!--            <th>Số bài đăng</th>-->
+<!--            <th>Thao tác</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr th:each="account : ${accounts}">-->
+<!--            <td th:text="${account.id}"></td>-->
+<!--            <td th:text="${account.fullName}"></td>-->
+<!--            <td th:text="${account.phone}"></td>-->
+<!--            <td th:text="${account.email}"></td>-->
+<!--            <td th:text="${account.balance}"></td>-->
+<!--            <td class="text-center">-->
+<!--                <span th:classappend="${account.status == 'active' ? 'badge bg-success' : 'badge bg-danger'}"-->
+<!--                      th:text="${account.status == 'active' ? 'Hoạt động' : 'Bị khóa'}">-->
+<!--                </span>-->
+<!--            </td>-->
+<!--            <td th:text="${account.postCount}"></td>-->
+<!--            <td class="text-center">-->
+<!--                <form th:action="@{/admin/account/{id}/toggle-status(id=${account.id})}" method="post">-->
+<!--                    <button type="submit"-->
+<!--                            th:classappend="${account.status == 'active' ? 'btn btn-warning btn-sm' : 'btn btn-success btn-sm'}"-->
+<!--                            th:text="${account.status == 'active' ? 'Khóa' : 'Mở khóa'}">-->
+<!--                    </button>-->
+<!--                </form>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!--</div>-->

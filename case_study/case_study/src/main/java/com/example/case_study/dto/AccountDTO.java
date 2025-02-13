@@ -19,6 +19,6 @@ public class AccountDTO {
     private BigDecimal balance;
     private String status;
     private String image;
-    private boolean isDelete;
+    private Boolean isDelete;
     private Long postCount;
 }

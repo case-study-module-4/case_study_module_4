@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface IDepositService {
     void saveDeposit(Deposit deposit);
-    List<DepositHistoryDto> getAllDepositHistory();
+    List<DepositHistoryDto> getAllDepositHistory(String userName);
     List<DepositHistoryDto> getAllDepositHistoryAllUser();
 }

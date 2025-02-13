@@ -16,9 +16,22 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
  @Query("SELECT new com.example.case_study.dto.TransactionHistoryDto( " +
          "t.id, t.price,  p.publishDate, p.title) " +
          "FROM transaction t " +
-         "LEFT JOIN t.post p " +
+         "JOIN t.post p " +
+         "JOIN p.user u " +
+         "JOIN u. account a " +
+         "WHERE a.username =:userName  " +
          "ORDER BY p.publishDate DESC")
- List<TransactionHistoryDto> getAllTransactionHistoryAllUser();
+ List<TransactionHistoryDto> getAllTransactionHistory(String userName);
+
+    @Query("SELECT new com.example.case_study.dto.TransactionHistoryDto( " +
+            "t.id, t.price,  p.publishDate, p.title) " +
+            "FROM transaction t " +
+            "LEFT JOIN t.post p " +
+            "ORDER BY p.publishDate DESC")
+    List<TransactionHistoryDto> getAllTransactionHistoryAllUser();
+
+
+
 
 
 }

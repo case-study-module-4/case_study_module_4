@@ -31,5 +31,5 @@ public interface IPostService extends IService<Post> {
 
     Long countByUserId(int userId);
 
-    List<Post> getAllDraftPosts();
+    List<Post> getAllPostsWithUsers();
 }

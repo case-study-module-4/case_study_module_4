@@ -22,7 +22,7 @@
             <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
             <div class="row">
                 <div th:each="post : ${posts}" class="col-12 mb-4">
-                    <div class="card" style="cursor: pointer;">
+                    <div class="card " th:attr="onclick='viewPost(' + ${post.id} + ')'" style="cursor: pointer ">
                         <div class="row no-gutters">
                             <div class="col-md-4">
                                 <img th:src="${post.image}" class="card-img"
@@ -64,8 +64,7 @@
                                     <!-- Container nút hành động -->
                                     <div class="mt-auto d-flex justify-content-end">
                                         <!-- Nút Detail luôn hiển thị -->
-                                        <a class="btn btn-info btn-sm me-2"
-                                           th:href="@{/posts/{id}(id=${post.id})}">Detail</a>
+<!--                                        <a class="btn btn-info btn-sm me-2"  style="font-size: 0.7rem; padding: 0.25rem 0.5rem;" th:href="@{/posts/{id}(id=${post.id})}">Detail</a>-->
                                         <!-- Nút Edit: hiển thị nếu user hiện hành là người đăng bài (nếu cần) -->
                                         <a class="btn btn-warning btn-sm me-2"
                                            th:if="${#authentication.name == post.user.account.username}"
@@ -157,6 +156,11 @@
             document.body.appendChild(form);
             form.submit();
         }
+    }
+</script>
+<script>
+    function viewPost(postId) {
+        window.location.href = "/posts/" + postId;
     }
 </script>
 <div style="margin-top:200px" th:insert="~{/layout/layout::footer}"></div>

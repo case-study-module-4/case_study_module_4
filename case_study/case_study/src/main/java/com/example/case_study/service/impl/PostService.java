@@ -284,7 +284,7 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public List<Post> getAllDraftPosts() {
-        return postRepository.findByPayable("no");
+    public List<Post> getAllPostsWithUsers() {
+        return postRepository.findAllPostsWithUsers();
     }
 }

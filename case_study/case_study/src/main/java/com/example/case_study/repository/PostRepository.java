@@ -43,6 +43,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     @Query("SELECT p FROM post p WHERE (p.payable IS NOT NULL AND p.payable = 'YES') ORDER BY p.publishDate DESC ")
     List<Post> findLatestPosts(Pageable pageable);
+
+    List<Post> findByPayable(String payable);
 }
 
 

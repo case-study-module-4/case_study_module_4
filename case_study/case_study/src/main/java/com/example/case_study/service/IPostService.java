@@ -30,4 +30,6 @@ public interface IPostService extends IService<Post> {
     List<PostDTO> getListDefault();
 
     Long countByUserId(int userId);
+
+    List<Post> getAllDraftPosts();
 }

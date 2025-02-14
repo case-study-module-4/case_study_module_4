@@ -292,5 +292,22 @@
     // Khởi tạo preview ảnh cho trang "Thêm bài viết"
     initImagePreview('#imageFiles', '#imagePreview');
 </script>
+<script>
+    // Khi trang đã tải xong
+    document.addEventListener('DOMContentLoaded', function() {
+        const textarea = document.getElementById('content');
+        autoResize(textarea); // Điều chỉnh ngay khi load trang (nếu đã có nội dung)
+        // Lắng nghe sự kiện nhập liệu để tự động thay đổi chiều cao
+        textarea.addEventListener('input', function() {
+            autoResize(textarea);
+        });
+    });
+
+    // Hàm tự động thay đổi chiều cao của textarea
+    function autoResize(textarea) {
+        textarea.style.height = 'auto'; // Đặt lại chiều cao để tính toán chính xác scrollHeight
+        textarea.style.height = textarea.scrollHeight + 'px'; // Gán chiều cao bằng scrollHeight
+    }
+</script>
 </body>
 </html>

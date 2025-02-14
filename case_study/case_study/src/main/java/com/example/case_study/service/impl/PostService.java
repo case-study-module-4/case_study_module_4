@@ -282,4 +282,9 @@ public class PostService implements IPostService {
     public Long countByUserId(int userId) {
         return postRepository.countByUserIdAndDeletedFalse(userId);
     }
+
+    @Override
+    public List<Post> getAllDraftPosts() {
+        return postRepository.findByPayable("no");
+    }
 }

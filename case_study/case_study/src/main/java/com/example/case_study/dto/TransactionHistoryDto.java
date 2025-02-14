@@ -29,5 +29,4 @@ public class TransactionHistoryDto {
     public String getFormattedId() {
         return String.format("T-%05d", this.id);
     }
-
 }

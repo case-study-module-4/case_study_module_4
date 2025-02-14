@@ -16,16 +16,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     let numberValue;
                     // Kiểm tra đơn vị của chuỗi gợi ý và chuyển đổi tương ứng
                     if (sugg.includes("tỷ")) {
-                        // Loại bỏ chữ "tỷ" và chuyển đổi sang số (với dấu phẩy thành dấu chấm nếu cần)
                         const num = parseFloat(sugg.replace("tỷ", "").trim().replace(",", "."));
-                        numberValue = num * 1000000000; // 1 tỷ = 1e9
+                        numberValue = num * 1000000000;
                     } else if (sugg.includes("triệu")) {
                         const num = parseFloat(sugg.replace("triệu", "").trim().replace(",", "."));
-                        numberValue = num * 1000000; // 1 triệu = 1e6
+                        numberValue = num * 1000000;
                     }
-                    priceInput.value = numberValue;
-                    suggestions.style.display = "none"; // Ẩn gợi ý sau khi chọn
+                    // Định dạng giá trị theo định dạng "1,234,567"
+                    priceInput.value = numberValue.toLocaleString("en-US");
+                    suggestions.style.display = "none";
                 });
+
                 suggestions.appendChild(div);
             });
             suggestions.style.display = "flex"; // Hiện danh sách gợi ý

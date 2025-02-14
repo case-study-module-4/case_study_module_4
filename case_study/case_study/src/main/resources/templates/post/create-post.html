@@ -217,7 +217,8 @@
                     <!-- Giá -->
                     <div class="mb-3">
                         <label for="price" class="form-label fw-bold">Giá</label>
-                        <input type="number" step="0.01" class="form-control" id="price" th:field="*{price}" required>
+                        <!-- Đổi type từ number sang text để sử dụng pattern -->
+                        <input type="text" pattern="^\d{1,3}(,\d{3})*$" class="form-control" id="price" th:field="*{price}" required>
                         <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger"></div>
                         <!-- Gợi ý giá -->
                         <div id="price-suggestions" class="d-flex flex-wrap gap-2 mt-2" style="display: none;"></div>
@@ -286,11 +287,27 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Chèn file JS xử lý modal -->
 <script src="/js/image-modal.js"></script>
-<!-- Chèn file JS xử lý preview ảnh -->
-<script src="/js/image-preview.js"></script>
+
 <script>
     // Khởi tạo preview ảnh cho trang "Thêm bài viết"
     initImagePreview('#imageFiles', '#imagePreview');
+</script>
+<script>
+    // Khi trang đã tải xong
+    document.addEventListener('DOMContentLoaded', function() {
+        const textarea = document.getElementById('content');
+        autoResize(textarea); // Điều chỉnh ngay khi load trang (nếu đã có nội dung)
+        // Lắng nghe sự kiện nhập liệu để tự động thay đổi chiều cao
+        textarea.addEventListener('input', function() {
+            autoResize(textarea);
+        });
+    });
+
+    // Hàm tự động thay đổi chiều cao của textarea
+    function autoResize(textarea) {
+        textarea.style.height = 'auto'; // Đặt lại chiều cao để tính toán chính xác scrollHeight
+        textarea.style.height = textarea.scrollHeight + 'px'; // Gán chiều cao bằng scrollHeight
+    }
 </script>
 </body>
 </html>

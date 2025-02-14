@@ -25,7 +25,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class PostService implements IPostService {
@@ -62,7 +61,14 @@ public class PostService implements IPostService {
 
     @Override
     public void deleteById(Integer id) {
-        postRepository.deleteById(id);
+        Optional<Post> optionalPost = postRepository.findById(id);
+        if (optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+            post.setDeleted(true);
+            postRepository.save(post);
+        } else {
+            throw new RuntimeException("Không tìm thấy bài đăng với id: " + id);
+        }
     }
 
     @Override
@@ -96,7 +102,6 @@ public class PostService implements IPostService {
             // 4. Xử lý upload ảnh qua Cloudinary
             List<MultipartFile> files = postDTO.getImageFiles();
             if (files != null && !files.isEmpty() && !files.get(0).isEmpty()) {
-                // 4.1 Upload ảnh đầu tiên làm ảnh chính
                 MultipartFile mainFile = files.get(0);
                 Map<?, ?> uploadResult = cloudinary.uploader().upload(mainFile.getBytes(), ObjectUtils.emptyMap());
                 String imageUrl = uploadResult.get("secure_url").toString();
@@ -106,7 +111,7 @@ public class PostService implements IPostService {
             // 5. Lưu Post để có id nếu cần dùng cho các bản ghi ảnh sau này
             Post savedPost = postRepository.save(post);
 
-            // 6. Upload và lưu các ảnh phụ (bỏ qua ảnh chính để tránh upload 2 lần)
+            // 6. Upload và lưu các ảnh phụ (bỏ qua ảnh chính)
             if (files != null && files.size() > 1) {
                 for (int i = 1; i < files.size(); i++) {
                     MultipartFile file = files.get(i);
@@ -114,8 +119,8 @@ public class PostService implements IPostService {
                         Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
                         String imageUrl = uploadResult.get("secure_url").toString();
                         Image image = new Image();
-                        image.setPost(post); // liên kết ảnh với bài đăng
-                        image.setImage(imageUrl); // lưu URL ảnh trả về từ Cloudinary
+                        image.setPost(post);
+                        image.setImage(imageUrl);
                         imageRepository.save(image);
                     }
                 }
@@ -163,24 +168,16 @@ public class PostService implements IPostService {
             // 4. Xử lý upload ảnh mới (nếu có) qua Cloudinary
             List<MultipartFile> files = postDTO.getImageFiles();
             if (files != null && !files.isEmpty()) {
-                // Nếu ảnh chính mới có nội dung
                 if (!files.get(0).isEmpty()) {
-                    // (Nếu cần) Xoá ảnh chính cũ khỏi Cloudinary
-                    // TODO: Thực hiện xoá ảnh cũ từ Cloudinary nếu bạn lưu public_id hoặc có cách truy xuất được
-                    // Ví dụ: deleteImageFromCloudinary(post.getImage());
-
                     MultipartFile mainFile = files.get(0);
                     Map<?, ?> uploadResult = cloudinary.uploader().upload(mainFile.getBytes(), ObjectUtils.emptyMap());
                     String imageUrl = uploadResult.get("secure_url").toString();
                     post.setImage(imageUrl);
-
-                    // (Tùy chọn) Lưu record của ảnh chính vào bảng Image
                     Image mainImage = new Image();
                     mainImage.setPost(post);
                     mainImage.setImage(imageUrl);
                     imageRepository.save(mainImage);
                 }
-                // Xử lý upload các ảnh phụ (bắt đầu từ index 1)
                 if (files.size() > 1) {
                     for (int i = 1; i < files.size(); i++) {
                         MultipartFile file = files.get(i);
@@ -196,15 +193,13 @@ public class PostService implements IPostService {
                 }
             }
 
-            // 5. Xử lý xoá các ảnh được chọn (deleteImageIds truyền từ form)
-            // Nếu bạn muốn xoá ảnh khỏi Cloudinary, bạn cần triển khai thêm logic xoá trên Cloudinary.
+            // 5. Xử lý xoá các ảnh được chọn
             if (deleteImageIds != null && !deleteImageIds.isEmpty()) {
                 for (Integer imageId : deleteImageIds) {
                     Optional<Image> imageOpt = imageRepository.findById(imageId);
                     if (imageOpt.isPresent()) {
                         Image image = imageOpt.get();
-                        // TODO: Thực hiện xoá ảnh khỏi Cloudinary nếu cần
-                        // Ví dụ: deleteImageFromCloudinary(image.getImage());
+                        // Nếu cần, thêm logic xoá ảnh khỏi Cloudinary
                         imageRepository.delete(image);
                     }
                 }
@@ -216,39 +211,25 @@ public class PostService implements IPostService {
         }
     }
 
-    // Nếu cần hỗ trợ xoá ảnh trên Cloudinary, bạn có thể triển khai phương thức này.
-    // Ví dụ: Sử dụng public_id đã lưu (nếu có) để gọi cloudinary.uploader().destroy(...)
-    /*
-    public void deleteImageFromCloudinary(String imageUrl) {
-        try {
-            // Lấy public_id từ URL (cách lấy public_id phụ thuộc vào cấu trúc URL và cách bạn lưu trữ ảnh)
-            String publicId = ...;
-            cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Lỗi khi xoá ảnh trên Cloudinary: " + e.getMessage());
-        }
-    }
-    */
-
     @Override
     public List<Post> getApprovedPosts() {
-        return postRepository.findByStatus("Approved");
+        // Giả sử status "Approved" chỉ dành cho các bài đăng hợp lệ và chưa xóa
+        return postRepository.findByStatusAndDeletedFalse("Approved");
     }
 
     @Override
     public List<Post> getDraftPosts() {
-        return postRepository.findByStatus("Pending");
+        return postRepository.findByStatusAndDeletedFalse("Pending");
     }
 
     @Override
     public List<Post> getApprovedPostsByUserId(Integer userId) {
-        return postRepository.findByUserIdAndStatus(userId, "yes");
+        return postRepository.findByUserIdAndStatusAndDeletedFalse(userId, "yes");
     }
 
     @Override
     public List<Post> getDraftPostsByUserId(Integer userId) {
-        return postRepository.findByUserIdAndPayable(userId, "no");
+        return postRepository.findByUserIdAndPayableAndDeletedFalse(userId, "no");
     }
 
     @Override
@@ -299,7 +280,7 @@ public class PostService implements IPostService {
 
     @Override
     public Long countByUserId(int userId) {
-        return postRepository.countByUserId(userId);
+        return postRepository.countByUserIdAndDeletedFalse(userId);
     }
 
     @Override

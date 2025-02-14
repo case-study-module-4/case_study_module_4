@@ -1,19 +1,16 @@
 package com.example.case_study.controller;
 
-
 import com.example.case_study.dto.PostDTO;
 import com.example.case_study.model.Account;
 import com.example.case_study.model.Post;
 import com.example.case_study.model.User;
 import com.example.case_study.repository.ImageRepository;
 import com.example.case_study.service.*;
-import com.example.case_study.service.impl.AccountService;
 import com.example.case_study.service.impl.PostService;
 import com.example.case_study.service.impl.PurposeService;
 import com.example.case_study.service.impl.RealEstateService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +21,6 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 @Controller
 @RequestMapping("/posts")
@@ -45,13 +41,11 @@ public class PostController {
     @Autowired
     private IUserService userService;
 
-
-
     @Autowired
     private IAccountService accountService;
+
     @Autowired
     private IPostInterestService postInterestService;
-
 
     @GetMapping
     public String getAllPosts(Model model) {
@@ -68,10 +62,8 @@ public class PostController {
         model.addAttribute("postDTO", postDTO);
         model.addAttribute("purposes", purposeService.findAll());
         model.addAttribute("realEstates", realEstateService.findAll());
-
         return "post/create-post";
     }
-
 
     @PostMapping()
     public String createPost(@Valid @ModelAttribute("postDTO") PostDTO postDTO,
@@ -79,7 +71,6 @@ public class PostController {
                              Model model,
                              Principal principal,
                              @RequestParam(value = "action", required = false, defaultValue = "continue") String action) {
-        // Thiết lập lại các đối tượng cho view (nếu có lỗi)
         model.addAttribute("postDTO", new PostDTO());
         model.addAttribute("purposes", purposeService.findAll());
         model.addAttribute("realEstates", realEstateService.findAll());
@@ -88,22 +79,16 @@ public class PostController {
             return "post/create-post";
         }
 
-        // Lấy user hiện hành
         User user = userService.findUserByUsername(principal.getName());
         model.addAttribute("user", user);
 
-        // Tạo bài viết; lưu ý trong service, khi tạo bài viết, giá trị payable được gán mặc định là "no"
         Post createdPost = postService.createPost(postDTO, user);
 
-        // Nếu action là "continue" -> chuyển hướng đến trang transaction để thanh toán
-        // Nếu action là "save" -> chuyển hướng về trang danh sách nháp (hoặc trang bạn muốn)
         if ("continue".equalsIgnoreCase(action)) {
             return "redirect:/transaction/transaction?postId=" + createdPost.getId();
         } else if ("save".equalsIgnoreCase(action)) {
             return "redirect:/posts/drafts?message=saved";
         }
-
-        // Mặc định (nếu không có action phù hợp) chuyển về trang chủ hoặc danh sách bài viết
         return "redirect:/posts";
     }
 
@@ -117,11 +102,7 @@ public class PostController {
             postDTO.setTitle(post.getTitle());
             postDTO.setContent(post.getContent());
             postDTO.setStatus(post.getStatus());
-            if (post.getPurpose() != null) {
-                postDTO.setPurpose(post.getPurpose().getPurpose());
-            } else {
-                postDTO.setPurpose("");
-            }
+            postDTO.setPurpose(post.getPurpose() != null ? post.getPurpose().getPurpose() : "");
             postDTO.setType(post.getRealEstate().getType());
             postDTO.setLocation(post.getRealEstate().getLocation());
             postDTO.setArea(post.getRealEstate().getArea());
@@ -130,13 +111,11 @@ public class PostController {
             postDTO.setImage(post.getImage());
             postDTO.setImages(post.getImages());
             postDTO.setPayable(post.getPayable());
-
             model.addAttribute("post", postDTO);
             return "post/edit";
         }
         return "redirect:/posts?error=notfound";
     }
-
 
     @PostMapping("/{id}")
     public String updatePost(@PathVariable Integer id,
@@ -145,30 +124,27 @@ public class PostController {
                              BindingResult result,
                              Model model,
                              @RequestParam(value = "deleteImages", required = false) List<Integer> deleteImageIds,
-                             @RequestParam(value = "action", required = false, defaultValue = "update") String action) {  // nhận thêm tham số "action"
+                             @RequestParam(value = "action", required = false, defaultValue = "update") String action) {
         if (result.hasErrors()) {
             model.addAttribute("purposes", purposeService.findAll());
             model.addAttribute("realEstates", realEstateService.findAll());
             return "post/edit";
         }
+
         Optional<Post> postOptional = postService.findById(id);
         if (postOptional.isPresent()) {
             Post post = postOptional.get();
             User user = userService.findUserByUsername(principal.getName());
-            // Kiểm tra quyền sở hữu bài đăng (nếu cần)
             if (post.getUser() == null || !post.getUser().equals(user)) {
                 return "redirect:/403";
             }
-
-            // Gọi phương thức updatePost để cập nhật đầy đủ các trường (lưu ý: không thay đổi trạng thái payable)
+            if (postDTO.getPrice() == null) {
+                postDTO.setPrice(post.getRealEstate().getPrice());
+            }
             postService.updatePost(post, postDTO, deleteImageIds);
-
-            // Nếu bài post có payable = "no" và người dùng bấm nút "Tiếp tục" thì điều hướng tới trang giao dịch
             if ("continue".equalsIgnoreCase(action)) {
-                // Điều hướng tới trang giao dịch, truyền postId cần thanh toán (transaction.html)
                 return "redirect:/transaction/transaction?postId=" + post.getId();
             } else {
-                // Ngược lại (payable = yes hoặc hành động là cập nhật) thì về trang danh sách bài viết
                 return "redirect:/posts/approved";
             }
         }
@@ -202,15 +178,11 @@ public class PostController {
 
     @GetMapping("/approved")
     public String getApprovedPostsForUser(Model model, Principal principal) {
-        // Lấy username từ Principal
         String username = principal.getName();
-        // Lấy đối tượng User dựa theo username
         User user = userService.findUserByUsername(username);
 
-        // Lấy toàn bộ bài đăng đã duyệt (theo cách hiện tại)
+        // Lấy tất cả bài đăng đã thanh toán (và chưa bị xóa)
         List<Post> allApprovedPosts = postService.findAll();
-
-        // Lọc chỉ những bài đăng thuộc về user hiện tại
         List<Post> approvedPosts = allApprovedPosts.stream()
                 .filter(post -> post.getUser() != null && post.getUser().getId().equals(user.getId()))
                 .collect(Collectors.toList());
@@ -221,17 +193,15 @@ public class PostController {
         return "user/approved-posts";
     }
 
-
     @GetMapping("/drafts")
     public String getDraftPostsForUser(Model model, Principal principal) {
         String username = principal.getName();
         User user = userService.findUserByUsername(username);
-        // Lấy các bài viết của user có payable = "no"
         List<Post> draftPosts = postService.getDraftPostsByUserId(user.getId());
         model.addAttribute("userId", user.getId());
         model.addAttribute("user", user);
         model.addAttribute("posts", draftPosts);
-        return "user/drafts-posts"; // Giao diện hiển thị bài viết nháp
+        return "user/drafts-posts";
     }
 
     @GetMapping("/{id}")
@@ -239,18 +209,15 @@ public class PostController {
         Optional<Post> postOptional = postService.findById(id);
         if (postOptional.isPresent()) {
             Post post = postOptional.get();
+            // (Tùy chọn) Nếu bài đăng đã soft delete, có thể chuyển hướng về trang 404
+            if (post.isDeleted()) {
+                return "redirect:/posts?error=notfound";
+            }
             model.addAttribute("post", post);
-            // Ghi nhận sự quan tâm nếu người dùng đã đăng nhập
             if (principal != null) {
                 String username = principal.getName();
                 Account account = accountService.findByUsername(username);
-                postInterestService.logPostClick(id, account); // Ghi nhận quan tâm vào database
-            }
-
-            String imageBase64 = post.getImage();
-            if (imageBase64 != null) {
-                String imageDataUrl = "data:image/jpeg;base64," + imageBase64;
-                model.addAttribute("imageDataUrl", imageDataUrl);
+                postInterestService.logPostClick(id, account);
             }
             return "post/detail";
         }
@@ -260,26 +227,24 @@ public class PostController {
     @GetMapping("/rent")
     public String getRentPosts(Model model) {
         List<Post> allPosts = postService.findAll();
-        // Lọc các bài đăng có purpose là "RENT"
         List<Post> rentPosts = allPosts.stream()
                 .filter(post -> post.getPurpose() != null
                         && post.getPurpose().getPurpose() != null
                         && post.getPurpose().getPurpose().equalsIgnoreCase("RENT"))
                 .collect(Collectors.toList());
         model.addAttribute("posts", rentPosts);
-        return "post/post"; // Template dành cho bài đăng cho thuê
+        return "post/post";
     }
+
     @GetMapping("/sale")
     public String getSalePosts(Model model) {
         List<Post> allPosts = postService.findAll();
-        // Lọc các bài đăng có purpose là "SALE"
-        List<Post> rentPosts = allPosts.stream()
+        List<Post> salePosts = allPosts.stream()
                 .filter(post -> post.getPurpose() != null
                         && post.getPurpose().getPurpose() != null
                         && post.getPurpose().getPurpose().equalsIgnoreCase("SALE"))
                 .collect(Collectors.toList());
-        model.addAttribute("posts", rentPosts);
-        return "post/post"; //
+        model.addAttribute("posts", salePosts);
+        return "post/post";
     }
-
 }

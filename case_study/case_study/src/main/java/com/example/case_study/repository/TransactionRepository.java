@@ -1,6 +1,5 @@
 package com.example.case_study.repository;
 
-import com.example.case_study.dto.DepositHistoryDto;
 import com.example.case_study.dto.TransactionHistoryDto;
 import com.example.case_study.model.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,8 +10,6 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
-
-
  @Query("SELECT new com.example.case_study.dto.TransactionHistoryDto( " +
          "t.id, t.price,  p.publishDate, p.title) " +
          "FROM transaction t " +

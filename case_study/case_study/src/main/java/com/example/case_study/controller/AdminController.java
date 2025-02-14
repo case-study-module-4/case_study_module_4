@@ -66,10 +66,17 @@ public class AdminController {
     }
 
     @GetMapping("/transaction-history")
-    public String getTransactionHistoryAllUser(Model model) {
+    public String getTransactionHistoryAllUser(Model model, Principal principal) {
+        String username = principal.getName();
+        User user = userService.findUserByUsername(username);
+        if (user == null) {
+            return "redirect:/error";
+        }
+
         List<DepositHistoryDto> deposits = depositService.getAllDepositHistoryAllUser();
         List<TransactionHistoryDto> payments = transactionService.getAllTransactionHistoryAllUser();
-
+        model.addAttribute("userId", user.getId());
+        model.addAttribute("user", user);
         model.addAttribute("deposits", deposits);
         model.addAttribute("payments", payments);
 
@@ -77,7 +84,7 @@ public class AdminController {
     }
 
     @GetMapping("/drafts")
-    public String getDraftPosts(Model model,Principal principal) {
+    public String getDraftPosts(Model model, Principal principal) {
         String username = principal.getName();
         User user = userService.findUserByUsername(username);
         if (user == null) {

@@ -104,7 +104,9 @@ public class TransactionController {
     public String getTransactionHistory(Model model, Principal piPrincipal) {
         List<DepositHistoryDto> deposits = depositService.getAllDepositHistory(piPrincipal.getName());
         List<TransactionHistoryDto> payments = transactionService.getAllTransactionHistory(piPrincipal.getName());
-
+        User user = userService.findUserByUsername(piPrincipal.getName());
+        model.addAttribute("userId", user.getId());
+        model.addAttribute("user", user);
 
         model.addAttribute("deposits", deposits);
         model.addAttribute("payments", payments);

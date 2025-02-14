@@ -83,7 +83,7 @@
     <meta charset="UTF-8">
     <title>Quản Lý Giao Dịch</title>
     <link rel="stylesheet" href="/style/user-dashboard.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <th:block th:insert="~{/layout/layout::library}"></th:block>
     <script>
         function showTable() {
             let selectedValue = document.getElementById("transactionType").value;
@@ -95,59 +95,9 @@
 <body>
 <div th:insert="~{/layout/layout::header}"></div>
 <div class="container-fluid">
-
     <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="user-info">
-            <div class="avatar">U</div>
-            <div class="full-name" th:text="${user.fullName}">Tên người dùng</div>
-            <div sec:authorize="hasRole('ROLE_USER')" class="account-balance">
-                <p>Số dư tài khoản</p>
-                <div>
-                    <span>TK Chính:</span>
-                    <span th:text="${#numbers.formatDecimal(user.balance, 0, 'COMMA', 0, 'POINT')} + ' VND'"></span>
-                </div>
-                <button class="btn btn-danger text-white">
-                    <a href="" class="submenu-link" data-url="/deposit" style="color: white; text-decoration: none;">Nạp
-                        tiền</a>
-                </button>
-            </div>
-        </div>
-        <hr>
-        <!-- Menu chính -->
-        <ul class="menu">
-            <li sec:authorize="hasRole('ROLE_ADMIN')">
-                <a class="menu-link" href="/admin/account">Quản lý người dùng</a>
-            </li>
-            <li sec:authorize="hasRole('ROLE_USER')">
-                <a href="" class="menu-link">Quản lý tin đăng</a>
-                <ul class="submenu">
-                    <li><a href="/posts/create" class="submenu-link">Đăng tin mới</a></li>
-                    <li><a href="/posts/approved" class="submenu-link">Danh sách tin</a></li>
-                    <li><a href="/posts/drafts" class="submenu-link">Tin nháp</a></li>
-                </ul>
-            </li>
-            <hr>
-            <li sec:authorize="hasRole('ROLE_USER')">
-                <a class="menu-link" href="/transaction/transaction-history">Lịch sử giao dịch</a></li>
-            <hr>
-            <li sec:authorize="hasRole('ROLE_USER')">
-                <a th:href="@{/user/interests(userId=${userId})}"
-                   style="color: black; text-decoration: none; font-weight: bold;"
-                   onmouseover="this.style.color='red'"
-                   onmouseout="this.style.color='black'"
-                   onclick="this.style.color='red'">Danh sách khách hàng</a>
-            </li>
-            <hr>
-            <li>
-                <a href="#" class="menu-link">Quản lý tài khoản</a>
-                <ul class="submenu">
-                    <li><a href="/profile/edit" class="submenu-link">Chỉnh sửa thông tin</a></li>
-                    <li><a href="/account/update-password" class="submenu-link">Cài đặt tài khoản</a></li>
-                </ul>
-            </li>
-        </ul>
-    </aside>
+    <aside th:insert="~{/layout/layout::sidebar}"></aside>
+
     <main class="main-content" id="main-content">
         <div class="container mt-4">
             <h2 class="text-center">Lịch sử Giao Dịch</h2>

@@ -100,6 +100,18 @@
                         >
                         <div class="text-danger small" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
                     </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label" style="font-size: 14px;">Số điện thoại</label>
+                        <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                class="form-control form-control-sm"
+                                th:field="*{email}"
+                                placeholder="Nhập email"
+                        >
+                        <div class="text-danger small" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    </div>
                     <div class="text-center">
                         <button type="submit" id="save-profile-btn" class="btn btn-sm btn-secondary btn-danger px-3"
                                 style="font-size: 14px;">Lưu

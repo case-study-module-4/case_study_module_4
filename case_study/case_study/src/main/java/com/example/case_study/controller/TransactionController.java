@@ -99,10 +99,13 @@ public class TransactionController {
 
 
     @GetMapping("/transaction-history")
-    public String getTransactionHistory(Model model) {
+    public String getTransactionHistory(Model model, Principal principal) {
+//        String username = principal.getName();
+//        User user = userService.findUserByUsername(username);
         List<DepositHistoryDto> deposits = depositService.getAllDepositHistory();
         List<TransactionHistoryDto> payments = transactionService.getAllTransactionHistory();
-
+//        model.addAttribute("userId", user.getId());
+//        model.addAttribute("user", user);
 
         model.addAttribute("deposits", deposits);
         model.addAttribute("payments", payments);

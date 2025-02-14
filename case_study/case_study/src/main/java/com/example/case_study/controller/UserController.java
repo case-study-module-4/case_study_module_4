@@ -79,6 +79,7 @@ public class UserController {
         User existingUser = userService.findUserByUsername(username);
         existingUser.setFullName(user.getFullName());
         existingUser.setPhone(user.getPhone());
+        existingUser.setEmail(user.getEmail());
         userService.updateUser(existingUser);
         redirectAttributes.addFlashAttribute("success", "Cập nhật thông tin thành công!");
         return "redirect:/dashboard";

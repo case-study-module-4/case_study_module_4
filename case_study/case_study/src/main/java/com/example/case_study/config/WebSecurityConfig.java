@@ -52,12 +52,13 @@ public class WebSecurityConfig {
                         .passwordParameter("password")
                         .loginPage("/login")
                         .failureUrl("/login?error=true")
-
-
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/home", true)
+                        // Đặt URL xử lý đăng nhập riêng biệt
+                        .loginProcessingUrl("/perform_login")
+                        // Sử dụng forward sau khi đăng nhập thành công để giữ nguyên phương thức (POST)
+                        .successForwardUrl("/login-success")
                         .permitAll()
                 )
+
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout=true")

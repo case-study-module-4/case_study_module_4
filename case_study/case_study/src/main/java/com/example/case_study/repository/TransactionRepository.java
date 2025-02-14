@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
  @Query("SELECT new com.example.case_study.dto.TransactionHistoryDto( " +
-         "t.id, t.price,  p.publishDate, p.title) " +
+         "p.id, t.price,  p.publishDate, p.title) " +
          "FROM transaction t " +
          "JOIN t.post p " +
          "JOIN p.user u " +
@@ -21,7 +21,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
  List<TransactionHistoryDto> getAllTransactionHistory(String userName);
 
     @Query("SELECT new com.example.case_study.dto.TransactionHistoryDto( " +
-            "t.id, u.fullName, t.price,  p.publishDate, p.title) " +
+            "p.id, u.fullName, t.price,  p.publishDate, p.title) " +
             "FROM transaction t " +
             "LEFT JOIN t.post p " +
             "JOIN p.user u " +

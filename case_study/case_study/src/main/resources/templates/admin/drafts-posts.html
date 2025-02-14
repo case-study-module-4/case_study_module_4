@@ -26,9 +26,10 @@
             <table class="table table-bordered" id="postTable">
                 <thead class="table-dark">
                 <tr>
-                    <th>Title</th>
-                    <th>Content</th>
-                    <th>Actions</th>
+                    <th>Tiêu đề</th>
+                    <th>Tên người dùng</th>
+                    <th>Nội dung</th>
+                    <th>Hành động</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -40,11 +41,12 @@
                 </tr>
                 <!-- Duyệt qua danh sách bài đăng -->
                 <tr th:each="post : ${posts}">
-                    <td th:text="${post.title}">Post Title</td>
-                    <td th:text="${post.content}">Post Content</td>
+                    <td th:text="${post.title}">Tiêu đề</td>
+                    <td th:text="${post.user.fullName}">Tên người dùng</td>
+                    <td th:text="${post.content}">Nội dung</td>
                     <td>
                         <!-- Nút Detail luôn hiển thị -->
-                        <a class="btn btn-info btn-sm" th:href="@{/posts/{id}(id=${post.id})}">Detail</a>
+                        <a class="btn btn-info btn-sm" th:href="@{/posts/{id}(id=${post.id})}">Chi tiết</a>
                     </td>
                 </tr>
                 </tbody>

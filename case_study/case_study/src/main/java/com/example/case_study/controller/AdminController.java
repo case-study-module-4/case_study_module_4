@@ -90,7 +90,7 @@ public class AdminController {
         if (user == null) {
             return "redirect:/error";
         }
-        List<Post> draftPosts = postService.getAllDraftPosts();
+        List<Post> draftPosts = postService.getAllPostsWithUsers();
         model.addAttribute("userId", user.getId());
         model.addAttribute("user", user);
         model.addAttribute("posts", draftPosts);

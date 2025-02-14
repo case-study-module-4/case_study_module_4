@@ -40,6 +40,7 @@
                     <thead class="table-primary">
                     <tr>
                         <th>STT</th>
+                        <th>Tên người dùng</th>
                         <th>Số Tiền</th>
                         <th>Phương thức giao dịch</th>
                         <th>Ngày Giao Dịch</th>
@@ -48,6 +49,7 @@
                     <tbody>
                     <tr th:each="deposit, status : ${deposits}">
                         <td th:text="${status.count}"></td>
+                        <td th:text="${deposit.fullName}"></td>
                         <td th:text="${#numbers.formatDecimal(deposit.amount, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
                         <td th:text="${deposit.paymentMethod}"></td>
                         <td th:text="${#temporals.format(deposit.paymentDate, 'dd/MM/yyyy')}"></td>
@@ -64,6 +66,7 @@
                     <tr>
                         <th>STT</th>
                         <th>Mã tin đăng</th>
+                        <th>Tên người dùng</th>
                         <th>Tin đăng đã thanh toán</th>
                         <th>Số Tiền</th>
                         <th>Ngày Giao Dịch</th>
@@ -73,6 +76,7 @@
                     <tr th:each="transaction, status : ${payments}">
                         <td th:text="${status.count}"></td>
                         <td th:text="${transaction.formattedId}"></td>
+                        <td th:text="${transaction.fullName}"></td>
                         <td th:text="${transaction.title}"></td>
                         <td th:text="${#numbers.formatDecimal(transaction.price, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
                         <td th:text="${transaction.publishDate}"></td>

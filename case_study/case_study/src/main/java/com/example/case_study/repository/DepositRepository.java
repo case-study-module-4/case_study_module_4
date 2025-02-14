@@ -20,7 +20,7 @@ public interface DepositRepository extends JpaRepository<Deposit, Integer> {
     List<DepositHistoryDto> getAllDepositHistory(String userName);
 
     @Query("SELECT new com.example.case_study.dto.DepositHistoryDto( " +
-            "d.id, d.amount,  d.paymentDate, d.paymentMethod) " +
+            "d.id, u.fullName, d.amount, d.paymentDate, d.paymentMethod) " +
             "FROM deposit d " +
             "JOIN d.user u " +
             "WHERE u.isDelete = false " +

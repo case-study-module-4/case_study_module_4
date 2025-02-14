@@ -22,7 +22,6 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "INT")
-
     private Integer id;
 
     @NotBlank(message = "Status must not be empty")
@@ -73,4 +72,6 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<PostInterest> postInterests;
 
+    @Column(name = "deleted", columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean deleted = false;
 }

@@ -5,12 +5,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.case_study.model.Account;
 import com.example.case_study.service.impl.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,7 +29,8 @@ public class LoginController {
         return "login/login"; // Trả về trang đăng nhập
     }
 
-    @GetMapping("/login-success")
+    // Hỗ trợ cả POST (do forward từ filter) và GET nếu cần
+    @RequestMapping(value = "/login-success", method = {RequestMethod.GET, RequestMethod.POST})
     public String showLoginSuccess(Authentication authentication, RedirectAttributes redirectAttributes) {
         if (authentication == null) {
             return "redirect:/login";
@@ -49,9 +51,7 @@ public class LoginController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
 
-        if (roles.contains("ROLE_ADMIN")) {
-            return "redirect:/home";
-        } else if (roles.contains("ROLE_USER")) {
+        if (roles.contains("ROLE_ADMIN") || roles.contains("ROLE_USER")) {
             return "redirect:/home";
         }
 

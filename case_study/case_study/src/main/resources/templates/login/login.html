@@ -34,7 +34,8 @@
                                         <p th:text="${message}"></p>
                                     </div>
 
-                                    <form th:action="@{/login}" method="post">
+                                    <!-- Chuyển action của form từ /login sang /perform_login -->
+                                    <form th:action="@{/perform_login}" method="post">
                                         <div class="form-floating mb-3">
                                             <input type="text" class="form-control" name="username" id="username"
                                                    placeholder="Tên đăng nhập" required>
